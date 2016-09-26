@@ -8,8 +8,6 @@ Open CMakeLists.txt
 Add a new line to the section denoted by "# Module List", as follows
 add_project_module(Module ModuleDirectory)
 
-## Adding 
-
 ## Branching Structure
 Create a branch for each feature you are working on, with a descriptive name!
 Only merge it to master when your feature is verified finished and working
@@ -22,11 +20,11 @@ Methods and Functions should be lowerCamelCase
 Variables should by lowerCamelCase
 
 ### Prefixes
-m : Member Variable
-s : Static Variable
-k : Constant Variable
+m : Member Variable, mInputDevice
 
-eg. mInputDevice, sNumBugs, kMaxInputDevices
+s : Static Variable, sNumBugs
+
+k : Constant Variable, kMaxInputDevices
 
 ## Compiling
 
