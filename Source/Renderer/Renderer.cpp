@@ -71,7 +71,7 @@ void Renderer::update ()
 {
 }
 
-void Renderer::switchViewport(Camera* camera, int ZOrder /* = 0 */)
+void Renderer::switchViewport (Camera* camera, int ZOrder /* = 0 */)
 {
 	assert(mInitialized);
 	
@@ -98,7 +98,7 @@ bool Renderer::frameRenderingQueued (const FrameEvent& evt)
 	return true;
 }
 
-void Renderer::windowClosed(Ogre::RenderWindow *rw) 
+void Renderer::windowClosed (Ogre::RenderWindow *rw) 
 {
 	mRunning = false;
 }

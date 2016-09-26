@@ -1,6 +1,32 @@
-## Adding folders to the build
+## Folder Structure
+Modules should be in their own folder under the Source directory
+Components should be under the directory for their parent module
+Resources should be in the Media directory, which will be copied to the Build/Binaries directory
+
+## Adding folders (modules) to the build
 Open CMakeLists.txt
-Add a new line to the 
+Add a new line to the section denoted by "# Module List", as follows
+add_project_module(Module ModuleDirectory)
+
+## Adding 
+
+## Branching Structure
+Create a branch for each feature you are working on, with a descriptive name!
+Only merge it to master when your feature is verified finished and working
+If you want a branch to be a sub-branch use a forward slash, eg "parent-branch/child-branch"
+When the project is due, we will turn in whatever the master branch builds
+
+## Naming Comventions
+Classes should be UpperCamelCase
+Methods and Functions should be lowerCamelCase
+Variables should by lowerCamelCase
+
+### Prefixes
+m : Member Variable
+s : Static Variable
+k : Constant Variable
+
+eg. mInputDevice, sNumBugs, kMaxInputDevices
 
 ## Compiling
 
@@ -10,12 +36,12 @@ Add a new line to the
 	$ cmake ..
 	$ make
 
-Then, to run it,
+Then, to run it with the correct resources, you MUST run from the Binaries directory
 
 	$ cd Binaries
 	$ ./ProjectName
 
-### Windows (Visual Studio 2013)
+### (Outdated) Windows (Visual Studio 2013)
 
 1. Open CMake-Gui and set the source path, and the build path to the source path + Build
 2. Add Entry OGRE_HOME and set it to your OGRE SDK path.
@@ -26,7 +52,7 @@ Then, to run it,
 
 On Windows, the DLLs needed to run the application are copied automatically to the binary folder.
 
-## Tips
+## (Outdated) Tips
 
 * If you are using version control, do not commit the Build folder. The generated build scripts are for your local working copy, not anyone else.
 * To add Ogre plugins, simply add them to the `find_package` line in the `CMakeLists.txt` and add to linking/includes. You will also have to add the `loadPlugin` line in `Source/Core/Application.cpp` to load the library before you can use it.
