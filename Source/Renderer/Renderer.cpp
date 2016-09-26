@@ -33,7 +33,7 @@ void Renderer::init ()
 	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
 
 	// Load in resources
-	ResourceGroupManager::getSingleton().addResourceLocation("../Media", "FileSystem", "General");
+	ResourceGroupManager::getSingleton().addResourceLocation("./Media", "FileSystem", "General");
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener

@@ -36,6 +36,7 @@ endmacro()
 
 ## End Macros ##
 
+# We assume that the user is on a linux lab machine
 set(OGRE_HOME "/lusr/opt/ogre-1.9" CACHE PATH "Path to Ogre SDK")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -104,6 +105,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${OGRE_HOME}/include/OGRE/RenderSystems/GL
 	${OIS_INCLUDE_DIR}
 )
+
+# Copy the media directory to the binaries folder
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/Media $<TARGET_FILE_DIR:${PROJECT_NAME}>/Media)
 
 # On Windows, copy DLLs to bin path.
 # If you link more libraries or plugins, make sure to add commands here.

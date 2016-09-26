@@ -1,3 +1,7 @@
+## Adding folders to the build
+Open CMakeLists.txt
+Add a new line to the 
+
 ## Compiling
 
 ### Linux
