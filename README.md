@@ -1,30 +1,28 @@
 ## Folder Structure
-Modules should be in their own folder under the Source directory
-Components should be under the directory for their parent module
-Resources should be in the Media directory, which will be copied to the Build/Binaries directory
+Modules should be in their own folder under the Source directory  
+Components should be under the directory for their parent module  
+Resources should be in the Media directory, which will be copied to the Build/Binaries directory  
 
 ## Adding folders (modules) to the build
-Open CMakeLists.txt
-Add a new line to the section denoted by "# Module List", as follows
-add_project_module(Module ModuleDirectory)
+1. Open CMakeLists.txt
+2. Add a new line to the section denoted by "# Module List", as follows
+3. add_project_module(Module ModuleDirectory)
 
 ## Branching Structure
-Create a branch for each feature you are working on, with a descriptive name!
-Only merge it to master when your feature is verified finished and working
-If you want a branch to be a sub-branch use a forward slash, eg "parent-branch/child-branch"
-When the project is due, we will turn in whatever the master branch builds
+Create a branch for each feature you are working on, with a descriptive name!  
+Only merge it to master when your feature is verified finished and working  
+If you want a branch to be a sub-branch use a forward slash, eg "parent-branch/child-branch"  
+When the project is due, we will turn in whatever the master branch builds  
 
 ## Naming Comventions
-Classes should be UpperCamelCase
-Methods and Functions should be lowerCamelCase
-Variables should by lowerCamelCase
+Classes should be UpperCamelCase  
+Methods and Functions should be lowerCamelCase  
+Variables should by lowerCamelCase  
 
 ### Prefixes
-m : Member Variable, mInputDevice
-
-s : Static Variable, sNumBugs
-
-k : Constant Variable, kMaxInputDevices
+m : Member Variable, mInputDevice  
+s : Static Variable, sNumBugs  
+k : Constant Variable, kMaxInputDevices  
 
 ## Compiling
 
