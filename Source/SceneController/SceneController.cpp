@@ -4,18 +4,19 @@
 using namespace Ogre;
 
 SceneController::SceneController (Renderer* renderer, Ogre::SceneType sceneType)
-:	mRenderer(renderer)
+:	mRenderer(renderer),
+	mSceneType(sceneType)
 {
-	assert(renderer && renderer->mInitialized);
-	mSceneMgr = renderer->mRoot->createSceneManager(sceneType);
+	assert(renderer);
 }
 
 SceneController::~SceneController ()
 {
 }
 
-void SceneController::init ()
+void SceneController::setup ()
 {
+	assert(mRenderer->isInitialized());
+	mSceneMgr = mRenderer->mRoot->createSceneManager(mSceneType);
 	loadScene();
-	mInitialized = true;
 }

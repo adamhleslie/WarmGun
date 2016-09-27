@@ -22,12 +22,15 @@ public:
 	SceneController(Renderer* renderer, Ogre::SceneType sceneType);
 	virtual ~SceneController();
 
-	void init() override;
 	virtual void update() = 0;
 	
 	virtual void loadScene() = 0;
 
+private:
+	void setup() override;
+
 protected:
 	Renderer* mRenderer = nullptr;
 	Ogre::SceneManager* mSceneMgr = nullptr;
+	Ogre::SceneType mSceneType;
 };

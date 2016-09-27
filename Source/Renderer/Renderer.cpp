@@ -16,7 +16,7 @@ Renderer::~Renderer ()
 	delete mRoot;
 }
 
-void Renderer::init ()
+void Renderer::setup ()
 {
 	// Load Plugins
 #if _DEBUG
@@ -41,7 +41,7 @@ void Renderer::init ()
 	mWindow->addListener(this);
 	mRoot->addFrameListener(this);
 
-	mInitialized = true;
+	disable();
 }
 
 void selectRenderSystem (Root* root)
@@ -67,14 +67,8 @@ void selectRenderSystem (Root* root)
 	}
 }
 
-void Renderer::update ()
-{
-}
-
 void Renderer::switchViewport (Camera* camera, int ZOrder /* = 0 */)
 {
-	assert(mInitialized);
-	
 	if (mViewport)
 		mWindow->removeViewport(0);
 

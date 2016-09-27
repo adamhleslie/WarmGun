@@ -20,13 +20,13 @@ public:
 	Renderer();
 	virtual ~Renderer();
 
-	void init() override;
-	void update() override;
-
 	void switchViewport(Ogre::Camera* camera, int ZOrder = 0);
 
 	Ogre::Root* mRoot = nullptr;
 	bool mRunning = true;
+
+protected:
+	void setup() override;
 	
 private:
 	Ogre::RenderWindow* mWindow = nullptr;

@@ -1,38 +1,60 @@
-#include <cassert>
-
 #include "Core.h"
+
+#include <cassert>
+#include <algorithm>
+
 #include "Module.h"
 #include "Renderer.h"
+
+
+/// Add Modules below ///
 #include "Scene1.h"
+
+void Core::getModules ()
+{
+	assert(!mInitialized);
+	mRenderer = new Renderer();
+
+	mModules[0] = mRenderer;
+	mModules[1] = new Scene1(mRenderer, Ogre::ST_GENERIC);
+	// make sure mModules[max], max == kNumModules - 1
+}
+/// Add Modules above ///
+
 
 Core::Core ()
 {
 	mModules.fill(nullptr);
+	mEnabledModules.reserve(kNumModules);
 }
 
 Core::~Core ()
 {
-	for (auto module = mModules.begin(); module != mModules.end(); module++)
+	for (Module* module : mModules)
 	{
-		if (*module)
-			delete *module;
+		if (module)
+			delete module;
 	}
 }
 
-// Initialize Modules before run()
+// Initializes the game engine before run is called
 void Core::init ()
 {
-	// Initialize the Renderer before anything else
-	mRenderer = new Renderer();
-	mRenderer->init();
+	assert(!mInitialized);
 
-	mModules[0] = mRenderer;
-	mModules[1] = new Scene1(mRenderer, Ogre::ST_GENERIC);
+	getModules();
 
-	// init modules, skipping renderer
-	for (int i = 1; i < kNumModules; i++)
+	// init modules
+	for (Module* module : mModules)
 	{
-		mModules[i]->init();
+		module->init(this);
+	}
+
+	// place enabled (updating) modules into their container
+	for (Module* module : mModules)
+	{
+		if (module->isEnabled())
+			mEnabledModules.push_back(module);
 	}
 
 	mInitialized = true;
@@ -57,9 +79,9 @@ void Core::run ()
 
 		while (accumulator >= kTimeStep)
 		{
-			for (auto module = mModules.begin(); module != mModules.end(); module++)
+			for (Module* module : mEnabledModules)
 			{
-				(*module)->update();
+				module->update();
 			}
 
 			accumulator -= kTimeStep;
@@ -68,4 +90,19 @@ void Core::run ()
 		Ogre::WindowEventUtilities::messagePump();
 		mRenderer->mRoot->renderOneFrame();
 	}
+}
+
+// module should not be in mEnabledModules
+void Core::enableModule (Module* module)
+{
+	mEnabledModules.push_back(module);
+}
+
+// module should be in mEnabledModules
+void Core::disableModule (Module* module)
+{
+	auto pos = std::find(mEnabledModules.begin(), mEnabledModules.end(), module);
+	assert(pos != mEnabledModules.end());
+
+    mEnabledModules.erase(pos);
 }
