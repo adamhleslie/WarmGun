@@ -12,7 +12,7 @@ public:
 	Core();
 	virtual ~Core();
 
-	void init();
+	// Begins the game loop
 	void run();
 
 	// Adds and removes the specified module from those being updated
@@ -31,6 +31,5 @@ private:
 	// The modules that are updated every tick
 	std::vector<Module*> mEnabledModules;
 
-	bool mInitialized = false;
 	Renderer* mRenderer = nullptr;
 };

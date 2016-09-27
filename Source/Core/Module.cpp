@@ -10,7 +10,6 @@ void Module::init (Core* core)
 	assert(core);
 	
 	mCore = core;
-	setup();
 	mInitialized = true;
 }
 

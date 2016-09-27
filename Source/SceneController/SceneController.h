@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <OgreCamera.h>
 #include <OgreEntity.h>
 #include <OgreLogManager.h>
@@ -22,15 +23,23 @@ public:
 	SceneController(Renderer* renderer, Ogre::SceneType sceneType);
 	virtual ~SceneController();
 
-	virtual void update() = 0;
-	
-	virtual void loadScene() = 0;
+	void update() override;
 
-private:
-	void setup() override;
+	void loadScene();
 
 protected:
 	Renderer* mRenderer = nullptr;
 	Ogre::SceneManager* mSceneMgr = nullptr;
-	Ogre::SceneType mSceneType;
+
+private:
+	Ogre::SceneNode* constructWall(const Ogre::Vector3& dir, const Ogre::Vector3& up, 
+								   const Ogre::Vector3& pos, const std::string& name);
+
+	size_t mBallRadius;
+	Ogre::Vector3 mBallVelocity;
+	Ogre::SceneNode* mBallNode = nullptr;
+
+	Ogre::Camera* mCamera = nullptr;
+
+	Ogre::Vector3 mWallDistances;
 };

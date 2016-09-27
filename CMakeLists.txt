@@ -77,7 +77,6 @@ add_project_module(Application		Application/${INTERFACE})
 add_project_module(Core				Core)
 add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
-add_project_module(Scenes			Scenes)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})

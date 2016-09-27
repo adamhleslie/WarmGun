@@ -8,15 +8,14 @@
 
 
 /// Add Modules below ///
-#include "Scene1.h"
+#include "SceneController.h"
 
 void Core::getModules ()
 {
-	assert(!mInitialized);
 	mRenderer = new Renderer();
 
 	mModules[0] = mRenderer;
-	mModules[1] = new Scene1(mRenderer, Ogre::ST_GENERIC);
+	mModules[1] = new SceneController(mRenderer, Ogre::ST_GENERIC);
 	// make sure mModules[max], max == kNumModules - 1
 }
 /// Add Modules above ///
@@ -25,23 +24,7 @@ void Core::getModules ()
 Core::Core ()
 {
 	mModules.fill(nullptr);
-	mEnabledModules.reserve(kNumModules);
-}
-
-Core::~Core ()
-{
-	for (Module* module : mModules)
-	{
-		if (module)
-			delete module;
-	}
-}
-
-// Initializes the game engine before run is called
-void Core::init ()
-{
-	assert(!mInitialized);
-
+	
 	getModules();
 
 	// init modules
@@ -56,14 +39,20 @@ void Core::init ()
 		if (module->isEnabled())
 			mEnabledModules.push_back(module);
 	}
+}
 
-	mInitialized = true;
+Core::~Core ()
+{
+	for (Module* module : mModules)
+	{
+		if (module)
+			delete module;
+	}
 }
 
 // The Game Loop
 void Core::run ()
 {
-	assert(mInitialized);
 	Ogre::Timer timer = Ogre::Timer();
 
 	constexpr unsigned long kTimeStep = 4;

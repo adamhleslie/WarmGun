@@ -4,9 +4,10 @@ class Core;
 
 /**
 	To create a brand new module:
+		0. Create a new folder for it, and add it to CMakeLists.txt with add_project_module
 		1. Inherit from this class
-		2. Implement, constructor, destructor, and setup()
-			a. Call disable() within setup if you don't use update
+		2. Implement constructor and destructor
+			a. Call disable() within your constructor if you don't want your module to start updating
 		3. Increase Core::kNumModules (Core.h)
 		4. Add your module to Core::getModules() (Core.cpp)
 		5. Add functionality as needed - GameObjects and Components not yet implemented
@@ -25,12 +26,9 @@ public:
 	bool isEnabled();
 
 protected:
-	// Called within init
-	virtual void setup() = 0;
-
 	// When enabled, update is called every tick
 	void enable();
-	// Modules begin enabled: disable may be called in setup
+	// Modules begin enabled: disable may be called before init
 	void disable();
 
 private:

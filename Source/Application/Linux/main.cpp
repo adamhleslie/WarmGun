@@ -11,7 +11,6 @@ int main (int argc, char** argv)
 	
 	try
 	{
-		core.init();
 		core.run();
 	}
 	catch (exception e)

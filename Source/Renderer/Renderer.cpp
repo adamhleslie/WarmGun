@@ -9,15 +9,6 @@ void selectRenderSystem(Root* root);
 Renderer::Renderer ()
 {
 	mRoot = new Root("");
-}
-
-Renderer::~Renderer ()
-{
-	delete mRoot;
-}
-
-void Renderer::setup ()
-{
 	// Load Plugins
 #if _DEBUG
 	mRoot->loadPlugin("RenderSystem_GL_d");
@@ -42,6 +33,11 @@ void Renderer::setup ()
 	mRoot->addFrameListener(this);
 
 	disable();
+}
+
+Renderer::~Renderer ()
+{
+	delete mRoot;
 }
 
 void selectRenderSystem (Root* root)

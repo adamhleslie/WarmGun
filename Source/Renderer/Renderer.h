@@ -24,9 +24,6 @@ public:
 
 	Ogre::Root* mRoot = nullptr;
 	bool mRunning = true;
-
-protected:
-	void setup() override;
 	
 private:
 	Ogre::RenderWindow* mWindow = nullptr;
