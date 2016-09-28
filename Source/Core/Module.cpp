@@ -25,11 +25,11 @@ bool Module::isEnabled ()
 
 void Module::enable ()
 {
-	assert(mInitialized);
 	if (!mEnabled)
 	{
 		mEnabled = true;
-		mCore->enableModule(this);
+		if (mInitialized)
+			mCore->enableModule(this);
 	}
 }
 

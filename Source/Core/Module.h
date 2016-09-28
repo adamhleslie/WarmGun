@@ -26,9 +26,8 @@ public:
 	bool isEnabled();
 
 protected:
-	// When enabled, update is called every tick
+	// When enabled, update is called every tick - Modules begin enabled
 	void enable();
-	// Modules begin enabled: disable may be called before init
 	void disable();
 
 private:
