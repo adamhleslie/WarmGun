@@ -74,6 +74,7 @@ set(CMAKE_DEBUG_POSTFIX "_d")
 
 # Module List
 add_project_module(Application		Application/${INTERFACE})
+add_project_module(Config			Config)
 add_project_module(Core				Core)
 add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
