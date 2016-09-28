@@ -29,11 +29,13 @@ k : Constant Variable, kMaxInputDevices
 ### Linux
 
 First time:
+
 	$ mkdir Build && cd Build
 	$ cmake ..
 	$ make
 
 After:
+
     $ cd Build
     $ make
 
