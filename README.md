@@ -28,13 +28,18 @@ k : Constant Variable, kMaxInputDevices
 
 ### Linux
 
+First time:
 	$ mkdir Build && cd Build
 	$ cmake ..
 	$ make
 
-Then, to run it with the correct resources, you MUST run from the Binaries directory
+After:
+    $ cd Build
+    $ make
 
-	$ cd Binaries
+To Run: (you must run it within the Binaries folder for it to find the Media folder)
+
+	$ cd Build/Binaries
 	$ ./ProjectName
 
 ### (Outdated) Windows (Visual Studio 2013)
