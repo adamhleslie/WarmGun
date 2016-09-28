@@ -10,7 +10,7 @@
 /// Add Modules below ///
 #include "SceneController.h"
 
-void Core::getModules ()
+void Core::loadModules ()
 {
 	mRenderer = new Renderer();
 
@@ -25,12 +25,12 @@ Core::Core ()
 {
 	mModules.fill(nullptr);
 	
-	getModules();
+	loadModules();
 
-	// init modules
+	// let modules know they are loaded
 	for (Module* module : mModules)
 	{
-		module->init(this);
+		module->onLoad(this);
 	}
 
 	// place enabled (updating) modules into their container

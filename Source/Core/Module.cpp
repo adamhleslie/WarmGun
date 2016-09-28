@@ -4,18 +4,29 @@
 
 #include "Core.h"
 
-void Module::init (Core* core)
+void Module::onLoad (Core* core)
 {
-	assert(!mInitialized);
+	assert(!mLoaded);
 	assert(core);
 	
 	mCore = core;
-	mInitialized = true;
+	mLoaded = true;
+
+	onLoadCallback();
 }
 
-bool Module::isInitialized ()
+void Module::onUnload (Core* core)
 {
-	return mInitialized;
+	assert(mLoaded);
+	assert(mCore == core);
+	
+	mCore = nullptr;
+	mLoaded = false;
+}
+
+bool Module::isLoaded ()
+{
+	return mLoaded;
 }
 
 bool Module::isEnabled ()
@@ -28,7 +39,7 @@ void Module::enable ()
 	if (!mEnabled)
 	{
 		mEnabled = true;
-		if (mInitialized)
+		if (mLoaded)
 			mCore->enableModule(this);
 	}
 }
@@ -38,7 +49,7 @@ void Module::disable ()
 	if (mEnabled)
 	{
 		mEnabled = false;
-		if (mInitialized)
+		if (mLoaded)
 			mCore->disableModule(this);
 	}
 }

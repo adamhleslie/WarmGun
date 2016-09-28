@@ -24,9 +24,9 @@ private:
 	static constexpr size_t kNumModules = 2;
 	static_assert(kNumModules >= 2, "Must have room for Renderer and SceneController modules");
 
-	// The modules loaded by getModules()
+	// The modules loaded by loadModules()
 	std::array<Module*, kNumModules> mModules;
-	void getModules();
+	void loadModules();
 
 	// The modules that are updated every tick
 	std::vector<Module*> mEnabledModules;
