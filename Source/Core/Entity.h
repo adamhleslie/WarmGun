@@ -8,7 +8,7 @@ class Core;
 class Entity
 {
 public:
-	Entity();
+	Entity() {}
 	virtual ~Entity();
 
 	// Calls update on all loaded and enabled components
@@ -32,10 +32,6 @@ public:
 	void unloadComponent(Component* component);
 	*/
 
-	// Enables/Disables the given component (should already by loaded)
-	void enableComponent(Component* component);
-	void disableComponent(Component* component);
-
 	// Creates and then loads a component of the given type, using its default constructor
 	template <class C> 
 	C* createComponent();
@@ -43,9 +39,13 @@ public:
 	// Unloads the component, and deallocates its memory
 	void destroyComponent(Component* component);
 
-	// Returns the first found loaded component of the given type
-	template <class C> 
-	C* getComponent();
+	// Enables/Disables the given component (should already by loaded)
+	void enableComponent(Component* component);
+	void disableComponent(Component* component);
+
+	// // Returns the first found loaded component of the given type
+	// template <class C> 
+	// C* getComponent();
 
 private:
 	// The components that are loaded
