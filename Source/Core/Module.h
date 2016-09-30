@@ -25,16 +25,16 @@ public:
 	void onLoad(Core* core);
 	void onUnload(Core* core);
 
+	// When enabled and loaded, update is called every tick - Modules start out enabled
+	void enable();
+	void disable();
+
 	bool isLoaded();
 	bool isEnabled();
 
 protected:
 	// Callback called within onLoad()
 	virtual void onLoadCallback() {}
-
-	// When enabled and loaded, update is called every tick - Modules start out enabled
-	void enable();
-	void disable();
 
 private:
 	bool mLoaded = false;

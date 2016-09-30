@@ -45,8 +45,8 @@ Core::~Core ()
 {
 	for (Module* module : mModules)
 	{
-		if (module)
-			delete module;
+		assert(module);
+		delete module;
 	}
 }
 
@@ -68,6 +68,12 @@ void Core::run ()
 
 		while (accumulator >= kTimeStep)
 		{
+			for (Entity* entity : mEntities)
+			{
+				if (entity->isEnabled())
+					entity->update();
+			}
+
 			for (Module* module : mEnabledModules)
 			{
 				module->update();
@@ -93,5 +99,21 @@ void Core::disableModule (Module* module)
 	auto pos = std::find(mEnabledModules.begin(), mEnabledModules.end(), module);
 	assert(pos != mEnabledModules.end());
 
-    mEnabledModules.erase(pos);
+	mEnabledModules.erase(pos);
+}
+
+Entity* Core::createEntity ()
+{
+	Entity* entity = new Entity();
+	mEntities.push_back(entity);
+
+	return entity;
+}
+
+void Core::destroyEntity (Entity* entity)
+{
+	auto pos = std::find(mEntities.begin(), mEntities.end(), entity);
+	assert(pos != mEntities.end());
+
+	mEntities.erase(pos);
 }

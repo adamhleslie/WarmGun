@@ -36,20 +36,14 @@ bool Module::isEnabled ()
 
 void Module::enable ()
 {
-	if (!mEnabled)
-	{
-		mEnabled = true;
-		if (mLoaded)
-			mCore->enableModule(this);
-	}
+	mEnabled = true;
+	if (mLoaded)
+		mCore->enableModule(this);
 }
 
 void Module::disable ()
 {
-	if (mEnabled)
-	{
-		mEnabled = false;
-		if (mLoaded)
-			mCore->disableModule(this);
-	}
+	mEnabled = false;
+	if (mLoaded)
+		mCore->disableModule(this);
 }

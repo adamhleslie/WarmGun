@@ -1,3 +1,15 @@
+## Design Overview
+Core is the basic functionality of the engine. It runs the game loop, which calls update on Modules and Entities, then renders.  
+Modules are the overarching engine extensions - large additions to total functionality  
+Entities are the things existing within the game at any point in time  
+Components are the things that bring behavior and functionality to an entity, and are related to a specific module, or simply provide game logic tying other components together
+
+There are 3 main ideas you should be familiar with:
+
+1. Load/Unload - If loaded, a module or entity is known to the engine, and a component is known to its entity
+2. Enable/Disable - If enabled (and loaded), a module, entity, or component has its update function called every tick
+3. Create/Destroy - By using create/destroy, a module, entity, or component will have its memory managed by the engine, and will be automatically loaded
+
 ## Folder Structure
 Modules should be in their own folder under the Source directory  
 Components should be under the directory for their parent module  
