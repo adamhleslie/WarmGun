@@ -99,7 +99,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${OGRE_Overlay_LIBRARIES}
 	${OGRE_RenderSystem_GL_LIBRARIES}
 	${OIS_LIBRARIES}
-	${SDL_LIBRARIES}
+	${SDL_LIBRARY}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
