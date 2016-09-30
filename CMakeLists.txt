@@ -58,6 +58,8 @@ endif()
 
 find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
 find_package(OIS REQUIRED)
+find_package(SDL REQUIRED)
+message(STATUS "*******************************Module added: ${SDL_LIBRARIES} at ${SDL_INCLUDE_DIR}")
 
 # Application Interface setup
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -78,6 +80,7 @@ add_project_module(Config			Config)
 add_project_module(Core				Core)
 add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
+add_project_module(Audio			Audio)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
@@ -96,6 +99,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${OGRE_Overlay_LIBRARIES}
 	${OGRE_RenderSystem_GL_LIBRARIES}
 	${OIS_LIBRARIES}
+	${SDL_LIBRARIES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -104,6 +108,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${OGRE_RenderSystem_GL_INCLUDE_DIRS}
 	${OGRE_HOME}/include/OGRE/RenderSystems/GL
 	${OIS_INCLUDE_DIR}
+	${SDL_INCLUDE_DIR}
 )
 
 # Copy the media directory to the binaries folder
