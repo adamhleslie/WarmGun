@@ -45,5 +45,5 @@ void Component::disable ()
 {
 	mEnabled = false;
 	if (mLoaded)
-		mEntity->enableComponent(this);
+		mEntity->disableComponent(this);
 }

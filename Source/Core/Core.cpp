@@ -3,6 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
+#include "Entity.h"
 #include "Module.h"
 #include "Renderer.h"
 
