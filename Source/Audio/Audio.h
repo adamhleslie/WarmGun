@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-#include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 class Audio : public Module
 {
@@ -9,7 +9,5 @@ class Audio : public Module
 		Audio();
 		virtual ~Audio();
 
-		int  openAudioDevice();
-		void playAudio();
-		void fill_audio(void *udata, Uint8 *stream, int len);
+		bool init();
 };
