@@ -38,6 +38,7 @@ endmacro()
 
 # We assume that the user is on a linux lab machine
 set(OGRE_HOME "/lusr/opt/ogre-1.9" CACHE PATH "Path to Ogre SDK")
+set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(OGRE_CMAKE_PATH "${OGRE_HOME}/lib/OGRE/cmake" CACHE PATH "Path to Ogre's CMake scripts")
@@ -96,6 +97,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${OGRE_Overlay_LIBRARIES}
 	${OGRE_RenderSystem_GL_LIBRARIES}
 	${OIS_LIBRARIES}
+	${CEGUI_HOME}/lib
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -104,6 +106,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${OGRE_RenderSystem_GL_INCLUDE_DIRS}
 	${OGRE_HOME}/include/OGRE/RenderSystems/GL
 	${OIS_INCLUDE_DIR}
+	${CEGUI_HOME}/include
 )
 
 # Copy the media directory to the binaries folder
