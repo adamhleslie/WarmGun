@@ -45,8 +45,8 @@ Core::~Core ()
 {
 	for (Module* module : mModules)
 	{
-		if (module)
-			delete module;
+		assert(module);
+		delete module;
 	}
 }
 
