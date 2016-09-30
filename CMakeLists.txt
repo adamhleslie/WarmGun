@@ -63,6 +63,7 @@ find_package(CEGUI REQUIRED COMPONENTS OgreRenderer)
 if(NOT CEGUI_FOUND)
    message(SEND_ERROR "Failed to find CEGUI.")
 endif()
+message(STATUS "**********8TEST: ${CEGUI_LIBRARIES}, ${CEGUI_INCLUDE_DIRS}")
 
 # Application Interface setup
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -102,6 +103,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${OGRE_RenderSystem_GL_LIBRARIES}
 	${OIS_LIBRARIES}
 	${CEGUI_LIBRARIES}
+	${CEGUI_OgreRenderer_LIBRARIES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -110,7 +112,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${OGRE_RenderSystem_GL_INCLUDE_DIRS}
 	${OGRE_HOME}/include/OGRE/RenderSystems/GL
 	${OIS_INCLUDE_DIR}
-	${CEGUI_INCLUDE_DIRS}
+	${CEGUI_INCLUDE_DIR}
 )
 
 # Copy the media directory to the binaries folder
