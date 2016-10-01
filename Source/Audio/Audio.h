@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Module.h"
+#include <cassert>
 #include <SDL/SDL_mixer.h>
 
 class Audio : public Module
@@ -9,8 +10,9 @@ class Audio : public Module
 		Audio();
 		virtual ~Audio();
 
-		static bool init();
-		static bool load_files();
-		static void clean_up();
-		static int  play_sound();
+		int play_s1();
+		int play_s2();
+		int play_s3();
+		int play_s4();
+		int play_s5();
 };

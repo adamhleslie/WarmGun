@@ -32,7 +32,7 @@ public:
 
 private:
 	// Number of modules used, including Renderer and SceneController
-	static constexpr size_t kNumModules = 2;
+	static constexpr size_t kNumModules = 3;
 	static_assert(kNumModules >= 2, "Must have room for Renderer and SceneController modules");
 
 	// The modules that are loaded (static, see loadModules())

@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "Module.h"
 #include "Renderer.h"
+#include "Audio.h"
 
 /// Add Modules below ///
 #include "SceneController.h"
@@ -16,6 +17,7 @@ void Core::loadModules ()
 
 	mModules[0] = mRenderer;
 	mModules[1] = new SceneController(mRenderer, Ogre::ST_GENERIC);
+	mModules[2] = new Audio();
 	// make sure mModules[max], max == kNumModules - 1
 }
 /// Add Modules above ///
