@@ -28,7 +28,18 @@ public:
 	// State //
 	// Returns a pointer to the first found loaded M, nullptr if none
 	template <class M>
-	M* getModule();
+	M* getModule()
+	{
+		static_assert(std::is_base_of<Module, M>::value, 
+				      "getModule: templated type must be derived from Module");
+
+		for (Module* module : mModules)
+		{
+			M* m = dynamic_cast<M*>(module);
+			if (m)
+				return m;
+		}
+	}
 
 // RESTRICTED API
 	// Enables/Disables updating of the given module

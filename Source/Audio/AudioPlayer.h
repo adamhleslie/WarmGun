@@ -2,6 +2,10 @@
 
 #include "Module.h"
 #include <SDL/SDL_mixer.h>
+#include "Audio.h"
+#include "Component.h"
+#include "Entity.h"
+#include "Core.h"
 
 class AudioPlayer : public Component
 {
@@ -14,5 +18,5 @@ class AudioPlayer : public Component
 		Audio* audio = nullptr;
 
 	protected:
-		virtual void onLoadCallback()
+		virtual void onLoadCallback();
 };
