@@ -24,6 +24,12 @@ void Component::disable ()
 	}
 }
 
+Entity* Component::getEntity ()
+{
+	assert(mLoaded);
+	return mEntity;
+}
+
 bool Component::isLoaded ()
 {
 	return mLoaded;

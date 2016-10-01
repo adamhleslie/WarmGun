@@ -29,6 +29,8 @@ public:
 	void disable();
 
 	// State //
+	Core* getCore();
+	
 	bool isLoaded();
 	bool isEnabled();
 
