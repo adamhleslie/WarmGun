@@ -24,6 +24,12 @@ void Module::disable ()
 	}
 }
 
+Core* Module::getCore ()
+{
+	assert(mLoaded);
+	return mCore;
+}
+
 bool Module::isLoaded ()
 {
 	return mLoaded;

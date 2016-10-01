@@ -18,6 +18,8 @@ public:
 	void disable();
 
 	// State //
+	Entity* getEntity();
+
 	bool isLoaded();
 	bool isEnabled();
 
