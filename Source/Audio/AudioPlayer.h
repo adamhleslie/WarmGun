@@ -8,6 +8,7 @@ class AudioPlayer : public Component
 	public:
 		AudioPlayer();
 		virtual ~AudioPlayer(){}
+		int playSound(int i);
 
 	private:
 		Audio* audio = nullptr;
