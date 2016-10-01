@@ -28,11 +28,13 @@ public:
 	// Unloads the component, and deallocates its memory
 	void destroyComponent(Component* component);
 
+	// State //
 	// Returns the first found loaded component of the given type, nullptr if none
 	template <class C> 
 	C* getComponent();
 
-	// State //
+	Core* getCore();
+
 	bool isLoaded();
 	bool isEnabled();
 

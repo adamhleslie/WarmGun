@@ -71,6 +71,12 @@ C* Entity::getComponent ()
 	return nullptr;
 }
 
+Core* Entity::getCore ()
+{
+	assert(mLoaded);
+	return mCore;
+}
+
 bool Entity::isLoaded ()
 {
 	return mLoaded;

@@ -18,11 +18,17 @@ public:
 	// Begins the game loop
 	void run();
 
+	// Modifiers //
 	// Creates and loads an entity, using its default constructor
 	Entity* createEntity();
 
 	// Unloads the given entity, and deallocates its memory
 	void destroyEntity(Entity* entity);
+
+	// State //
+	// Returns a pointer to the first found loaded M, nullptr if none
+	template <class M>
+	M* getModule();
 
 // RESTRICTED API
 	// Enables/Disables updating of the given module
