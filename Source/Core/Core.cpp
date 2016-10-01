@@ -7,7 +7,6 @@
 #include "Module.h"
 #include "Renderer.h"
 
-
 /// Add Modules below ///
 #include "SceneController.h"
 
@@ -20,7 +19,6 @@ void Core::loadModules ()
 	// make sure mModules[max], max == kNumModules - 1
 }
 /// Add Modules above ///
-
 
 Core::Core ()
 {
@@ -47,7 +45,14 @@ Core::~Core ()
 	for (Module* module : mModules)
 	{
 		assert(module);
+		module->onUnload(this);
 		delete module;
+	}
+	for (Entity* entity : mEntities)
+	{
+		assert(entity);
+		entity->onUnload(this);
+		delete entity;
 	}
 }
 
@@ -88,6 +93,26 @@ void Core::run ()
 	}
 }
 
+Entity* Core::createEntity ()
+{
+	Entity* entity = new Entity();
+	mEntities.push_back(entity);
+	entity->onLoad(this);
+
+	return entity;
+}
+
+void Core::destroyEntity (Entity* entity)
+{
+	auto pos = std::find(mEntities.begin(), mEntities.end(), entity);
+	assert(pos != mEntities.end());
+	mEntities.erase(pos);
+
+	entity->onUnload(this);
+
+	delete entity;
+}
+
 // module should not be in mEnabledModules
 void Core::enableModule (Module* module)
 {
@@ -99,22 +124,5 @@ void Core::disableModule (Module* module)
 {
 	auto pos = std::find(mEnabledModules.begin(), mEnabledModules.end(), module);
 	assert(pos != mEnabledModules.end());
-
 	mEnabledModules.erase(pos);
-}
-
-Entity* Core::createEntity ()
-{
-	Entity* entity = new Entity();
-	mEntities.push_back(entity);
-
-	return entity;
-}
-
-void Core::destroyEntity (Entity* entity)
-{
-	auto pos = std::find(mEntities.begin(), mEntities.end(), entity);
-	assert(pos != mEntities.end());
-
-	mEntities.erase(pos);
 }
