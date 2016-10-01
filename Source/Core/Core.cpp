@@ -113,6 +113,19 @@ void Core::destroyEntity (Entity* entity)
 	delete entity;
 }
 
+template <class M>
+M* Core::getModule()
+{
+	static_assert(std::is_base_of<Module, M>::value, 
+			      "getModule: templated type must be derived from Module");
+
+	for (Module* module : mModules)
+	{
+		if (dynamic_cast<M*>(module))
+			return module;
+	}
+}
+
 // module should not be in mEnabledModules
 void Core::enableModule (Module* module)
 {
