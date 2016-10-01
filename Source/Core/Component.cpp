@@ -4,24 +4,24 @@
 
 #include "Entity.h"
 
-void Component::onLoad (Entity* entity)
+void Component::enable ()
 {
-	assert(!mLoaded);
-	assert(entity);
-	
-	mEntity = entity;
-	mLoaded = true;
-
-	onLoadCallback();
+	if (!mEnabled)
+	{
+		mEnabled = true;
+		if (mLoaded)
+			mEntity->enableComponent(this);
+	}
 }
 
-void Component::onUnload (Entity* entity)
+void Component::disable ()
 {
-	assert(mLoaded);
-	assert(mEntity == entity);
-	
-	mEntity = nullptr;
-	mLoaded = false;
+	if (mEnabled)
+	{
+		mEnabled = false;
+		if (mLoaded)
+			mEntity->disableComponent(this);
+	}
 }
 
 bool Component::isLoaded ()
@@ -34,16 +34,21 @@ bool Component::isEnabled ()
 	return mEnabled;
 }
 
-void Component::enable ()
+void Component::onLoad (Entity* entity)
 {
-	mEnabled = true;
-	if (mLoaded)
-		mEntity->enableComponent(this);
+	assert(!mLoaded);
+	assert(entity);
+	
+	mEntity = entity;
+	onLoadCallback();
+	mLoaded = true;
 }
 
-void Component::disable ()
+void Component::onUnload (Entity* entity)
 {
-	mEnabled = false;
-	if (mLoaded)
-		mEntity->disableComponent(this);
+	assert(mLoaded);
+	assert(mEntity == entity);
+	
+	mEntity = nullptr;
+	mLoaded = false;
 }

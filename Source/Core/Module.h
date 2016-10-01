@@ -1,39 +1,46 @@
 #pragma once
 
-class Core;
-
 /**
 	To create a brand new module:
 		0. Create a new folder for it, and add it to CMakeLists.txt with add_project_module
 		1. Inherit from this class
-		2. Implement constructor and destructor
+		2. Implement constructor and destructor as needed
 			a. Call disable() within your constructor if you don't want your module to update upon load
 		3. Increase Core::kNumModules (Core.h)
 		4. Add your module to Core::loadModules() (Core.cpp)
-		5. Add functionality as needed - GameObjects and Components not yet implemented
+		5. Add functionality as needed - Put related components into the modules folder
 **/
+
+class Core;
 
 class Module
 {
 public:
+
+// PUBLIC API
 	Module () {}
 	virtual ~Module () {}
 
 	virtual void update () {}
 
-	// Functions called when loaded and when unloaded from the engine Core
-	void onLoad(Core* core);
-	void onUnload(Core* core);
-
-	// When enabled and loaded, update is called every tick - Modules start out enabled
+	// Modifiers //
+	// When enabled and loaded, update is called every tick - Modules begin enabled
 	void enable();
 	void disable();
 
+	// State //
 	bool isLoaded();
 	bool isEnabled();
 
+// RESTRICTED API
+	// Callbacks called when loaded and when unloaded by Core
+	// Used by Core
+	void onLoad(Core* core);
+	void onUnload(Core* core);
+
 protected:
-	// Callback called within onLoad()
+	// Called in onLoad(), before being added to the list of enabled modules
+	// Use this for processing immediately after being added to the core
 	virtual void onLoadCallback() {}
 
 private:

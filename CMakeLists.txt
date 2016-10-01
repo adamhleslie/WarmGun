@@ -64,6 +64,7 @@ if(NOT CEGUI_FOUND)
    message(SEND_ERROR "Failed to find CEGUI.")
 endif()
 message(STATUS "**********8TEST: ${CEGUI_LIBRARIES}, ${CEGUI_INCLUDE_DIRS}")
+find_package(SDL REQUIRED)
 
 # Application Interface setup
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -84,6 +85,7 @@ add_project_module(Config			Config)
 add_project_module(Core				Core)
 add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
+add_project_module(Audio			Audio)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
@@ -104,6 +106,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${OIS_LIBRARIES}
 	${CEGUI_LIBRARIES}
 	${CEGUI_OgreRenderer_LIBRARIES}
+	${SDL_LIBRARY}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -113,6 +116,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${OGRE_HOME}/include/OGRE/RenderSystems/GL
 	${OIS_INCLUDE_DIR}
 	${CEGUI_INCLUDE_DIR}
+	${SDL_INCLUDE_DIR}
 )
 
 # Copy the media directory to the binaries folder
