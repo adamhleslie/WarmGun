@@ -9,5 +9,8 @@ class Audio : public Module
 		Audio();
 		virtual ~Audio();
 
-		bool init();
+		static bool init();
+		static bool load_files();
+		static void clean_up();
+		static int  play_sound();
 };
