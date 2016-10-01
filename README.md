@@ -42,19 +42,23 @@ k : Constant Variable, kMaxInputDevices
 
 First time:
 
-	$ mkdir Build && cd Build
-	$ cmake ..
-	$ make
+	$ make release
+
+or
+
+	$ make debug
 
 After:
 
-    $ cd Build
-    $ make
+    $ make build
 
-To Run: (you must run it within the Binaries folder for it to find the Media folder)
+To Run:
 
-	$ cd Build/Binaries
-	$ ./ProjectName
+	$ make run
+
+To Build then Run:
+
+	$ make
 
 ### (Outdated) Windows (Visual Studio 2013)
 
