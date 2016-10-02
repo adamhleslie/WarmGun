@@ -25,6 +25,9 @@ public:
 	// Unloads the given entity, and deallocates its memory
 	void destroyEntity(Entity* entity);
 
+	// Unloads and deallocates memory for all entities
+	void destroyAllEntities();
+
 	// State //
 	// Returns a pointer to the first found loaded M (deriving from Module), nullptr if none
 	template <class M>

@@ -6,10 +6,10 @@
 #include "Entity.h"
 #include "Module.h"
 #include "Renderer.h"
-#include "Audio.h"
 
 /// Add Modules below ///
 #include "SceneController.h"
+#include "Audio.h"
 
 void Core::loadModules ()
 {
@@ -113,6 +113,17 @@ void Core::destroyEntity (Entity* entity)
 	entity->onUnload(this);
 
 	delete entity;
+}
+
+void Core::destroyAllEntities ()
+{
+	for (Entity* entity : mEntities)
+	{
+		assert(entity);
+		entity->onUnload(this);
+		delete entity;
+	}
+	mEntities.clear();
 }
 
 // module should not be in mEnabledModules
