@@ -1,22 +1,11 @@
 #pragma once
 
-#include <string>
-#include <list>
-
 #include "Module.h"
-#include "Scene.h"
 
-#include <OgreCamera.h>
-#include <OgreEntity.h>
-#include <OgreLogManager.h>
-#include <OgreRoot.h>
-#include <OgreViewport.h>
+#include <list>
 #include <OgreSceneManager.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-#include <OgreWindowEventUtilities.h>
-#include <OgreRenderTargetListener.h>
-#include <OgreMeshManager.h>
+
+#include "Scene.h"
 
 class Renderer;
 
@@ -27,8 +16,6 @@ public:
 // PUBLIC API
 	SceneController(Renderer* renderer, Ogre::SceneType sceneType);
 	~SceneController() {}
-
-	void update() override;
 
 	// Modifiers //
 	void addScene(Scene& scene);

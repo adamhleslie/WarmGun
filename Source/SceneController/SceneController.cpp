@@ -2,20 +2,15 @@
 
 #include <cassert>
 
-#include "Core.h"
 #include "Renderer.h"
 #include "Scene.h"
+#include "Core.h"
 
 SceneController::SceneController (Renderer* renderer, Ogre::SceneType sceneType)
 :	mRenderer(renderer)
 {
 	assert(renderer);
 	mSceneMgr = mRenderer->mRoot->createSceneManager(sceneType);
-}
-
-void SceneController::update ()
-{
-	(*(mCurScene->updateScene))();
 }
 
 void SceneController::addScene (Scene& scene)

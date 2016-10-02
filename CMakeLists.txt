@@ -81,6 +81,7 @@ add_project_module(Core				Core)
 add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
 add_project_module(Audio			Audio)
+add_project_module(GameLogic		GameLogic)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})

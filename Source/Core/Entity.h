@@ -75,8 +75,9 @@ C* Entity::createComponent ()
 	static_assert(std::is_base_of<Component, C>::value, 
 				  "createComponent: templated type must be derived from Component");
 	
-	Component* component = static_cast<Component*>(new C());
-	loadComponent(component);
+	C* component = new C();
+	Component* casted = static_cast<Component*>(component);
+	loadComponent(casted);
 
 	return component;
 }
