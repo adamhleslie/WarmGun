@@ -10,13 +10,13 @@
 class AudioPlayer : public Component
 {
 	public:
-		AudioPlayer();
-		virtual ~AudioPlayer(){}
+		AudioPlayer() {}
+		~AudioPlayer() {}
 		int playSound(int i);
 
 	private:
 		Audio* audio = nullptr;
 
 	protected:
-		virtual void onLoadCallback(Entity* entity);
+		void onLoadCallback(Entity* entity) override;
 };

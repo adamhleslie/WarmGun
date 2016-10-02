@@ -3,6 +3,7 @@
 void AudioPlayer::onLoadCallback(Entity* entity)
 {
 	audio = entity->getCore()->getModule<Audio>();
+	assert(audio);
 }
 
 int AudioPlayer::playSound(int i)

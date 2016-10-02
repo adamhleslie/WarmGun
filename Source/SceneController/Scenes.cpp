@@ -13,6 +13,7 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "BoundMovement.h"
+#include "AudioPlayer.h"
 
 using Ogre::Vector3;
 
@@ -59,6 +60,7 @@ namespace scene1
 
 		// Set up Sphere
 		Entity* sphere = core->createEntity();
+		sphere->createComponent<AudioPlayer>();
 		BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
 
 		// Set up camera
@@ -76,9 +78,9 @@ namespace scene1
 		boundMove->mBallNode->attachObject(sphereEntity);
 		
 		srand(time(NULL));
-		boundMove->mBallVelocity = Vector3(Ogre::Math::RangeRandom(-1, -.3),
-										   Ogre::Math::RangeRandom(-1, -.3),
-										   Ogre::Math::RangeRandom(-1, -.3));
+		boundMove->mBallVelocity = Vector3(Ogre::Math::RangeRandom(-1, 1),
+										   Ogre::Math::RangeRandom(-1, 1),
+										   Ogre::Math::RangeRandom(-1, 1));
 
 		// Set up walls
 		Ogre::SceneNode* tmp;
