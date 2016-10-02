@@ -46,7 +46,7 @@ void Module::onLoad (Core* core)
 	assert(core);
 	
 	mCore = core;
-	onLoadCallback();
+	onLoadCallback(core);
 	mLoaded = true;
 }
 

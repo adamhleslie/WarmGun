@@ -43,7 +43,7 @@ public:
 protected:
 	// Called in onLoad(), before being added to the list of enabled modules
 	// Use this for processing immediately after being added to the core
-	virtual void onLoadCallback() {}
+	virtual void onLoadCallback(Core* core) {}
 
 private:
 	bool mLoaded = false;
