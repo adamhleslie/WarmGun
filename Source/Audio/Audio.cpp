@@ -19,11 +19,11 @@ Audio::Audio()
 	s4 = Mix_LoadWAV( "s4.wav" );
 	s5 = Mix_LoadWAV( "s5.wav" );
 
-    assert( s1 != NULL );
-    assert( s2 != NULL );
-    assert( s3 != NULL );
-    assert( s4 != NULL );
-    assert( s5 != NULL );
+    // assert( s1 != NULL );
+    // assert( s2 != NULL );
+    // assert( s3 != NULL );
+    // assert( s4 != NULL );
+    // assert( s5 != NULL );
 }
 
 

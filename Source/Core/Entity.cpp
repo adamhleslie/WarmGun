@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <algorithm>
-#include <type_traits>
 
 #include "Core.h"
 #include "Component.h"
@@ -35,18 +34,6 @@ void Entity::disable ()
 	mEnabled = false;
 }
 
-template <class C> 
-C* Entity::createComponent ()
-{
-	static_assert(std::is_base_of<Component, C>::value, 
-				  "createComponent: templated type must be derived from Component");
-	Component* component = static_cast<Component*>(new C());
-
-	loadComponent(component);
-
-	return component;
-}
-
 void Entity::destroyComponent (Component* component)
 {
 	assert(component->isLoaded());
@@ -54,21 +41,6 @@ void Entity::destroyComponent (Component* component)
 	unloadComponent(component);
 
 	delete component;
-}
-
-template <class C> 
-C* Entity::getComponent ()
-{
-	static_assert(std::is_base_of<Component, C>::value, 
-				  "getComponent: templated type must be derived from Component");
-	
-	for (Component* component : mComponents)
-	{
-		if (dynamic_cast<C*>(component))
-			return component;
-	}
-
-	return nullptr;
 }
 
 Core* Entity::getCore ()

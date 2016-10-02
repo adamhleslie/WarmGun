@@ -65,3 +65,34 @@ private:
 	void loadComponent(Component* component);
 	void unloadComponent(Component* component);
 };
+
+// Template Methods //
+#include <type_traits>
+
+template <class C> 
+C* Entity::createComponent ()
+{
+	static_assert(std::is_base_of<Component, C>::value, 
+				  "createComponent: templated type must be derived from Component");
+	
+	Component* component = static_cast<Component*>(new C());
+	loadComponent(component);
+
+	return component;
+}
+
+template <class C> 
+C* Entity::getComponent ()
+{
+	static_assert(std::is_base_of<Component, C>::value, 
+				  "getComponent: templated type must be derived from Component");
+	
+	for (Component* component : mComponents)
+	{
+		C* casted = dynamic_cast<C*>(component);
+		if (casted)
+			return casted;
+	}
+
+	return nullptr;
+}
