@@ -1,8 +1,8 @@
 #include "AudioPlayer.h"
 
-void AudioPlayer::onLoadCallback()
+void AudioPlayer::onLoadCallback(Entity* entity)
 {
-	audio = getEntity()->getCore()->getModule<Audio>();
+	audio = entity->getCore()->getModule<Audio>();
 }
 
 int AudioPlayer::playSound(int i)

@@ -18,5 +18,5 @@ class AudioPlayer : public Component
 		Audio* audio = nullptr;
 
 	protected:
-		virtual void onLoadCallback();
+		virtual void onLoadCallback(Entity* entity);
 };

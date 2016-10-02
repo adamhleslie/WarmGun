@@ -46,7 +46,7 @@ void Component::onLoad (Entity* entity)
 	assert(entity);
 	
 	mEntity = entity;
-	onLoadCallback();
+	onLoadCallback(entity);
 	mLoaded = true;
 }
 
