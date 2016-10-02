@@ -13,6 +13,8 @@ class AudioPlayer : public Component
 		AudioPlayer() {}
 		~AudioPlayer() {}
 		int playSound(int i);
+		int changeVolume(int volume);
+		int muteVolume();
 
 	private:
 		Audio* audio = nullptr;

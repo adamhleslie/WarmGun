@@ -21,6 +21,7 @@ void BoundMovement::update()
 	{
 			mBallVelocity.x = -mBallVelocity.x;
 			mAudioPlayer->playSound(1);
+			mAudioPlayer->muteVolume();
 	}
 
 	if (mBallVelocity.y >= 0 && (next.y + mBallRadius > mWallDistances.y) ||
@@ -28,6 +29,7 @@ void BoundMovement::update()
 	{
 			mBallVelocity.y = -mBallVelocity.y;
 			mAudioPlayer->playSound(2);
+			mAudioPlayer->changeVolume(-30);
 	}
 
 	if (mBallVelocity.z >= 0 && (next.z + mBallRadius > mWallDistances.z) ||
@@ -35,6 +37,7 @@ void BoundMovement::update()
 	{
 			mBallVelocity.z = -mBallVelocity.z;
 			mAudioPlayer->playSound(3);
+			mAudioPlayer->changeVolume(30);
 	}
 
 	mBallNode->translate(mBallVelocity);
