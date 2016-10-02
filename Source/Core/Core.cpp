@@ -32,11 +32,6 @@ Core::Core ()
 	for (Module* module : mModules)
 	{
 		module->onLoad(this);
-	}
-
-	// place enabled (updating) modules into their container
-	for (Module* module : mModules)
-	{
 		if (module->isEnabled())
 			mEnabledModules.push_back(module);
 	}
