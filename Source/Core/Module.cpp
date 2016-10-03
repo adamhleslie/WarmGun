@@ -24,6 +24,12 @@ void Module::disable ()
 	}
 }
 
+Core* Module::getCore ()
+{
+	assert(mLoaded);
+	return mCore;
+}
+
 bool Module::isLoaded ()
 {
 	return mLoaded;
@@ -40,7 +46,7 @@ void Module::onLoad (Core* core)
 	assert(core);
 	
 	mCore = core;
-	onLoadCallback();
+	onLoadCallback(core);
 	mLoaded = true;
 }
 

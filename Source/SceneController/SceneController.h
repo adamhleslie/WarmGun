@@ -1,45 +1,41 @@
 #pragma once
 
-#include <string>
-#include <OgreCamera.h>
-#include <OgreEntity.h>
-#include <OgreLogManager.h>
-#include <OgreRoot.h>
-#include <OgreViewport.h>
-#include <OgreSceneManager.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-#include <OgreWindowEventUtilities.h>
-#include <OgreRenderTargetListener.h>
-#include <OgreMeshManager.h>
-
 #include "Module.h"
+
+#include <list>
+#include <OgreSceneManager.h>
+
+#include "Scene.h"
 
 class Renderer;
 
 class SceneController : public Module
 {
 public:
+
+// PUBLIC API
 	SceneController(Renderer* renderer, Ogre::SceneType sceneType);
-	virtual ~SceneController();
+	~SceneController() {}
 
-	void update() override;
+	// Modifiers //
+	void addScene(Scene& scene);
+	void loadNextScene(bool additive = false);
 
-	void loadScene();
-
+// RESTRICTED API
 protected:
+	void onLoadCallback(Core* core) override;
+
+private:
 	Renderer* mRenderer = nullptr;
 	Ogre::SceneManager* mSceneMgr = nullptr;
 
-private:
-	Ogre::SceneNode* constructWall(const Ogre::Vector3& dir, const Ogre::Vector3& up, 
-								   const Ogre::Vector3& pos, const std::string& name);
+	std::list<Scene> mSceneList;
+	std::list<Scene>::iterator mCurScene;
 
-	size_t mBallRadius;
-	Ogre::Vector3 mBallVelocity;
-	Ogre::SceneNode* mBallNode = nullptr;
+	// Loads the first scene in the scene list
+	void loadInitialScene(Core* core);
 
-	Ogre::Camera* mCamera = nullptr;
-
-	Ogre::Vector3 mWallDistances;
+	// Adds the initial scenes to the scene list
+	// Implemented in Scenes.cpp
+	void initScenes();
 };

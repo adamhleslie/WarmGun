@@ -18,11 +18,20 @@ public:
 	// Begins the game loop
 	void run();
 
+	// Modifiers //
 	// Creates and loads an entity, using its default constructor
 	Entity* createEntity();
 
 	// Unloads the given entity, and deallocates its memory
 	void destroyEntity(Entity* entity);
+
+	// Unloads and deallocates memory for all entities
+	void destroyAllEntities();
+
+	// State //
+	// Returns a pointer to the first found loaded M (deriving from Module), nullptr if none
+	template <class M>
+	M* getModule();
 
 // RESTRICTED API
 	// Enables/Disables updating of the given module
@@ -32,7 +41,7 @@ public:
 
 private:
 	// Number of modules used, including Renderer and SceneController
-	static constexpr size_t kNumModules = 2;
+	static constexpr size_t kNumModules = 3;
 	static_assert(kNumModules >= 2, "Must have room for Renderer and SceneController modules");
 
 	// The modules that are loaded (static, see loadModules())
@@ -51,3 +60,22 @@ private:
 	// Initialization function for loading the static modules
 	void loadModules();
 };
+
+// Template Methods //
+#include <type_traits>
+
+template <class M>
+M* Core::getModule()
+{
+	static_assert(std::is_base_of<Module, M>::value, 
+			      "getModule: templated type must be derived from Module");
+
+	for (Module* module : mModules)
+	{
+		M* casted = dynamic_cast<M*>(module);
+		if (casted)
+			return casted;
+	}
+
+	return nullptr;
+}

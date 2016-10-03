@@ -24,6 +24,12 @@ void Component::disable ()
 	}
 }
 
+Entity* Component::getEntity ()
+{
+	assert(mLoaded);
+	return mEntity;
+}
+
 bool Component::isLoaded ()
 {
 	return mLoaded;
@@ -40,7 +46,7 @@ void Component::onLoad (Entity* entity)
 	assert(entity);
 	
 	mEntity = entity;
-	onLoadCallback();
+	onLoadCallback(entity);
 	mLoaded = true;
 }
 

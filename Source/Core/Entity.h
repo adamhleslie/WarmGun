@@ -28,11 +28,13 @@ public:
 	// Unloads the component, and deallocates its memory
 	void destroyComponent(Component* component);
 
+	// State //
 	// Returns the first found loaded component of the given type, nullptr if none
 	template <class C> 
 	C* getComponent();
 
-	// State //
+	Core* getCore();
+
 	bool isLoaded();
 	bool isEnabled();
 
@@ -63,3 +65,35 @@ private:
 	void loadComponent(Component* component);
 	void unloadComponent(Component* component);
 };
+
+// Template Methods //
+#include <type_traits>
+
+template <class C> 
+C* Entity::createComponent ()
+{
+	static_assert(std::is_base_of<Component, C>::value, 
+				  "createComponent: templated type must be derived from Component");
+	
+	C* component = new C();
+	Component* casted = static_cast<Component*>(component);
+	loadComponent(casted);
+
+	return component;
+}
+
+template <class C> 
+C* Entity::getComponent ()
+{
+	static_assert(std::is_base_of<Component, C>::value, 
+				  "getComponent: templated type must be derived from Component");
+	
+	for (Component* component : mComponents)
+	{
+		C* casted = dynamic_cast<C*>(component);
+		if (casted)
+			return casted;
+	}
+
+	return nullptr;
+}
