@@ -44,4 +44,7 @@ private:
 	//virtual void windowFocusChange(Ogre::RenderWindow *rw) override;
 	//virtual void windowMoved(Ogre::RenderWindow *rw) override;
 	//virtual void windowResized(Ogre::RenderWindow *rw) override;
+
+protected:
+	bool quit(const CEGUI::EventArgs &e);
 };
