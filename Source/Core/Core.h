@@ -33,6 +33,8 @@ public:
 	template <class M>
 	M* getModule();
 
+	Renderer* getRenderer();
+
 // RESTRICTED API
 	// Enables/Disables updating of the given module
 	// Used by Module

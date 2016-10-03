@@ -13,10 +13,10 @@
 
 void Core::loadModules ()
 {
-	mRenderer = new Renderer();
+	mRenderer = new Renderer(Ogre::ST_GENERIC);
 
 	mModules[0] = mRenderer;
-	mModules[1] = new SceneController(mRenderer, Ogre::ST_GENERIC);
+	mModules[1] = new SceneController(mRenderer);
 	mModules[2] = new Audio();
 	// make sure mModules[max], max == kNumModules - 1
 }
@@ -27,6 +27,7 @@ Core::Core ()
 	mModules.fill(nullptr);
 	
 	loadModules();
+	assert(mRenderer);
 
 	// let modules know they are loaded
 	for (Module* module : mModules)
@@ -39,17 +40,13 @@ Core::Core ()
 
 Core::~Core ()
 {
+	// Destroy entities first, since their components destructors may rely on modules
+	destroyAllEntities();
 	for (Module* module : mModules)
 	{
 		assert(module);
 		module->onUnload(this);
 		delete module;
-	}
-	for (Entity* entity : mEntities)
-	{
-		assert(entity);
-		entity->onUnload(this);
-		delete entity;
 	}
 }
 
@@ -85,8 +82,7 @@ void Core::run ()
 			accumulator -= kTimeStep;
 		}
 
-		Ogre::WindowEventUtilities::messagePump();
-		mRenderer->mRoot->renderOneFrame();
+		mRenderer->renderOneFrame();
 	}
 }
 
@@ -119,6 +115,11 @@ void Core::destroyAllEntities ()
 		delete entity;
 	}
 	mEntities.clear();
+}
+
+Renderer* Core::getRenderer ()
+{
+	return mRenderer;
 }
 
 // module should not be in mEnabledModules

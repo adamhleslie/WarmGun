@@ -6,8 +6,11 @@ using namespace Ogre;
 
 void selectRenderSystem(Root* root);
 
-Renderer::Renderer ()
+Renderer::Renderer (Ogre::SceneType sceneType)
 {
+	// Renderer does not need to update every tick
+	disable();
+	
 	mRoot = new Root("");
 	// Load Plugins
 #if _DEBUG
@@ -16,15 +19,13 @@ Renderer::Renderer ()
 	mRoot->loadPlugin("RenderSystem_GL");
 #endif
 
-
-
 	// Initialize with render system
 	selectRenderSystem(mRoot);
 	//TODO: change back to false to stop autocreating window
 	mRoot->initialise(true);
 
-	// Create scene manager, render window, and camera
-	//mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
+	// Create scene manager, and render window
+	mSceneManager = mRoot->createSceneManager(sceneType);
 	mWindow = mRoot->getAutoCreatedWindow ();
 
 	// Load in resources
@@ -35,15 +36,10 @@ Renderer::Renderer ()
 	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/looknfeel", "FileSystem", "LookNFeel");
 	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/layouts", "FileSystem", "Layouts");
 
-
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener
 	WindowEventUtilities::addWindowEventListener(mWindow, this);
-	mWindow->addListener(this);
-	mRoot->addFrameListener(this);
-
-	disable();
 
 	// Bootstrap CEGUI::System with an OgreRenderer object that uses the
 	// default Ogre rendering window as the default output surface, an Ogre based
@@ -76,6 +72,37 @@ Renderer::~Renderer ()
 	delete mRoot;
 }
 
+void Renderer::renderOneFrame ()
+{
+	Ogre::WindowEventUtilities::messagePump();
+	mRoot->renderOneFrame();
+}
+
+void Renderer::switchViewport (Camera* camera, int ZOrder /* = 0 */)
+{
+	if (mViewport)
+		mWindow->removeViewport(0);
+
+	mViewport = mWindow->addViewport(camera, 0);
+	mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+	camera->setAutoAspectRatio(true);
+}
+
+Ogre::Root* Renderer::getRoot ()
+{
+	return mRoot;
+}
+
+Ogre::SceneManager* Renderer::getSceneManager ()
+{
+	return mSceneManager;
+}
+
+bool Renderer::quit (const CEGUI::EventArgs &e)
+{
+    return true;
+}
+
 void selectRenderSystem (Root* root)
 {
 	// Select render system
@@ -99,37 +126,7 @@ void selectRenderSystem (Root* root)
 	}
 }
 
-void Renderer::switchViewport (Camera* camera, int ZOrder /* = 0 */)
-{
-	if (mViewport)
-		mWindow->removeViewport(0);
-
-	mViewport = mWindow->addViewport(camera, 0);
-	mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
-	camera->setAutoAspectRatio(true);
-}
-
-bool Renderer::frameRenderingQueued (const FrameEvent& evt)
-{
-	if (mWindow->isClosed())
-	{
-		return false;
-	}
-
-	if (!mRunning)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 void Renderer::windowClosed (Ogre::RenderWindow *rw) 
 {
 	mRunning = false;
-}
-
-bool Renderer::quit(const CEGUI::EventArgs &e)
-{
-    return true;
 }

@@ -20,7 +20,6 @@ using Ogre::Vector3;
 namespace scene1
 {
 	Ogre::SceneManager* mSceneMgr = nullptr;
-	Renderer* mRenderer = nullptr;	
 
 	Ogre::SceneNode* constructWall(const Vector3& norm, const Vector3& up, 
 								   const Vector3& pos, const std::string& name)
@@ -43,10 +42,12 @@ namespace scene1
 		return node;
 	}
 
-	void load (Core* core, Ogre::SceneManager* sceneMgr, Renderer* renderer)
+	void load (Core* core)
 	{
-		mSceneMgr = sceneMgr;
-		mRenderer = renderer;
+		Renderer* renderer = core->getRenderer();
+		assert(renderer);
+
+		mSceneMgr = renderer->getSceneManager();
 
 		// Set up scene lighting
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .3));
@@ -68,7 +69,7 @@ namespace scene1
 		boundMove->mCamera->setPosition(0, 0, 0);
 		boundMove->mCamera->lookAt(Vector3(200, 0, 0));
 		boundMove->mCamera->setNearClipDistance(5);
-		mRenderer->switchViewport(boundMove->mCamera);
+		renderer->switchViewport(boundMove->mCamera);
 
 		boundMove->mBallRadius = 50;
 		Ogre::Entity* sphereEntity = mSceneMgr->createEntity("mySphere", Ogre::SceneManager::PT_SPHERE);

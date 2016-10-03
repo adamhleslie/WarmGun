@@ -7,11 +7,10 @@ class Renderer;
 
 struct Scene
 {
-	typedef void (*LoadSceneFunc)(Core* core, Ogre::SceneManager* sceneMgr, Renderer* renderer);
+	typedef void (*LoadSceneFunc)(Core* core);
 	LoadSceneFunc loadScene = nullptr;
 
-	Scene (LoadSceneFunc loadSceneFunc)
-		: loadScene(loadSceneFunc) {}
+	Scene (LoadSceneFunc loadSceneFunc) : loadScene(loadSceneFunc) {}
 	~Scene () {}
 };
 
