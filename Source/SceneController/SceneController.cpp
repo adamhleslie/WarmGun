@@ -31,7 +31,7 @@ void SceneController::loadNextScene (bool additive /* = false */)
 		mSceneManager->clearScene();
 	}
 
-	(*(mCurScene->loadScene))(core, mSceneManager);
+	(*(mCurScene->loadScene))(core);
 }
 
 void SceneController::onLoadCallback (Core* core)
@@ -45,5 +45,5 @@ void SceneController::loadInitialScene (Core* core)
 	assert(!mSceneList.empty());
 
 	mCurScene = mSceneList.begin();
-	(*(mCurScene->loadScene))(core, mSceneManager);
+	(*(mCurScene->loadScene))(core);
 }

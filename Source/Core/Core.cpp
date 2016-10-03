@@ -27,6 +27,7 @@ Core::Core ()
 	mModules.fill(nullptr);
 	
 	loadModules();
+	assert(mRenderer);
 
 	// let modules know they are loaded
 	for (Module* module : mModules)

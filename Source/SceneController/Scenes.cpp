@@ -42,11 +42,12 @@ namespace scene1
 		return node;
 	}
 
-	void load (Core* core, Ogre::SceneManager* sceneMgr)
+	void load (Core* core)
 	{
-		mSceneMgr = sceneMgr;
-		Renderer* renderer = core->getModule<Renderer>();
+		Renderer* renderer = core->getRenderer();
 		assert(renderer);
+
+		mSceneMgr = renderer->getSceneManager();
 
 		// Set up scene lighting
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .3));
