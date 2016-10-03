@@ -10,6 +10,7 @@
 /// Add Modules below ///
 #include "SceneController.h"
 #include "Audio.h"
+#include "GUI.h"
 
 void Core::loadModules ()
 {
@@ -18,6 +19,7 @@ void Core::loadModules ()
 	mModules[0] = mRenderer;
 	mModules[1] = new SceneController(mRenderer);
 	mModules[2] = new Audio();
+	mModules[3] = new GUI();
 	// make sure mModules[max], max == kNumModules - 1
 }
 /// Add Modules above ///

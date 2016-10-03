@@ -11,10 +11,6 @@
 #include <OgreWindowEventUtilities.h>
 #include <OgreRenderTargetListener.h>
 #include <OgreMeshManager.h>
-//#include <CEGUIOgreRenderer-0>
-#include <CEGUI/CEGUI.h>
-//#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include "Module.h"
 
@@ -33,8 +29,6 @@ public:
 
 	bool mRunning = true;
 
-protected:
-	bool quit(const CEGUI::EventArgs &e);
 
 private:
 	Ogre::Root* mRoot = nullptr;
