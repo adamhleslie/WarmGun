@@ -11,6 +11,10 @@
 #include <OgreWindowEventUtilities.h>
 #include <OgreRenderTargetListener.h>
 #include <OgreMeshManager.h>
+//#include <CEGUIOgreRenderer-0>
+#include <CEGUI/CEGUI.h>
+//#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include "Module.h"
 
@@ -40,4 +44,7 @@ private:
 	//virtual void windowFocusChange(Ogre::RenderWindow *rw) override;
 	//virtual void windowMoved(Ogre::RenderWindow *rw) override;
 	//virtual void windowResized(Ogre::RenderWindow *rw) override;
+
+protected:
+	bool quit(const CEGUI::EventArgs &e);
 };
