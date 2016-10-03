@@ -13,7 +13,8 @@
 #include <OgreMeshManager.h>
 //#include <CEGUIOgreRenderer-0>
 #include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
+//#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include "Module.h"
 

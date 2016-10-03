@@ -39,6 +39,10 @@ endmacro()
 # We assume that the user is on a linux lab machine
 set(OGRE_HOME "/lusr/opt/ogre-1.9" CACHE PATH "Path to Ogre SDK")
 set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")
+set(CEGUI_LIBRARIES "/lusr/opt/cegui-0.8.4/lib/libCEGUIBase-0.so" CACHE PATH "Path to CEGUI Libraries")
+set(CEGUI_OgreRenderer_LIBRARIES "/lusr/opt/cegui-0.8.4/lib/libCEGUIOgreRenderer-0.so" CACHE PATH "Path to CEGUI OgreRenderer Libraries")
+set(CEGUI_INCLUDE_DIR "/lusr/opt/cegui-0.8.4/include/cegui-0" CACHE PATH "Path to CEGUI Include_dir")
+
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(OGRE_CMAKE_PATH "${OGRE_HOME}/lib/OGRE/cmake" CACHE PATH "Path to Ogre's CMake scripts")
@@ -59,11 +63,11 @@ endif()
 
 find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
 find_package(OIS REQUIRED)
-find_package(CEGUI REQUIRED COMPONENTS OgreRenderer)
-if(NOT CEGUI_FOUND)
-   message(SEND_ERROR "Failed to find CEGUI.")
-endif()
-message(STATUS "**********8TEST: ${CEGUI_LIBRARIES}, ${CEGUI_INCLUDE_DIRS}")
+#find_package(CEGUI REQUIRED COMPONENTS OgreRenderer)
+#if(NOT CEGUI_FOUND)
+#   message(SEND_ERROR "Failed to find CEGUI.")
+#endif()
+message(STATUS "**********8TEST: ${CEGUI_LIBRARIES}, ${CEGUI_INCLUDE_DIRS}, ${CEGUI_OgreRenderer_LIBRARIES}")
 find_package(SDL REQUIRED)
 
 # Application Interface setup

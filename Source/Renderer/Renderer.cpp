@@ -16,10 +16,7 @@ Renderer::Renderer ()
 	mRoot->loadPlugin("RenderSystem_GL");
 #endif
 
-	// Bootstrap CEGUI::System with an OgreRenderer object that uses the
-	// default Ogre rendering window as the default output surface, an Ogre based
-	// ResourceProvider, and an Ogre based ImageCodec.
-	CEGUI::OgreRenderer& GUIRenderer = CEGUI::OgreRenderer::bootstrapSystem();
+
 
 	// Initialize with render system
 	selectRenderSystem(mRoot);
@@ -38,6 +35,11 @@ Renderer::Renderer ()
 	mRoot->addFrameListener(this);
 
 	disable();
+
+	// Bootstrap CEGUI::System with an OgreRenderer object that uses the
+	// default Ogre rendering window as the default output surface, an Ogre based
+	// ResourceProvider, and an Ogre based ImageCodec.
+	CEGUI::OgreRenderer& GUIRenderer = CEGUI::OgreRenderer::bootstrapSystem();
 }
 
 Renderer::~Renderer ()
