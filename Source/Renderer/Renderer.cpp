@@ -20,10 +20,12 @@ Renderer::Renderer ()
 
 	// Initialize with render system
 	selectRenderSystem(mRoot);
-	mRoot->initialise(false);
+	//TODO: change back to false to stop autocreating window
+	mRoot->initialise(true);
 
 	// Create scene manager, render window, and camera
-	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
+	//mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
+	mWindow = mRoot->getAutoCreatedWindow ();
 
 	// Load in resources
 	ResourceGroupManager::getSingleton().addResourceLocation("./Media", "FileSystem", "General");
