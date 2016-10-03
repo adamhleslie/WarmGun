@@ -4,7 +4,6 @@
 
 #include <list>
 #include <OgreSceneManager.h>
-
 #include "Scene.h"
 
 class Renderer;
@@ -12,22 +11,21 @@ class Renderer;
 class SceneController : public Module
 {
 public:
-
-// PUBLIC API
-	SceneController(Renderer* renderer, Ogre::SceneType sceneType);
+	SceneController(Renderer* renderer);
 	~SceneController() {}
 
-	// Modifiers //
+	// Add a scene to the end of the scene list
 	void addScene(Scene& scene);
+
+	// Load the next scene in the scene list
+	// if additive, prior scenes are not unloaded
 	void loadNextScene(bool additive = false);
 
-// RESTRICTED API
 protected:
 	void onLoadCallback(Core* core) override;
 
 private:
-	Renderer* mRenderer = nullptr;
-	Ogre::SceneManager* mSceneMgr = nullptr;
+	Ogre::SceneManager* mSceneManager = nullptr;
 
 	std::list<Scene> mSceneList;
 	std::list<Scene>::iterator mCurScene;

@@ -59,7 +59,6 @@ endif()
 find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
 find_package(OIS REQUIRED)
 find_package(SDL REQUIRED)
-message(STATUS "*******************************Module added: ${SDL_LIBRARIES} at ${SDL_INCLUDE_DIR}")
 
 # Application Interface setup
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

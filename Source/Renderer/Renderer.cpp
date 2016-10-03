@@ -6,7 +6,7 @@ using namespace Ogre;
 
 void selectRenderSystem(Root* root);
 
-Renderer::Renderer ()
+Renderer::Renderer (Ogre::SceneType sceneType)
 {
 	mRoot = new Root("");
 	// Load Plugins
@@ -20,7 +20,8 @@ Renderer::Renderer ()
 	selectRenderSystem(mRoot);
 	mRoot->initialise(false);
 
-	// Create scene manager, render window, and camera
+	// Create scene manager, and render window
+	mSceneManager = mRoot->createSceneManager(sceneType);
 	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
 
 	// Load in resources
@@ -29,8 +30,6 @@ Renderer::Renderer ()
 	
 	// Set up frame listener
 	WindowEventUtilities::addWindowEventListener(mWindow, this);
-	mWindow->addListener(this);
-	mRoot->addFrameListener(this);
 
 	disable();
 }
@@ -38,6 +37,32 @@ Renderer::Renderer ()
 Renderer::~Renderer ()
 {
 	delete mRoot;
+}
+
+void Renderer::renderOneFrame ()
+{
+	Ogre::WindowEventUtilities::messagePump();
+	mRoot->renderOneFrame();
+}
+
+void Renderer::switchViewport (Camera* camera, int ZOrder /* = 0 */)
+{
+	if (mViewport)
+		mWindow->removeViewport(0);
+
+	mViewport = mWindow->addViewport(camera, 0);
+	mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+	camera->setAutoAspectRatio(true);
+}
+
+Ogre::Root* Renderer::getRoot ()
+{
+	return mRoot;
+}
+
+Ogre::SceneManager* Renderer::getSceneManager ()
+{
+	return mSceneManager;
 }
 
 void selectRenderSystem (Root* root)
@@ -61,31 +86,6 @@ void selectRenderSystem (Root* root)
 	{
 		LogManager::getSingletonPtr()->logMessage(LML_CRITICAL, "Initializing render system failed. No renderers available.");
 	}
-}
-
-void Renderer::switchViewport (Camera* camera, int ZOrder /* = 0 */)
-{
-	if (mViewport)
-		mWindow->removeViewport(0);
-
-	mViewport = mWindow->addViewport(camera, 0);
-	mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
-	camera->setAutoAspectRatio(true);
-}
-
-bool Renderer::frameRenderingQueued (const FrameEvent& evt)
-{
-	if (mWindow->isClosed())
-	{
-		return false;
-	}
-
-	if (!mRunning)
-	{
-		return false;
-	}
-
-	return true;
 }
 
 void Renderer::windowClosed (Ogre::RenderWindow *rw) 
