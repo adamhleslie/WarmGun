@@ -8,6 +8,9 @@ void selectRenderSystem(Root* root);
 
 Renderer::Renderer (Ogre::SceneType sceneType)
 {
+	// Renderer does not need to update every tick
+	disable();
+	
 	mRoot = new Root("");
 	// Load Plugins
 #if _DEBUG
@@ -18,20 +21,50 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 
 	// Initialize with render system
 	selectRenderSystem(mRoot);
-	mRoot->initialise(false);
+	//TODO: change back to false to stop autocreating window
+	mRoot->initialise(true);
 
 	// Create scene manager, and render window
 	mSceneManager = mRoot->createSceneManager(sceneType);
-	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
+	mWindow = mRoot->getAutoCreatedWindow ();
 
 	// Load in resources
 	ResourceGroupManager::getSingleton().addResourceLocation("./Media", "FileSystem", "General");
+	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/imagesets", "FileSystem", "Imagesets");
+	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/fonts", "FileSystem", "Fonts");
+	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/schemes", "FileSystem", "Schemes");
+	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/looknfeel", "FileSystem", "LookNFeel");
+	ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/layouts", "FileSystem", "Layouts");
+
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener
 	WindowEventUtilities::addWindowEventListener(mWindow, this);
 
-	disable();
+	// Bootstrap CEGUI::System with an OgreRenderer object that uses the
+	// default Ogre rendering window as the default output surface, an Ogre based
+	// ResourceProvider, and an Ogre based ImageCodec.
+	CEGUI::OgreRenderer& GUIRenderer = CEGUI::OgreRenderer::bootstrapSystem();
+
+	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+	CEGUI::Font::setDefaultResourceGroup("Fonts");
+	CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+	CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+	CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
+	//TODO: move
+	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
+
+	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+
+	CEGUI::Window *quit = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/QuitButton");
+	quit->setText("Quit");
+	quit->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+
+	sheet->addChild(quit);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 }
 
 Renderer::~Renderer ()
@@ -63,6 +96,11 @@ Ogre::Root* Renderer::getRoot ()
 Ogre::SceneManager* Renderer::getSceneManager ()
 {
 	return mSceneManager;
+}
+
+bool Renderer::quit (const CEGUI::EventArgs &e)
+{
+    return true;
 }
 
 void selectRenderSystem (Root* root)
