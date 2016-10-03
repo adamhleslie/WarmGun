@@ -11,33 +11,38 @@
 #include <OgreWindowEventUtilities.h>
 #include <OgreRenderTargetListener.h>
 #include <OgreMeshManager.h>
+//#include <CEGUIOgreRenderer-0>
+#include <CEGUI/CEGUI.h>
+//#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include "Module.h"
 
-class Renderer : public Module, public Ogre::FrameListener, public Ogre::WindowEventListener, public Ogre::RenderTargetListener
+// Renderer maintains and provides the game engines direct connections to Ogre
+class Renderer : public Module, public Ogre::WindowEventListener
 {
 public:
-	Renderer();
+	Renderer(Ogre::SceneType sceneType);
 	virtual ~Renderer();
 
+	void renderOneFrame();
 	void switchViewport(Ogre::Camera* camera, int ZOrder = 0);
 
-	Ogre::Root* mRoot = nullptr;
+	Ogre::Root* getRoot();
+	Ogre::SceneManager* getSceneManager();
+
 	bool mRunning = true;
-	
+
+protected:
+	bool quit(const CEGUI::EventArgs &e);
+
 private:
+	Ogre::Root* mRoot = nullptr;
+	Ogre::SceneManager* mSceneManager = nullptr;
+
 	Ogre::RenderWindow* mWindow = nullptr;
 	Ogre::Viewport* mViewport = nullptr;
 
-	// Ogre::FrameListener
-	//virtual bool frameEnded(const Ogre::FrameEvent &evt) override;
-	virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt) override;
-	//virtual bool frameStarted(const Ogre::FrameEvent &evt) override;
-
 	// Ogre::WindowEventListener
 	virtual void windowClosed(Ogre::RenderWindow *rw) override;
-	//virtual bool windowClosing(Ogre::RenderWindow *rw) override;
-	//virtual void windowFocusChange(Ogre::RenderWindow *rw) override;
-	//virtual void windowMoved(Ogre::RenderWindow *rw) override;
-	//virtual void windowResized(Ogre::RenderWindow *rw) override;
 };

@@ -6,11 +6,10 @@
 #include "Scene.h"
 #include "Core.h"
 
-SceneController::SceneController (Renderer* renderer, Ogre::SceneType sceneType)
-:	mRenderer(renderer)
+SceneController::SceneController (Renderer* renderer)
 {
 	assert(renderer);
-	mSceneMgr = mRenderer->mRoot->createSceneManager(sceneType);
+	mSceneManager = renderer->getSceneManager();
 }
 
 void SceneController::addScene (Scene& scene)
@@ -26,10 +25,13 @@ void SceneController::loadNextScene (bool additive /* = false */)
 	assert(mCurScene != mSceneList.end());
 
 	Core* core = getCore();
-	if (!additive)
+	if (!additive) 
+	{
 		core->destroyAllEntities();
+		mSceneManager->clearScene();
+	}
 
-	(*(mCurScene->loadScene))(core, mSceneMgr, mRenderer);
+	(*(mCurScene->loadScene))(core);
 }
 
 void SceneController::onLoadCallback (Core* core)
@@ -43,5 +45,5 @@ void SceneController::loadInitialScene (Core* core)
 	assert(!mSceneList.empty());
 
 	mCurScene = mSceneList.begin();
-	(*(mCurScene->loadScene))(core, mSceneMgr, mRenderer);
+	(*(mCurScene->loadScene))(core);
 }

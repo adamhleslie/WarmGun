@@ -1,0 +1,15 @@
+implementing CEGUI module
+
+/**
+	To create a brand new module:
+		0. Create a new folder for it, and add it to CMakeLists.txt with add_project_module
+		1. Inherit from this class
+		2. Implement constructor and destructor
+			a. Call disable() within your constructor if you don't want your module to update upon load
+		3. Increase Core::kNumModules (Core.h)
+		4. Add your module to Core::loadModules() (Core.cpp)
+		5. Add functionality as needed - GameObjects and Components not yet implemented
+**/
+
+notes: not sure if we need to create the .cpp and .h files, do these already exist?
+also, not sure how to construct such that CEGUI hooks in with the renderer
