@@ -116,7 +116,7 @@ void Core::destroyAllEntities ()
 	mEntities.clear();
 }
 
-void Core::getRenderer ()
+Renderer* Core::getRenderer ()
 {
 	return mRenderer;
 }

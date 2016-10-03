@@ -14,6 +14,7 @@
 
 #include "Module.h"
 
+// Renderer maintains and provides the game engines direct connections to Ogre
 class Renderer : public Module, public Ogre::WindowEventListener
 {
 public:
@@ -27,7 +28,7 @@ public:
 	Ogre::SceneManager* getSceneManager();
 
 	bool mRunning = true;
-	
+
 private:
 	Ogre::Root* mRoot = nullptr;
 	Ogre::SceneManager* mSceneManager = nullptr;
@@ -37,8 +38,4 @@ private:
 
 	// Ogre::WindowEventListener
 	virtual void windowClosed(Ogre::RenderWindow *rw) override;
-	//virtual bool windowClosing(Ogre::RenderWindow *rw) override;
-	//virtual void windowFocusChange(Ogre::RenderWindow *rw) override;
-	//virtual void windowMoved(Ogre::RenderWindow *rw) override;
-	//virtual void windowResized(Ogre::RenderWindow *rw) override;
 };
