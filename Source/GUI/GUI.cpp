@@ -36,7 +36,7 @@ GUI::GUI(/*Ogre::Root* mRoot*/)
 
     sheet->addChild(quit);
     CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
-    }
+}
 //-------------------------------------------------------------------------------------
 GUI::~GUI(void)
 {
