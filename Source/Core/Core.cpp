@@ -15,18 +15,20 @@
 void Core::loadModules ()
 {
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
+	mModules.push_back(mRenderer);
 
-	mModules[0] = mRenderer;
-	mModules[1] = new SceneController(mRenderer);
-	mModules[2] = new Audio();
-	mModules[3] = new GUI();
-	// make sure mModules[max], max == kNumModules - 1
+	mModules.push_back(new SceneController(mRenderer));
+	mModules.push_back(new Audio());
+	// mModules.push_back(new GUI());
 }
 /// Add Modules above ///
 
 Core::Core ()
 {
-	mModules.fill(nullptr);
+	constexpr size_t kNumModules = 3;
+	static_assert(kNumModules >= 1, "Must have room for Renderer");
+
+	mModules.reserve(kNumModules);
 	
 	loadModules();
 	assert(mRenderer);
@@ -42,7 +44,7 @@ Core::Core ()
 
 Core::~Core ()
 {
-	// Destroy entities first, since their components destructors may rely on modules
+	// Destroy entities first (component destructors rely on modules?), then modules
 	destroyAllEntities();
 	for (Module* module : mModules)
 	{
