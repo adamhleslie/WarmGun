@@ -44,7 +44,7 @@ int Audio::play_s3()
 
 int Audio::play_s4()
 {
-    return Mix_PlayChannel( -1, s4, 0 );
+    return Mix_PlayChannel( -1, s4, 10 );
 }
 
 int Audio::play_s5()
