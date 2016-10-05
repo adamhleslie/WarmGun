@@ -11,10 +11,6 @@
 #include <OgreWindowEventUtilities.h>
 #include <OgreRenderTargetListener.h>
 #include <OgreMeshManager.h>
-//#include <CEGUIOgreRenderer-0>
-#include <CEGUI/CEGUI.h>
-//#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include "Module.h"
 
@@ -23,18 +19,16 @@ class Renderer : public Module, public Ogre::WindowEventListener
 {
 public:
 	Renderer(Ogre::SceneType sceneType);
-	virtual ~Renderer();
+	~Renderer();
 
 	void renderOneFrame();
-	void switchViewport(Ogre::Camera* camera, int ZOrder = 0);
+	Ogre::Camera* switchCamera(Ogre::Camera* camera);
+	void destroyCamera();
 
 	Ogre::Root* getRoot();
 	Ogre::SceneManager* getSceneManager();
 
 	bool mRunning = true;
-
-protected:
-	bool quit(const CEGUI::EventArgs &e);
 
 private:
 	Ogre::Root* mRoot = nullptr;
@@ -42,7 +36,8 @@ private:
 
 	Ogre::RenderWindow* mWindow = nullptr;
 	Ogre::Viewport* mViewport = nullptr;
+	Ogre::Camera* mCamera = nullptr;
 
 	// Ogre::WindowEventListener
-	virtual void windowClosed(Ogre::RenderWindow *rw) override;
+	void windowClosed(Ogre::RenderWindow *rw) override;
 };

@@ -1,15 +1,17 @@
 #include "SceneController.h"
 
 #include <cassert>
+#include <OgreSceneManager.h>
 
 #include "Renderer.h"
 #include "Scene.h"
 #include "Core.h"
 
 SceneController::SceneController (Renderer* renderer)
+:	mRenderer(renderer)
 {
-	assert(renderer);
-	mSceneManager = renderer->getSceneManager();
+	assert(mRenderer);
+	disable();
 }
 
 void SceneController::addScene (Scene& scene)
@@ -25,10 +27,11 @@ void SceneController::loadNextScene (bool additive /* = false */)
 	assert(mCurScene != mSceneList.end());
 
 	Core* core = getCore();
-	if (!additive) 
+	if (!additive)
 	{
+		mRenderer->destroyCamera();
+		mRenderer->getSceneManager()->clearScene();
 		core->destroyAllEntities();
-		mSceneManager->clearScene();
 	}
 
 	(*(mCurScene->loadScene))(core);
