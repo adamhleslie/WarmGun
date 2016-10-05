@@ -410,12 +410,13 @@ if (WIN32)
     )
 elseif (UNIX)
     set(CEGUI_PREFIX_GUESSES
-        /opt/cegui
-        /opt/CEGUI
-        /usr
-        /usr/local
-        $ENV{HOME}/cegui
-        $ENV{HOME}/CEGUI
+        /lusr
+        # /opt/cegui
+        # /opt/CEGUI
+        # /usr
+        # /usr/local
+        # $ENV{HOME}/cegui
+        # $ENV{HOME}/CEGUI
     )
     if (APPLE)
         set(CEGUI_PREFIX_GUESSES
@@ -446,11 +447,11 @@ find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI
 set(CEGUI_INCOMPATIBLE FALSE)
 if (CEGUI_INCLUDE_DIR)
     # determine CEGUI version
-    if(CEGUI_CONFIG_INCLUDE_DIR_PREFIX)
-        file(READ ${CEGUI_INCLUDE_DIR}/CEGUIVersion.h CEGUI_TEMP_VERSION_CONTENT)
-    else()
+    # if(CEGUI_CONFIG_INCLUDE_DIR_PREFIX)
+    #     file(READ ${CEGUI_INCLUDE_DIR}/CEGUIVersion.h CEGUI_TEMP_VERSION_CONTENT)
+    # else()
         file(READ ${CEGUI_INCLUDE_DIR}/Version.h CEGUI_TEMP_VERSION_CONTENT)
-    endif()
+    # endif()
 
     if (NOT "${CEGUI_TEMP_VERSION_CONTENT}" STREQUAL "")
         get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MAJOR CEGUI_VERSION_MAJOR)

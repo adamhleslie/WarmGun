@@ -59,19 +59,21 @@ namespace scene1
 		spotLight->setDirection(-.5, -1, 0);
 		spotLight->setPosition(Vector3(400, 600, 0));
 
+		// Set up camera
+		Ogre::Camera* mCamera = mSceneMgr->createCamera("Main Camera");
+		mCamera->setPosition(0, 0, 0);
+		mCamera->lookAt(Vector3(200, 0, 0));
+		mCamera->setNearClipDistance(5);
+		renderer->switchCamera(mCamera);
+
 		// Set up Sphere
 		Entity* sphere = core->createEntity();
 		sphere->createComponent<AudioPlayer>();
+
 		BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
-
-		// Set up camera
-		boundMove->mCamera = mSceneMgr->createCamera("Main Camera");
-		boundMove->mCamera->setPosition(0, 0, 0);
-		boundMove->mCamera->lookAt(Vector3(200, 0, 0));
-		boundMove->mCamera->setNearClipDistance(5);
-		renderer->switchViewport(boundMove->mCamera);
-
+		boundMove->mCamera = mCamera;
 		boundMove->mBallRadius = 50;
+		
 		Ogre::Entity* sphereEntity = mSceneMgr->createEntity("mySphere", Ogre::SceneManager::PT_SPHERE);
 		sphereEntity->setCastShadows(true);
 		sphereEntity->setMaterialName("Examples/BumpyMetal");
@@ -83,8 +85,7 @@ namespace scene1
 										   Ogre::Math::RangeRandom(-1, 1),
 										   Ogre::Math::RangeRandom(-1, 1));
 
-		// Set up walls
-		Ogre::SceneNode* tmp;
+		// // Set up walls
 		constructWall(Vector3::UNIT_Y, Vector3::UNIT_Z, Vector3(0, -400, 0), "ground");
 		constructWall(Vector3::NEGATIVE_UNIT_Y, Vector3::UNIT_Z, Vector3(0, 400, 0), "ceiling");
 		constructWall(Vector3::UNIT_X, Vector3::UNIT_Z, Vector3(-400, 0, 0), "wall1");

@@ -3,7 +3,6 @@
 #include "Module.h"
 
 #include <list>
-#include <OgreSceneManager.h>
 #include "Scene.h"
 
 class Renderer;
@@ -25,7 +24,7 @@ protected:
 	void onLoadCallback(Core* core) override;
 
 private:
-	Ogre::SceneManager* mSceneManager = nullptr;
+	Renderer* mRenderer = nullptr;
 
 	std::list<Scene> mSceneList;
 	std::list<Scene>::iterator mCurScene;

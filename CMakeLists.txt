@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(GameEngine)
+set(CMAKE_DEBUG_POSTFIX "_d")
 
 ## Macros ##
 
@@ -38,11 +39,6 @@ endmacro()
 
 # We assume that the user is on a linux lab machine
 set(OGRE_HOME "/lusr/opt/ogre-1.9" CACHE PATH "Path to Ogre SDK")
-set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")
-set(CEGUI_LIBRARIES "/lusr/opt/cegui-0.8.4/lib/libCEGUIBase-0.so" CACHE PATH "Path to CEGUI Libraries")
-set(CEGUI_OgreRenderer_LIBRARIES "/lusr/opt/cegui-0.8.4/lib/libCEGUIOgreRenderer-0.so" CACHE PATH "Path to CEGUI OgreRenderer Libraries")
-set(CEGUI_INCLUDE_DIR "/lusr/opt/cegui-0.8.4/include/cegui-0" CACHE PATH "Path to CEGUI Include_dir")
-
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(OGRE_CMAKE_PATH "${OGRE_HOME}/lib/OGRE/cmake" CACHE PATH "Path to Ogre's CMake scripts")
@@ -61,15 +57,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--std=c++11")
 endif()
 
-find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
-find_package(OIS REQUIRED)
-#find_package(CEGUI REQUIRED COMPONENTS OgreRenderer)
-#if(NOT CEGUI_FOUND)
-#   message(SEND_ERROR "Failed to find CEGUI.")
-#endif()
-message(STATUS "**********8TEST: ${CEGUI_LIBRARIES}, ${CEGUI_INCLUDE_DIRS}, ${CEGUI_OgreRenderer_LIBRARIES}")
-find_package(SDL REQUIRED)
-
 # Application Interface setup
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(INTERFACE "Windows")
@@ -81,8 +68,6 @@ else() # Unknown
 endif()
 message(STATUS "Application Interface: ${INTERFACE}")
 
-set(CMAKE_DEBUG_POSTFIX "_d")
-
 # Module List
 add_project_module(Application		Application/${INTERFACE})
 add_project_module(Config			Config)
@@ -91,6 +76,7 @@ add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
 add_project_module(Audio			Audio)
 add_project_module(GameLogic		GameLogic)
+add_project_module(GUI              GUI)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
@@ -103,25 +89,68 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 	PDB_OUTPUT_DIRECTORY     ${CMAKE_BINARY_DIR}/Binaries
 )
 
-# Library linking and including
-target_link_libraries(${PROJECT_NAME} PRIVATE
-	${OGRE_LIBRARIES}
-	${OGRE_Overlay_LIBRARIES}
-	${OGRE_RenderSystem_GL_LIBRARIES}
-	${OIS_LIBRARIES}
-	${CEGUI_LIBRARIES}
-	${CEGUI_OgreRenderer_LIBRARIES}
-	${SDL_LIBRARY}
-	SDL_mixer
-)
+##
+# ADD INCLUDE DIRECTORIES, AND LINK TO LIBRARIES
+##
 
+##OGRE
+find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${OGRE_RenderSystem_GL_INCLUDE_DIRS}
-	${OGRE_HOME}/include/OGRE/RenderSystems/GL
+)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${OGRE_LIBRARIES}
+	${OGRE_Overlay_LIBRARIES}
+	${OGRE_RenderSystem_GL_LIBRARIES}
+)
+
+##OIS
+find_package(OIS REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${OIS_LIBRARIES}
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
 	${OIS_INCLUDE_DIR}
+)
+
+##CEGUI
+set(CEGUI_HOME "/lusr" CACHE PATH "Path to CEGUI")
+
+set(CEGUI_LIBRARIES "${CEGUI_HOME}/lib/libCEGUIBase-0.so" CACHE PATH "Path to CEGUI Libraries")
+set(CEGUI_INCLUDE_DIR "${CEGUI_HOME}/include/cegui-0" CACHE PATH "Path to CEGUI Include_dir")
+set(CEGUI_OgreRenderer_LIBRARIES "${CEGUI_HOME}/lib/libCEGUIOgreRenderer-0.so" CACHE PATH "Path to CEGUI OgreRenderer Libraries")
+# set(CEGUI_OgreRenderer_INCLUDE_DIR "${CEGUI_HOME}/include/cegui-0/CEGUI/RendererModules/Ogre" CACHE PATH "Path to CEGUI OgreRenderer Include_dir")
+
+# find_package(CEGUI 0.8.4 EXACT REQUIRED COMPONENTS OgreRenderer)
+# if(NOT CEGUI_FOUND)
+#   message(SEND_ERROR "Failed to find CEGUI.")
+# endif()
+
+# message(STATUS "*******************************************************************")
+# message(STATUS "CEGUI_LIBRARIES: ${CEGUI_LIBRARIES}")
+# message(STATUS "CEGUI_INCLUDE_DIR: ${CEGUI_INCLUDE_DIR}")
+# message(STATUS "CEGUI_OgreRenderer_LIBRARIES: ${CEGUI_OgreRenderer_LIBRARIES}")
+# message(STATUS "CEGUI_OgreRenderer_INCLUDE_DIR: ${CEGUI_OgreRenderer_INCLUDE_DIR}")
+# message(STATUS "*******************************************************************")
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${CEGUI_LIBRARIES}
+	${CEGUI_OgreRenderer_LIBRARIES}
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
 	${CEGUI_INCLUDE_DIR}
+	${CEGUI_OgreRenderer_INCLUDE_DIR}
+)
+
+##SDL
+find_package(SDL REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${SDL_LIBRARY}
+	SDL_mixer
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
 	${SDL_INCLUDE_DIR}
 )
 

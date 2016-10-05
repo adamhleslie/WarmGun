@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <vector>
 
 class Module;
@@ -42,12 +41,8 @@ public:
 	void disableModule(Module* module);
 
 private:
-	// Number of modules used, including Renderer and SceneController
-	static constexpr size_t kNumModules = 3;
-	static_assert(kNumModules >= 2, "Must have room for Renderer and SceneController modules");
-
 	// The modules that are loaded (static, see loadModules())
-	std::array<Module*, kNumModules> mModules;
+	std::vector<Module*> mModules;
 
 	// The modules that are loaded and enabled, updated every tick
 	std::vector<Module*> mEnabledModules;
