@@ -19,16 +19,16 @@ class Renderer : public Module, public Ogre::WindowEventListener
 {
 public:
 	Renderer(Ogre::SceneType sceneType);
-	virtual ~Renderer();
+	~Renderer();
 
 	void renderOneFrame();
-	void switchViewport(Ogre::Camera* camera, int ZOrder = 0);
+	Ogre::Camera* switchCamera(Ogre::Camera* camera);
+	void destroyCamera();
 
 	Ogre::Root* getRoot();
 	Ogre::SceneManager* getSceneManager();
 
 	bool mRunning = true;
-
 
 private:
 	Ogre::Root* mRoot = nullptr;
@@ -36,7 +36,8 @@ private:
 
 	Ogre::RenderWindow* mWindow = nullptr;
 	Ogre::Viewport* mViewport = nullptr;
+	Ogre::Camera* mCamera = nullptr;
 
 	// Ogre::WindowEventListener
-	virtual void windowClosed(Ogre::RenderWindow *rw) override;
+	void windowClosed(Ogre::RenderWindow *rw) override;
 };

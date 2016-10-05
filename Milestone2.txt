@@ -1,0 +1,17 @@
+Adam Leslie
+David Alexander
+Rhyn Cai
+
+Explanation:
+When you run GameEngine, you will see the scene from project 1. But it will also have a gui element, and sound. Controls are ready to be used but have not yet been mapped to anything. The majority of work that has been accomplished is related to the architecture. Audio, CEGUI, the Renderer, and the SceneController are implemented modules, and the ball is mapped to an entity with a single component representing it's Ogre entity/sceneNode, as well as its movement logic. This is currently being separated so that an Entities Ogre representations are in specific components.
+
+Features:
+Scoring Rules: No modifications. Still building the foundations to allow easy game logic creation. This is taking slightly longer than expected.
+Look: No modificaions. Still working within a test scene (identical to project 1), but our Entity/Component system will make it easy to build this out.
+GUI: We have tied in CEGUI after a plethora of issues that have held us back in other areas. Will be easy to make this show the games score when we add score functionality.
+Sound: We have music using SDL_mixer, and 3 sound effects. We have volume controllability built in, but keys are not mapped yet.
+Additional: A scene management system is in place for having multiple levels, but it is not being used. Bullet it not tied into the submitted milestone, as we have not fixed all compilation issues yet.
+
+Architecure: Same plan, and it's mostly finished. The entity-component system is in place, but it is not yet tied into the renderer or bullet.
+
+Workload: Adam is in charge of the architecture, and therefore has done a majority of the work so far, but it will all even out by the end of the project. Workload is balanced in the long run. David has been working on CEGUI, and Rhyn has been working on Audio and user input.
