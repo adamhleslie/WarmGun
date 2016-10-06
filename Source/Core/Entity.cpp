@@ -38,6 +38,7 @@ void Entity::disable ()
 
 void Entity::destroyComponent (Component* component)
 {
+	assert(mLoaded);
 	assert(component);
 	assert(component->isLoaded());
 
@@ -92,6 +93,7 @@ void Entity::onUnload (Core* core)
 
 void Entity::enableComponent(Component* component)
 {
+	assert(mLoaded);
 	assert(component);
 	assert(component->isLoaded());
 
@@ -100,6 +102,7 @@ void Entity::enableComponent(Component* component)
 
 void Entity::disableComponent(Component* component)
 {
+	assert(mLoaded);
 	assert(component);
 	assert(!component->isLoaded());
 
@@ -110,6 +113,7 @@ void Entity::disableComponent(Component* component)
 
 void Entity::loadComponent (Component* component)
 {
+	assert(mLoaded);
 	assert(component);
 
 	// Add component to loaded components
@@ -124,6 +128,7 @@ void Entity::loadComponent (Component* component)
 
 void Entity::unloadComponent (Component* component)
 {
+	assert(mLoaded);
 	assert(component);
 
 	// Remove component from enabled components before loading

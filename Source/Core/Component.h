@@ -7,10 +7,10 @@ class Component
 public:
 
 // PUBLIC API
-	Component() {}
-	virtual ~Component() {}
+	Component () {}
+	virtual ~Component () {}
 
-	virtual void update() {}
+	virtual void update () {}
 
 	// Modifiers //
 	// When enabled and loaded, update is called every tick - Components begin enabled
