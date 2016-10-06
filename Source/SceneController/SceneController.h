@@ -21,7 +21,7 @@ public:
 	void loadNextScene(bool additive = false);
 
 protected:
-	void onLoadCallback(Core* core) override;
+	void postLoad() override;
 
 private:
 	Renderer* mRenderer = nullptr;
@@ -30,7 +30,7 @@ private:
 	std::list<Scene>::iterator mCurScene;
 
 	// Loads the first scene in the scene list
-	void loadInitialScene(Core* core);
+	void loadInitialScene();
 
 	// Adds the initial scenes to the scene list
 	// Implemented in Scenes.cpp

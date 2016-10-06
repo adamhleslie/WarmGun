@@ -11,7 +11,8 @@ SceneController::SceneController (Renderer* renderer)
 :	mRenderer(renderer)
 {
 	assert(mRenderer);
-	disable();
+	stopUpdating();
+	initScenes();
 }
 
 void SceneController::addScene (Scene& scene)
@@ -37,16 +38,16 @@ void SceneController::loadNextScene (bool additive /* = false */)
 	(*(mCurScene->loadScene))(core);
 }
 
-void SceneController::onLoadCallback (Core* core)
+void SceneController::postLoad ()
 {
-	initScenes();
-	loadInitialScene(core);
+	loadInitialScene();
 }
 
-void SceneController::loadInitialScene (Core* core)
+void SceneController::loadInitialScene ()
 {
+	assert(isLoaded());
 	assert(!mSceneList.empty());
 
 	mCurScene = mSceneList.begin();
-	(*(mCurScene->loadScene))(core);
+	(*(mCurScene->loadScene))(getCore());
 }

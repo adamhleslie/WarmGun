@@ -12,14 +12,16 @@
 #include "Audio.h"
 #include "GUI.h"
 
-void Core::loadModules ()
+void Core::createModules ()
 {
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
-	mModules.push_back(mRenderer);
+	loadModule(mRenderer);
+	
+	loadModule(new Audio());
+	// loadModule(new GUI());
 
-	mModules.push_back(new SceneController(mRenderer));
-	mModules.push_back(new Audio());
-	// mModules.push_back(new GUI());
+	// Create SceneController last, since it sets up the initial scene
+	loadModule(new SceneController(mRenderer));
 }
 /// Add Modules above ///
 
@@ -27,29 +29,19 @@ Core::Core ()
 {
 	constexpr size_t kNumModules = 4;
 	static_assert(kNumModules >= 1, "Make room for the Renderer module!");
-
 	mModules.reserve(kNumModules);
 	
-	loadModules();
+	createModules();
 	assert(mRenderer);
-
-	// let modules know they are loaded
-	for (Module* module : mModules)
-	{
-		module->onLoad(this);
-		if (module->isEnabled())
-			mEnabledModules.push_back(module);
-	}
 }
 
 Core::~Core ()
 {
-	// Destroy entities first (component destructors rely on modules?), then modules
 	destroyAllEntities();
 	for (Module* module : mModules)
 	{
 		assert(module);
-		module->onUnload(this);
+		unloadModule(module, false);
 		delete module;
 	}
 }
@@ -58,8 +50,6 @@ Core::~Core ()
 void Core::run ()
 {
 	Ogre::Timer timer = Ogre::Timer();
-
-	constexpr unsigned long kTimeStep = 4;
 
 	unsigned long accumulator = 0.0;
 	unsigned long time = timer.getMilliseconds();
@@ -78,7 +68,7 @@ void Core::run ()
 					entity->update();
 			}
 
-			for (Module* module : mEnabledModules)
+			for (Module* module : mUpdatingModules)
 			{
 				module->update();
 			}
@@ -94,18 +84,23 @@ Entity* Core::createEntity ()
 {
 	Entity* entity = new Entity();
 	mEntities.push_back(entity);
-	entity->onLoad(this);
+	entity->onLoad(this); // Call onLoad after actually loading
 
 	return entity;
 }
 
-void Core::destroyEntity (Entity* entity)
+void Core::destroyEntity (Entity* entity, bool findAndRemove /* = true */)
 {
-	auto pos = std::find(mEntities.begin(), mEntities.end(), entity);
-	assert(pos != mEntities.end());
-	mEntities.erase(pos);
+	assert(entity);
+	assert(entity->isLoaded());
 
-	entity->onUnload(this);
+	entity->onUnload(this); // Call onUnload before actually unloading
+	if (findAndRemove)
+	{
+		auto pos = std::find(mEntities.begin(), mEntities.end(), entity);
+		assert(pos != mEntities.end());
+		mEntities.erase(pos);
+	}
 
 	delete entity;
 }
@@ -114,9 +109,7 @@ void Core::destroyAllEntities ()
 {
 	for (Entity* entity : mEntities)
 	{
-		assert(entity);
-		entity->onUnload(this);
-		delete entity;
+		destroyEntity(entity, false);
 	}
 	mEntities.clear();
 }
@@ -126,16 +119,49 @@ Renderer* Core::getRenderer ()
 	return mRenderer;
 }
 
-// module should not be in mEnabledModules
-void Core::enableModule (Module* module)
+// module should not be in mUpdatingModules
+void Core::startUpdatingModule (Module* module)
 {
-	mEnabledModules.push_back(module);
+	assert(module);
+
+	mUpdatingModules.push_back(module);
 }
 
-// module should be in mEnabledModules
-void Core::disableModule (Module* module)
+// module should be in mUpdatingModules
+void Core::stopUpdatingModule (Module* module)
 {
-	auto pos = std::find(mEnabledModules.begin(), mEnabledModules.end(), module);
-	assert(pos != mEnabledModules.end());
-	mEnabledModules.erase(pos);
+	assert(module);
+
+	auto pos = std::find(mUpdatingModules.begin(), mUpdatingModules.end(), module);
+	assert(pos != mUpdatingModules.end());
+	mUpdatingModules.erase(pos);
+}
+
+void Core::loadModule (Module* module)
+{
+	assert(module);
+	assert(!module->isLoaded());
+
+	mModules.push_back(module);
+	if (module->isUpdating())
+		startUpdatingModule(module);
+
+	module->onLoad(this); // Call onLoad after actually loading
+}
+
+void Core::unloadModule (Module* module, bool findAndRemove /* = true */)
+{
+	assert(module);
+	assert(module->isLoaded());
+
+	module->onUnload(this); // Call onUnload before actually unloading
+	if (findAndRemove)
+	{
+		auto pos = std::find(mModules.begin(), mModules.end(), module);
+		assert(pos != mModules.end());
+		mModules.erase(pos);
+
+		if (module->isUpdating())
+			stopUpdatingModule(module);
+	}
 }

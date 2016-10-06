@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------------
 GUI::GUI(/*Ogre::Root* mRoot*/)
 {
-    disable();
+    stopUpdating();
     //this.mRoot = mRoot;
     CEGUI::OgreRenderer& GUIRenderer = CEGUI::OgreRenderer::bootstrapSystem();
 
