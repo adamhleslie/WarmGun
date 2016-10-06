@@ -5,6 +5,7 @@
 
 #include "Core.h"
 #include "Component.h"
+#include "Transform.h"
 
 Entity::~Entity ()
 {
@@ -12,6 +13,7 @@ Entity::~Entity ()
 	{
 		assert(component);
 		component->onUnload(this);
+		// Don't need to actually remove from loaded/enabled lists
 		delete component;
 	}
 }
@@ -36,6 +38,8 @@ void Entity::disable ()
 
 void Entity::destroyComponent (Component* component)
 {
+	assert(mLoaded);
+	assert(component);
 	assert(component->isLoaded());
 
 	unloadComponent(component);
@@ -46,7 +50,15 @@ void Entity::destroyComponent (Component* component)
 Core* Entity::getCore ()
 {
 	assert(mLoaded);
+	assert(mCore);
 	return mCore;
+}
+
+Transform* Entity::getTransform ()
+{
+	assert(mLoaded);
+	assert(mTransform);
+	return mTransform;
 }
 
 bool Entity::isLoaded ()
@@ -66,6 +78,8 @@ void Entity::onLoad (Core* core)
 	
 	mCore = core;
 	mLoaded = true;
+
+	createDefaultComponents();
 }
 
 void Entity::onUnload (Core* core)
@@ -77,15 +91,21 @@ void Entity::onUnload (Core* core)
 	mLoaded = false;
 }
 
-// Component should be loaded already, and not enabled
 void Entity::enableComponent(Component* component)
 {
+	assert(mLoaded);
+	assert(component);
+	assert(component->isLoaded());
+
 	mEnabledComponents.push_back(component);
 }
 
-// Component should be loaded and enabled already
 void Entity::disableComponent(Component* component)
 {
+	assert(mLoaded);
+	assert(component);
+	assert(!component->isLoaded());
+
 	auto pos = std::find(mEnabledComponents.begin(), mEnabledComponents.end(), component);
 	assert(pos != mEnabledComponents.end());
 	mEnabledComponents.erase(pos);
@@ -93,26 +113,38 @@ void Entity::disableComponent(Component* component)
 
 void Entity::loadComponent (Component* component)
 {
+	assert(mLoaded);
+	assert(component);
+
 	// Add component to loaded components
 	mComponents.push_back(component);
 
 	component->onLoad(this);
 
-	// Add component to enabled components
+	// Add component to enabled components after loading
 	if (component->isEnabled())
 		enableComponent(component);
 }
 
 void Entity::unloadComponent (Component* component)
 {
+	assert(mLoaded);
+	assert(component);
+
+	// Remove component from enabled components before loading
+	if (component->isEnabled())
+		disableComponent(component);
+
 	// Remove component from loaded components
 	auto pos = std::find(mComponents.begin(), mComponents.end(), component);
 	assert(pos != mComponents.end());
 	mComponents.erase(pos);
 
 	component->onUnload(this);
+}
 
-	// Remove component from enabled components
-	if (component->isEnabled())
-		disableComponent(component);
+void Entity::createDefaultComponents ()
+{
+	mTransform = createComponent<Transform>();
+	assert(mTransform);
 }

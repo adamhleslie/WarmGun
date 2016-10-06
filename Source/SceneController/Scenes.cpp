@@ -13,6 +13,7 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "BoundMovement.h"
+#include "Transform.h"
 #include "AudioPlayer.h"
 
 using Ogre::Vector3;
@@ -73,12 +74,14 @@ namespace scene1
 		BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
 		boundMove->mCamera = mCamera;
 		boundMove->mBallRadius = 50;
+
+		Ogre::SceneNode* ballNode = sphere->getTransform()->getSceneNode();
+		ballNode->setPosition(Vector3 (0,150,0));
 		
 		Ogre::Entity* sphereEntity = mSceneMgr->createEntity("mySphere", Ogre::SceneManager::PT_SPHERE);
 		sphereEntity->setCastShadows(true);
 		sphereEntity->setMaterialName("Examples/BumpyMetal");
-		boundMove->mBallNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(Vector3 (0,150,0));
-		boundMove->mBallNode->attachObject(sphereEntity);
+		ballNode->attachObject(sphereEntity);
 		
 		srand(time(NULL));
 		boundMove->mBallVelocity = Vector3(Ogre::Math::RangeRandom(-1, 1),

@@ -19,7 +19,7 @@ void Core::loadModules ()
 
 	mModules.push_back(new SceneController(mRenderer));
 	mModules.push_back(new Audio());
-	mModules.push_back(new GUI());
+	// mModules.push_back(new GUI());
 }
 /// Add Modules above ///
 

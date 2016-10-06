@@ -76,7 +76,7 @@ add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
 add_project_module(Audio			Audio)
 add_project_module(GameLogic		GameLogic)
-add_project_module(GUI              GUI)
+add_project_module(GUI				GUI)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
@@ -92,6 +92,20 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 ##
 # ADD INCLUDE DIRECTORIES, AND LINK TO LIBRARIES
 ##
+
+##BULLET
+find_package(Bullet REQUIRED)
+set(OGREBULLET_HOME "${PROJECT_SOURCE_DIR}/Libraries/ogrebullet" CACHE PATH "Path to OgreBullet")
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${BULLET_LIBRARIES}
+	${OGREBULLET_HOME}/lib/libOgreBulletDynamics.so
+	${OGREBULLET_HOME}/lib/libOgreBulletCollisions.so
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
+	${BULLET_INCLUDE_DIRS}
+	${OGREBULLET_HOME}/Dynamics/include
+	${OGREBULLET_HOME}/Collisions/include
+)
 
 ##OGRE
 find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
@@ -116,7 +130,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 ##CEGUI
-set(CEGUI_HOME "/lusr" CACHE PATH "Path to CEGUI")
+set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")
 
 set(CEGUI_LIBRARIES "${CEGUI_HOME}/lib/libCEGUIBase-0.so" CACHE PATH "Path to CEGUI Libraries")
 set(CEGUI_INCLUDE_DIR "${CEGUI_HOME}/include/cegui-0" CACHE PATH "Path to CEGUI Include_dir")
