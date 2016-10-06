@@ -116,7 +116,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 ##CEGUI
-set(CEGUI_HOME "/lusr" CACHE PATH "Path to CEGUI")
+set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")
 
 set(CEGUI_LIBRARIES "${CEGUI_HOME}/lib/libCEGUIBase-0.so" CACHE PATH "Path to CEGUI Libraries")
 set(CEGUI_INCLUDE_DIR "${CEGUI_HOME}/include/cegui-0" CACHE PATH "Path to CEGUI Include_dir")

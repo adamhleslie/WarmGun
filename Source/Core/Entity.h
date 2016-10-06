@@ -4,6 +4,7 @@
 
 class Component;
 class Core;
+class Transform;
 
 class Entity
 {
@@ -34,6 +35,7 @@ public:
 	C* getComponent();
 
 	Core* getCore();
+	Transform* getTransform();
 
 	bool isLoaded();
 	bool isEnabled();
@@ -64,6 +66,10 @@ private:
 	// As long as the component is loaded, the entity will handle its memory deallocation
 	void loadComponent(Component* component);
 	void unloadComponent(Component* component);
+
+	// Creates the components every entity has (Transform, ...)
+	void createDefaultComponents();
+	Transform* mTransform = nullptr;
 };
 
 // Template Methods //
