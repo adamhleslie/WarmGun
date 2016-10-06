@@ -11,6 +11,7 @@
 #include "SceneController.h"
 #include "Audio.h"
 #include "GUI.h"
+#include "Physics.h"
 
 void Core::loadModules ()
 {
@@ -20,12 +21,13 @@ void Core::loadModules ()
 	mModules.push_back(new SceneController(mRenderer));
 	mModules.push_back(new Audio());
 	mModules.push_back(new GUI());
+	mModules.push_back(new Physics(mRenderer->getSceneManager()));
 }
 /// Add Modules above ///
 
 Core::Core ()
 {
-	constexpr size_t kNumModules = 4;
+	constexpr size_t kNumModules = 5;
 	static_assert(kNumModules >= 1, "Make room for the Renderer module!");
 
 	mModules.reserve(kNumModules);
