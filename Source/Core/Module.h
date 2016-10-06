@@ -24,14 +24,14 @@ public:
 
 	// Modifiers //
 	// When enabled and loaded, update is called every tick - Modules begin enabled
-	void enable();
-	void disable();
+	void startUpdating();
+	void stopUpdating();
 
 	// State //
 	Core* getCore();
 	
 	bool isLoaded();
-	bool isEnabled();
+	bool isUpdating();
 
 // RESTRICTED API
 	// Callbacks called when loaded and when unloaded by Core
@@ -40,12 +40,12 @@ public:
 	void onUnload(Core* core);
 
 protected:
-	// Called in onLoad(), before being added to the list of enabled modules
-	// Use this for processing immediately after being added to the core
-	virtual void onLoadCallback(Core* core) {}
+	// Called after being loaded/before being unloaded by the engine
+	virtual void postLoad () {};
+	virtual void preUnload () {};
 
 private:
 	bool mLoaded = false;
-	bool mEnabled = true;
+	bool mUpdating = true;
 	Core* mCore = nullptr;
 };

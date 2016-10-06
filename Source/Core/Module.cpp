@@ -4,24 +4,18 @@
 
 #include "Core.h"
 
-void Module::enable ()
+void Module::startUpdating ()
 {
-	if (!mEnabled)
-	{
-		mEnabled = true;
-		if (mLoaded)
-			mCore->enableModule(this);
-	}
+	mUpdating = true;
+	if (mLoaded)
+		mCore->startUpdatingModule(this);
 }
 
-void Module::disable ()
+void Module::stopUpdating ()
 {
-	if (mEnabled)
-	{
-		mEnabled = false;
-		if (mLoaded)
-			mCore->disableModule(this);
-	}
+	mUpdating = false;
+	if (mLoaded)
+		mCore->stopUpdatingModule(this);
 }
 
 Core* Module::getCore ()
@@ -35,9 +29,9 @@ bool Module::isLoaded ()
 	return mLoaded;
 }
 
-bool Module::isEnabled ()
+bool Module::isUpdating ()
 {
-	return mEnabled;
+	return mUpdating;
 }
 
 void Module::onLoad (Core* core)
@@ -46,15 +40,19 @@ void Module::onLoad (Core* core)
 	assert(core);
 	
 	mCore = core;
-	onLoadCallback(core);
 	mLoaded = true;
+
+	postLoad();
 }
 
 void Module::onUnload (Core* core)
 {
 	assert(mLoaded);
+	assert(core);
 	assert(mCore == core);
 	
+	preUnload();
+
 	mCore = nullptr;
 	mLoaded = false;
 }
