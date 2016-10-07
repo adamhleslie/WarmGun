@@ -77,6 +77,7 @@ add_project_module(SceneController	SceneController)
 add_project_module(Audio			Audio)
 add_project_module(GameLogic		GameLogic)
 add_project_module(GUI				GUI)
+add_project_module(Physics			Physics)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
