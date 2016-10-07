@@ -14,6 +14,8 @@ class AudioPlayer : public Component
 		~AudioPlayer() {}
 
 		int playSound(int i);
+		int changeVolume(int volume);
+		int muteVolume();
 
 	protected:
 		void postLoad() override;
