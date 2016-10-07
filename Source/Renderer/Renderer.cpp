@@ -83,6 +83,11 @@ Ogre::Root* Renderer::getRoot ()
 	return mRoot;
 }
 
+Ogre::RenderWindow* Renderer::getRenderWindow()
+{
+	return mWindow;
+}
+
 Ogre::SceneManager* Renderer::getSceneManager ()
 {
 	return mSceneManager;

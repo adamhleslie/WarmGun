@@ -11,6 +11,7 @@
 #include "SceneController.h"
 #include "Audio.h"
 #include "GUI.h"
+#include "InputManager.h"
 
 void Core::createModules ()
 {
@@ -20,6 +21,9 @@ void Core::createModules ()
 	loadModule(new Audio());
 	loadModule(new GUI());
 
+	//Setup
+	loadModule(new InputManager(mRenderer->getRenderWindow()));
+
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
 }
@@ -27,7 +31,7 @@ void Core::createModules ()
 
 Core::Core ()
 {
-	constexpr size_t kNumModules = 4;
+	constexpr size_t kNumModules = 5;
 	static_assert(kNumModules >= 1, "Make room for the Renderer module!");
 	mModules.reserve(kNumModules);
 	
