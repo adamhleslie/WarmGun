@@ -12,33 +12,31 @@ Entity::~Entity ()
 	for (Component* component : mComponents)
 	{
 		assert(component);
-		component->onUnload(this);
-		// Don't need to actually remove from loaded/enabled lists
+		unloadComponent(component, false);
 		delete component;
 	}
 }
 
 void Entity::update ()
 {
-	for (Component* component : mEnabledComponents)
+	for (Component* component : mUpdatingComponents)
 	{
 		component->update();
 	}
 }
 
-void Entity::enable ()
+void Entity::startUpdating ()
 {
-	mEnabled = true;
+	mUpdating = true;
 }
 
-void Entity::disable ()
+void Entity::stopUpdating ()
 {
-	mEnabled = false;
+	mUpdating = false;
 }
 
 void Entity::destroyComponent (Component* component)
 {
-	assert(mLoaded);
 	assert(component);
 	assert(component->isLoaded());
 
@@ -50,14 +48,12 @@ void Entity::destroyComponent (Component* component)
 Core* Entity::getCore ()
 {
 	assert(mLoaded);
-	assert(mCore);
 	return mCore;
 }
 
 Transform* Entity::getTransform ()
 {
 	assert(mLoaded);
-	assert(mTransform);
 	return mTransform;
 }
 
@@ -66,9 +62,9 @@ bool Entity::isLoaded ()
 	return mLoaded;
 }
 
-bool Entity::isEnabled ()
+bool Entity::isUpdating ()
 {
-	return mEnabled;
+	return mUpdating;
 }
 
 void Entity::onLoad (Core* core)
@@ -85,66 +81,63 @@ void Entity::onLoad (Core* core)
 void Entity::onUnload (Core* core)
 {
 	assert(mLoaded);
+	assert(core);
 	assert(mCore == core);
 	
 	mCore = nullptr;
 	mLoaded = false;
 }
 
-void Entity::enableComponent(Component* component)
+void Entity::startUpdatingComponent(Component* component)
 {
 	assert(mLoaded);
 	assert(component);
-	assert(component->isLoaded());
 
-	mEnabledComponents.push_back(component);
+	mUpdatingComponents.push_back(component);
 }
 
-void Entity::disableComponent(Component* component)
+void Entity::stopUpdatingComponent(Component* component)
 {
-	assert(mLoaded);
 	assert(component);
-	assert(!component->isLoaded());
 
-	auto pos = std::find(mEnabledComponents.begin(), mEnabledComponents.end(), component);
-	assert(pos != mEnabledComponents.end());
-	mEnabledComponents.erase(pos);
+	auto pos = std::find(mUpdatingComponents.begin(), mUpdatingComponents.end(), component);
+	assert(pos != mUpdatingComponents.end());
+	mUpdatingComponents.erase(pos);
 }
 
 void Entity::loadComponent (Component* component)
 {
 	assert(mLoaded);
 	assert(component);
+	assert(!component->isLoaded());
 
-	// Add component to loaded components
 	mComponents.push_back(component);
+	if (component->isUpdating())
+		startUpdatingComponent(component);
 
-	component->onLoad(this);
-
-	// Add component to enabled components after loading
-	if (component->isEnabled())
-		enableComponent(component);
+	component->onLoad(this); // Call onLoad after actually loading
 }
 
-void Entity::unloadComponent (Component* component)
+void Entity::unloadComponent (Component* component, bool findAndRemove /* = true */)
 {
-	assert(mLoaded);
+	// Entity may not be loaded at this point
 	assert(component);
+	assert(component->isLoaded());
 
-	// Remove component from enabled components before loading
-	if (component->isEnabled())
-		disableComponent(component);
+	component->onUnload(this); // Call onUnload before actually unloading
+	if (findAndRemove)
+	{
+		auto pos = std::find(mComponents.begin(), mComponents.end(), component);
+		assert(pos != mComponents.end());
+		mComponents.erase(pos);
 
-	// Remove component from loaded components
-	auto pos = std::find(mComponents.begin(), mComponents.end(), component);
-	assert(pos != mComponents.end());
-	mComponents.erase(pos);
-
-	component->onUnload(this);
+		if (component->isUpdating())
+			stopUpdatingComponent(component);
+	}
 }
 
 void Entity::createDefaultComponents ()
 {
+	assert(mLoaded);
 	mTransform = createComponent<Transform>();
-	assert(mTransform);
 }

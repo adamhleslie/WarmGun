@@ -23,7 +23,6 @@ public:
 	virtual void update () {}
 
 	// Modifiers //
-	// When enabled and loaded, update is called every tick - Modules begin enabled
 	void startUpdating();
 	void stopUpdating();
 

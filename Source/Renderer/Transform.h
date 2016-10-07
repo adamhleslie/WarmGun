@@ -10,13 +10,13 @@ class Entity;
 class Transform : public Component
 {
 public:
-	Transform() { disable(); }
+	Transform() { stopUpdating(); }
 	~Transform() {}
 
 	Ogre::SceneNode* getSceneNode();
 
 protected:
-	void onLoadCallback(Entity* entity);
+	void postLoad() override;
 
 private:
 	// The SceneManager this transform is a part of

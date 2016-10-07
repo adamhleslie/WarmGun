@@ -64,7 +64,7 @@ void Core::run ()
 		{
 			for (Entity* entity : mEntities)
 			{
-				if (entity->isEnabled())
+				if (entity->isUpdating())
 					entity->update();
 			}
 

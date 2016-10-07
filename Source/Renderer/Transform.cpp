@@ -12,9 +12,9 @@ Ogre::SceneNode* Transform::getSceneNode ()
 	return mNode;
 }
 
-void Transform::onLoadCallback (Entity* entity)
+void Transform::postLoad ()
 {
-	assert(entity);
+	Entity* entity = getEntity();
 
 	mSceneManager = entity->getCore()->getRenderer()->getSceneManager();
 	assert(mSceneManager);

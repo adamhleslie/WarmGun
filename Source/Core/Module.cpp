@@ -6,16 +6,22 @@
 
 void Module::startUpdating ()
 {
-	mUpdating = true;
-	if (mLoaded)
-		mCore->startUpdatingModule(this);
+	if (!mUpdating)
+	{
+		mUpdating = true;
+		if (mLoaded)
+			mCore->startUpdatingModule(this);
+	}
 }
 
 void Module::stopUpdating ()
 {
-	mUpdating = false;
-	if (mLoaded)
-		mCore->stopUpdatingModule(this);
+	if (mUpdating)
+	{
+		mUpdating = false;
+		if (mLoaded)
+			mCore->stopUpdatingModule(this);
+	}
 }
 
 Core* Module::getCore ()

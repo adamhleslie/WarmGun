@@ -1,12 +1,12 @@
 #include "AudioPlayer.h"
 
-void AudioPlayer::onLoadCallback(Entity* entity)
+void AudioPlayer::postLoad ()
 {
-	audio = entity->getCore()->getModule<Audio>();
+	audio = getEntity()->getCore()->getModule<Audio>();
 	assert(audio);
 }
 
-int AudioPlayer::playSound(int i)
+int AudioPlayer::playSound (int i)
 {
 	switch(i)
 	{
