@@ -39,22 +39,22 @@ Audio::~Audio()
 
 int Audio::play_s1()
 {
-	return Mix_PlayChannel( -1, s1, 0 );
+	return Mix_PlayChannel( 1, s1, 0 );
 }
 
 int Audio::play_s2()
 {
-	return Mix_PlayChannel( -1, s2, 0 );
+	return Mix_PlayChannel( 2, s2, 0 );
 }
 
 int Audio::play_s3()
 {
-	return Mix_PlayChannel( -1, s3, 0 );
+	return Mix_PlayChannel( 3, s3, 0 );
 }
 
 int Audio::play_s4()
 {
-    return Mix_PlayChannel( -1, s4, 10 );
+    return Mix_PlayChannel( 4, s4, 10 );
 }
 
 int Audio::play_s5()

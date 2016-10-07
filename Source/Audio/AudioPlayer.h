@@ -14,8 +14,10 @@ class AudioPlayer : public Component
 		~AudioPlayer() {}
 
 		int playSound(int i);
-		int changeVolume(int volume);
-		int muteVolume();
+		void changeSoundEffectVolume(int volume);
+		void muteSoundEffect();
+		void changeBackgroundMusicVolume(int volume);
+		void muteBackgroundMusic();
 
 	protected:
 		void postLoad() override;

@@ -1,6 +1,7 @@
 #include "AudioPlayer.h"
 
-int currentVolume = 128;
+int currentSoundEffectVolume = 128;
+int currentBackgroundMusicVolume = 128;
 
 void AudioPlayer::postLoad ()
 {
@@ -8,30 +9,49 @@ void AudioPlayer::postLoad ()
 	assert(audio);
 }
 
-int AudioPlayer::changeVolume(int volume)
+void AudioPlayer::changeSoundEffectVolume(int volume)
 {
-	currentVolume += volume;
-	if(volume>=0)
+	currentSoundEffectVolume += volume;
+	Mix_Volume(1, currentSoundEffectVolume);
+	Mix_Volume(2, currentSoundEffectVolume);
+	Mix_Volume(3, currentSoundEffectVolume);
+}
+
+void AudioPlayer::muteSoundEffect()
+{
+	if(currentSoundEffectVolume!=0)
 	{
-		return Mix_Volume(-1, currentVolume);
+		currentSoundEffectVolume=0;
+		Mix_Volume(1,0);
+		Mix_Volume(2,0);
+		Mix_Volume(3,0);
 	}
 	else
 	{
-		return Mix_Volume(-1, currentVolume);
+		currentSoundEffectVolume=128;
+		Mix_Volume(1,128);
+		Mix_Volume(2,128);
+		Mix_Volume(3,128);
 	}
 }
 
-int AudioPlayer::muteVolume()
+void AudioPlayer::changeBackgroundMusicVolume(int volume)
 {
-	if(currentVolume!=0)
+	currentBackgroundMusicVolume += volume;
+	Mix_Volume(4, currentBackgroundMusicVolume);
+}
+
+void AudioPlayer::muteBackgroundMusic()
+{
+	if(currentBackgroundMusicVolume!=0)
 	{
-		currentVolume=0;
-		return Mix_Volume(-1,0);
+		currentBackgroundMusicVolume=0;
+		Mix_Volume(4,0);
 	}
 	else
 	{
-		currentVolume=128;
-		return Mix_Volume(-1,128);
+		currentBackgroundMusicVolume=128;
+		Mix_Volume(4,128);
 	}
 }
 
