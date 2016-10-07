@@ -4,23 +4,23 @@
 
 #include "Entity.h"
 
-void Component::enable ()
+void Component::startUpdating ()
 {
-	if (!mEnabled)
+	if (!mUpdating)
 	{
-		mEnabled = true;
+		mUpdating = true;
 		if (mLoaded)
-			mEntity->enableComponent(this);
+			mEntity->startUpdatingComponent(this);
 	}
 }
 
-void Component::disable ()
+void Component::stopUpdating ()
 {
-	if (mEnabled)
+	if (mUpdating)
 	{
-		mEnabled = false;
+		mUpdating = false;
 		if (mLoaded)
-			mEntity->disableComponent(this);
+			mEntity->stopUpdatingComponent(this);
 	}
 }
 
@@ -35,9 +35,9 @@ bool Component::isLoaded ()
 	return mLoaded;
 }
 
-bool Component::isEnabled ()
+bool Component::isUpdating ()
 {
-	return mEnabled;
+	return mUpdating;
 }
 
 void Component::onLoad (Entity* entity)
@@ -46,15 +46,19 @@ void Component::onLoad (Entity* entity)
 	assert(entity);
 	
 	mEntity = entity;
-	onLoadCallback(entity);
 	mLoaded = true;
+
+	postLoad();
 }
 
 void Component::onUnload (Entity* entity)
 {
 	assert(mLoaded);
+	assert(entity);
 	assert(mEntity == entity);
 	
+	preUnload();
+
 	mEntity = nullptr;
 	mLoaded = false;
 }

@@ -19,8 +19,8 @@ public:
 
 	// Modifiers //
 	// When enabled and loaded, update is called every tick - Entities begin enabled
-	void enable();
-	void disable();
+	void startUpdating();
+	void stopUpdating();
 
 	// Creates and then loads a component of the given type, using its default constructor
 	template <class C> 
@@ -38,7 +38,7 @@ public:
 	Transform* getTransform();
 
 	bool isLoaded();
-	bool isEnabled();
+	bool isUpdating();
 
 // RESTRICTED API
 	// Callbacks called when loaded/unloaded by Core
@@ -48,28 +48,29 @@ public:
 
 	// Enables/Disables the given component (should already by loaded)
 	// Used by Component
-	void enableComponent(Component* component);
-	void disableComponent(Component* component);
+	void startUpdatingComponent(Component* component);
+	void stopUpdatingComponent(Component* component);
 
 private:
 	// The components that are loaded
 	std::vector<Component*> mComponents;
 
 	// The components that are enabled (updated when loaded)
-	std::vector<Component*> mEnabledComponents;
+	std::vector<Component*> mUpdatingComponents;
+
+	Core* mCore = nullptr;
+	Transform* mTransform = nullptr;
 
 	bool mLoaded = false;
-	bool mEnabled = true;
-	Core* mCore = nullptr;
+	bool mUpdating = true;
 
 	// Loads/Unloads the given component, calling onLoad/onUnload on it
 	// As long as the component is loaded, the entity will handle its memory deallocation
 	void loadComponent(Component* component);
-	void unloadComponent(Component* component);
+	void unloadComponent(Component* component, bool findAndRemove = true);
 
 	// Creates the components every entity has (Transform, ...)
 	void createDefaultComponents();
-	Transform* mTransform = nullptr;
 };
 
 // Template Methods //

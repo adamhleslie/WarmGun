@@ -12,11 +12,12 @@ class AudioPlayer : public Component
 	public:
 		AudioPlayer() {}
 		~AudioPlayer() {}
+
 		int playSound(int i);
+
+	protected:
+		void postLoad() override;
 
 	private:
 		Audio* audio = nullptr;
-
-	protected:
-		void onLoadCallback(Entity* entity) override;
 };

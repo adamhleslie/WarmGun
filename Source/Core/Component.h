@@ -13,15 +13,14 @@ public:
 	virtual void update () {}
 
 	// Modifiers //
-	// When enabled and loaded, update is called every tick - Components begin enabled
-	void enable();
-	void disable();
+	void startUpdating();
+	void stopUpdating();
 
 	// State //
 	Entity* getEntity();
 
 	bool isLoaded();
-	bool isEnabled();
+	bool isUpdating();
 
 // RESTRICTED API
 	// Callbacks called when loaded/unloaded by an Entity
@@ -30,12 +29,12 @@ public:
 	void onUnload(Entity* entity);
 
 protected:
-	// Called in onLoad(), before being added to the list of enabled components
-	// Use this for processing immediately after being added to an entity
-	virtual void onLoadCallback(Entity* entity) {}
+	// Called after being loaded/before being unloaded by an entity
+	virtual void postLoad () {};
+	virtual void preUnload () {};
 
 private:
 	bool mLoaded = false;
-	bool mEnabled = true;
+	bool mUpdating = true;
 	Entity* mEntity = nullptr;
 };
