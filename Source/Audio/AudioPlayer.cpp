@@ -2,9 +2,9 @@
 
 int currentVolume = 128;
 
-void AudioPlayer::onLoadCallback(Entity* entity)
+void AudioPlayer::postLoad ()
 {
-	audio = entity->getCore()->getModule<Audio>();
+	audio = getEntity()->getCore()->getModule<Audio>();
 	assert(audio);
 }
 

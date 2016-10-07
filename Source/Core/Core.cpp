@@ -18,7 +18,7 @@ void Core::createModules ()
 	loadModule(mRenderer);
 	
 	loadModule(new Audio());
-	// loadModule(new GUI());
+	loadModule(new GUI());
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -64,7 +64,7 @@ void Core::run ()
 		{
 			for (Entity* entity : mEntities)
 			{
-				if (entity->isEnabled())
+				if (entity->isUpdating())
 					entity->update();
 			}
 

@@ -21,7 +21,7 @@ public:
 	Ogre::Vector3 mWallDistances;
 
 protected:
-	void onLoadCallback(Entity* entity) override;
+	void postLoad() override;
 
 private:
 	AudioPlayer* mAudioPlayer = nullptr;

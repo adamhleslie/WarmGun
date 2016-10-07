@@ -47,9 +47,9 @@ void BoundMovement::update()
 	ballNode->translate(mBallVelocity);
 }
 
-void BoundMovement::onLoadCallback (Entity* entity)
+void BoundMovement::postLoad ()
 {
-	mAudioPlayer = entity->getComponent<AudioPlayer>();
+	mAudioPlayer = getEntity()->getComponent<AudioPlayer>();
 	assert(mAudioPlayer);
 
 	mAudioPlayer->playSound(4);
