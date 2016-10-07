@@ -9,7 +9,7 @@ void selectRenderSystem(Root* root);
 Renderer::Renderer (Ogre::SceneType sceneType)
 {
 	// Renderer does not need to update every tick
-	disable();
+	stopUpdating();
 	
 	mRoot = new Root("");
 	// Load Plugins
@@ -26,15 +26,14 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 
 	// Create scene manager, and render window
 	mSceneManager = mRoot->createSceneManager(sceneType);
-	mWindow = mRoot->getAutoCreatedWindow ();
+	mWindow = mRoot->getAutoCreatedWindow();
 
-	// Load in resources
-	ResourceGroupManager::getSingleton().addResourceLocation("./Media", "FileSystem", "General");
+	// Load in renderer resources
+	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Renderer", "FileSystem", "General");
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener
 	WindowEventUtilities::addWindowEventListener(mWindow, this);
-	
 }
 
 Renderer::~Renderer ()

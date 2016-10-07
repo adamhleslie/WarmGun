@@ -3,15 +3,17 @@
 #include <cstdlib>
 #include <OgreCamera.h>
 #include <OgreEntity.h>
-#include <OgreRoot.h>
+#include <OgreSceneNode.h>
 
+#include "Transform.h"
 #include "AudioPlayer.h"
 
 using Ogre::Vector3;
 
 void BoundMovement::update()
 {
-	Vector3 initial = mBallNode->getPosition();
+	Ogre::SceneNode* ballNode = getEntity()->getTransform()->getSceneNode();
+	Vector3 initial = ballNode->getPosition();
 	mCamera->lookAt(initial);
 
 	Vector3 next = initial + mBallVelocity;
@@ -40,7 +42,7 @@ void BoundMovement::update()
 			mAudioPlayer->changeVolume(30);
 	}
 
-	mBallNode->translate(mBallVelocity);
+	ballNode->translate(mBallVelocity);
 }
 
 void BoundMovement::onLoadCallback (Entity* entity)

@@ -14,7 +14,6 @@ public:
 
 	void update() override;
 
-	Ogre::SceneNode* mBallNode = nullptr;
 	Ogre::Camera* mCamera = nullptr;
 
 	size_t mBallRadius;

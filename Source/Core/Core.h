@@ -14,6 +14,9 @@ public:
 	Core();
 	virtual ~Core();
 
+	// The fixed time step taken by every tick (in ms)
+	static constexpr unsigned long kTimeStep = 4;
+
 	// Begins the game loop
 	void run();
 
@@ -22,7 +25,7 @@ public:
 	Entity* createEntity();
 
 	// Unloads the given entity, and deallocates its memory
-	void destroyEntity(Entity* entity);
+	void destroyEntity(Entity* entity, bool findAndRemove = true);
 
 	// Unloads and deallocates memory for all entities
 	void destroyAllEntities();
@@ -35,27 +38,27 @@ public:
 	Renderer* getRenderer();
 
 // RESTRICTED API
-	// Enables/Disables updating of the given module
-	// Used by Module
-	void enableModule(Module* module);
-	void disableModule(Module* module);
+	// Enables/Disables updating of the given module, used by Module
+	void startUpdatingModule(Module* module);
+	void stopUpdatingModule(Module* module);
 
 private:
-	// The modules that are loaded (static, see loadModules())
+	// The modules that are loaded, and those that have update called every tick
 	std::vector<Module*> mModules;
-
-	// The modules that are loaded and enabled, updated every tick
-	std::vector<Module*> mEnabledModules;
+	std::vector<Module*> mUpdatingModules;
 
 	// The entities that are loaded
-	// We don't have a separate container for enabled entities, since it will be easier to implement
-	// parent-child relationships within a single container
+	// We don't have a separate container for enabled entities, for parent-child relations
 	std::vector<Entity*> mEntities;
 
 	Renderer* mRenderer = nullptr;
 
-	// Initialization function for loading the static modules
-	void loadModules();
+	// Create/load the available modules
+	void createModules();
+
+	// Calls onLoad after fully loading, and onUnload before unloading
+	void loadModule(Module* module);
+	void unloadModule(Module* module, bool findAndRemove = true);
 };
 
 // Template Methods //
