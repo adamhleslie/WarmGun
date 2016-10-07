@@ -14,8 +14,6 @@ public:
 
 	void update() override;
 
-	Ogre::Camera* mCamera = nullptr;
-
 	size_t mBallRadius;
 	Ogre::Vector3 mBallVelocity;
 	Ogre::Vector3 mWallDistances;

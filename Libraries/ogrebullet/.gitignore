@@ -1,6 +1,0 @@
-# OS X Finder config
-*.DS_Store
-
-# QtCreator cmake config
-CMakeLists.txt.user*
-

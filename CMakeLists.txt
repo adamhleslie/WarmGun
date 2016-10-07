@@ -94,20 +94,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # ADD INCLUDE DIRECTORIES, AND LINK TO LIBRARIES
 ##
 
-##BULLET
-find_package(Bullet REQUIRED)
-set(OGREBULLET_HOME "${PROJECT_SOURCE_DIR}/Libraries/ogrebullet" CACHE PATH "Path to OgreBullet")
-target_link_libraries(${PROJECT_NAME} PRIVATE
-	${BULLET_LIBRARIES}
-	${OGREBULLET_HOME}/lib/libOgreBulletDynamics.so
-	${OGREBULLET_HOME}/lib/libOgreBulletCollisions.so
-)
-target_include_directories(${PROJECT_NAME} PRIVATE
-	${BULLET_INCLUDE_DIRS}
-	${OGREBULLET_HOME}/Dynamics/include
-	${OGREBULLET_HOME}/Collisions/include
-)
-
 ##OGRE
 find_package(OGRE REQUIRED COMPONENTS Overlay RenderSystem_GL)
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -167,6 +153,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${SDL_INCLUDE_DIR}
+)
+
+##BULLET
+find_package(Bullet REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	${BULLET_LIBRARIES}
+)
+target_include_directories(${PROJECT_NAME} PRIVATE
+	${BULLET_INCLUDE_DIRS}
 )
 
 # Copy the media directory to the binaries folder

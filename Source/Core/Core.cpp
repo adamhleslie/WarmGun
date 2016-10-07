@@ -11,14 +11,16 @@
 #include "SceneController.h"
 #include "Audio.h"
 #include "GUI.h"
+#include "Physics.h"
 
 void Core::createModules ()
 {
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
-	
+
 	loadModule(new Audio());
-	loadModule(new GUI());
+	// loadModule(new GUI());
+	loadModule(new Physics());
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));

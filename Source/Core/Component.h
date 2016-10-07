@@ -30,8 +30,8 @@ public:
 
 protected:
 	// Called after being loaded/before being unloaded by an entity
-	virtual void postLoad () {};
-	virtual void preUnload () {};
+	virtual void postLoad () {}
+	virtual void preUnload () {}
 
 private:
 	bool mLoaded = false;

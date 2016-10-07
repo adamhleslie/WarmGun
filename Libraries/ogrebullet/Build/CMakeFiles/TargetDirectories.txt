@@ -1,3 +1,0 @@
-/u/adamhl/dev/cs354R/ogrebullet/Build/CMakeFiles/OgreBulletCollisions.dir
-/u/adamhl/dev/cs354R/ogrebullet/Build/CMakeFiles/OgreBulletDynamics.dir
-/u/adamhl/dev/cs354R/ogrebullet/Build/CMakeFiles/uninstall.dir

@@ -1,7 +1,6 @@
 #include "BoundMovement.h"
 
 #include <cstdlib>
-#include <OgreCamera.h>
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 
@@ -15,8 +14,6 @@ void BoundMovement::update()
 {
 	Ogre::SceneNode* ballNode = getEntity()->getTransform()->getSceneNode();
 	Vector3 initial = ballNode->getPosition();
-
-	mCamera->lookAt(initial);
 
 	Vector3 next = initial + mBallVelocity;
 
