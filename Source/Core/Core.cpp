@@ -25,8 +25,8 @@ void Core::createModules ()
 
 	// OIS::KeyListener* keyTest = dynamic_cast<OIS::KeyListener*>(mInputMgr);
  //    OIS::MouseListener* mouseTest = dynamic_cast<OIS::MouseListener*>(mInputMgr);
-	mInputMgr = InputManager::getSingletonPtr();
-    mInputMgr->initialise( mRenderer->getRenderWindow() );
+	//mInputMgr = InputManager::getSingletonPtr();
+    //mInputMgr->initialise( mRenderer->getRenderWindow() );
 
 
     //assert(keyTest!=0 && mouseTest!=0);
@@ -36,7 +36,7 @@ void Core::createModules ()
 	//mInputMgr = new InputManager(mRenderer->getRenderWindow());
 	//mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
     //mInputMgr->addMouseListener( mInputMgr, "MouseListener" );
-	loadModule(mInputMgr);
+	//loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
