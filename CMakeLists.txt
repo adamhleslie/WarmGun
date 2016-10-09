@@ -156,7 +156,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 ##BULLET
-find_package(Bullet REQUIRED)
+set(BULLET_HOME "/lusr/opt/bullet-2.79" CACHE PATH "Path to Bullet")
+set(BULLET_LIBRARIES "${BULLET_HOME}/lib/libBulletDynamics.so;${BULLET_HOME}/lib/libBulletCollision.so;${BULLET_HOME}/lib/libLinearMath.so;${BULLET_HOME}/lib/libBulletSoftBody.so" CACHE PATH "Path to Bullet Libraries")
+set(BULLET_INCLUDE_DIRS "${BULLET_HOME}/include/bullet" CACHE PATH "Path to Bullet Include_dir")
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	${BULLET_LIBRARIES}
 )
