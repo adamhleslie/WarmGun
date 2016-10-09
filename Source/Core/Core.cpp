@@ -30,8 +30,8 @@ void Core::createModules ()
 
 
     //assert(keyTest!=0 && mouseTest!=0);
-    mInputMgr->addKeyListener( (OIS::KeyListener*)mInputMgr, "keyListener" );
-    mInputMgr->addMouseListener( (OIS::MouseListener*)mInputMgr, "mouseListener" );
+    // mInputMgr->addKeyListener( (OIS::KeyListener*)mInputMgr, "keyListener" );
+    // mInputMgr->addMouseListener( (OIS::MouseListener*)mInputMgr, "mouseListener" );
 
 	//mInputMgr = new InputManager(mRenderer->getRenderWindow());
 	//mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
