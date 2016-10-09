@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "InputManager.h"
 
 class Module;
 class Entity;
@@ -52,6 +53,7 @@ private:
 	std::vector<Entity*> mEntities;
 
 	Renderer* mRenderer = nullptr;
+	InputManager* mInputMgr = nullptr;
 
 	// Create/load the available modules
 	void createModules();

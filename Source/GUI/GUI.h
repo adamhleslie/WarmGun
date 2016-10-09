@@ -11,7 +11,7 @@
 class GUI : public Module
 {
 public:
-    GUI(/*Ogre::Root* mRoot*/);
+    GUI(Ogre::RenderWindow* mWindow);
     virtual ~GUI(void);
 
 private:
