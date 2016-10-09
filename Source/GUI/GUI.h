@@ -14,11 +14,20 @@ public:
     GUI(Ogre::RenderWindow* mWindow);
     virtual ~GUI(void);
 
+    void update();
+    void scorePoint();
+
 private:
     //Ogre::Root* mRoot;
  
 protected:
     CEGUI::OgreRenderer* GUIRenderer;
+
+    int mScore = 0;
+    CEGUI::Window* score;
+
+    CEGUI::Window* youWinBoard;
+    CEGUI::Window* youLoseBoard;
  
     // virtual void createFrameListener(void);
  
@@ -35,4 +44,5 @@ protected:
  
     bool quit(const CEGUI::EventArgs &e);
     void createGameUI();
+    void loadResources();
 };

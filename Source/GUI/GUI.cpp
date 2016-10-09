@@ -10,23 +10,53 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     CEGUI::OgreRenderer& GUIRenderer = CEGUI::OgreRenderer::bootstrapSystem(*mWindow);
 
     // Load in resources
-    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/imagesets", "FileSystem", "Imagesets");
-    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/fonts", "FileSystem", "Fonts");
-    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/schemes", "FileSystem", "Schemes");
-    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/looknfeel", "FileSystem", "LookNFeel");
-    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/layouts", "FileSystem", "Layouts");
+    loadResources();
 
-    ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+    CEGUI::FontManager &fmg = CEGUI::FontManager::getSingleton();
+    //CEGUI::Font &font = fmg.createFreeTypeFont("arial", 20, true, "arial.ttf");
+    CEGUI::Font &font = fmg.createFreeTypeFont("futhark adapted", 20, true, "FutharkAdapted.ttf");
+    
+    CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+    CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "Root");
+    CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
-    CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
-    CEGUI::Font::setDefaultResourceGroup("Fonts");
-    CEGUI::Scheme::setDefaultResourceGroup("Schemes");
-    CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
-    CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+    CEGUI::Window* quitButton = wmgr.createWindow("AlfiskoSkin/Button", "QuitButton");
+    quitButton->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.0f, 0), CEGUI::UDim(0.0f, 0)),
+        CEGUI::UVector2(CEGUI::UDim(0.1f, 0), CEGUI::UDim(0.05f, 0))));
+    quitButton->setText("Quit");
 
-    CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
-    CEGUI::SchemeManager::getSingleton().createFromFile("HUDDemo.scheme");
-    CEGUI::SchemeManager::getSingleton().createFromFile("AlfiskoSkin.scheme");
+    replayButton = wmgr.createWindow("AlfiskoSkin/Button", "ReplayButton");
+    replayButton->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.3f, 0), CEGUI::UDim(0.4f, 0)),
+        CEGUI::UVector2(CEGUI::UDim(0.7f, 0), CEGUI::UDim(0.45f, 0))));
+    replayButton->setText("Replay");
+
+
+    // howToButton = wmgr.createWindow("AlfiskoSkin/Button", "HowToButton");
+    // howToButton->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.3f, 0), CEGUI::UDim(0.3f, 0)),
+    //     CEGUI::UVector2(CEGUI::UDim(0.7f, 0), CEGUI::UDim(0.35f, 0))));
+    // howToButton->setText("How To Play");
+
+    // howToText = wmgr.createWindow("AlfiskoSkin/MultiLineEditbox", "Instructions");
+    // howToText->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.125f, 0), CEGUI::UDim(0.35f, 0)),
+    //     CEGUI::UVector2(CEGUI::UDim(0.875f, 0), CEGUI::UDim(0.75f, 0))));
+    // howToText->setText(instructions);
+    // static_cast<CEGUI::MultiLineEditbox*>(howToText)->setReadOnly(true);
+
+
+
+
+    sheet->addChild(quitButton);
+    sheet->addChild(replayButton);
+    // sheet->addChild(howToButton);
+    // sheet->addChild(howToText);
+
+    howToText->hide();
+
+    quitButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::Quit, this));
+    replayButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::Replay, this));
+    //howToButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::HowTo, this));
+
+
     //CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
     // CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
@@ -40,24 +70,21 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     // quit->setText("Quit");
     // quit->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
     //CEGUI::OgreRenderer* mRenderer;
-    CEGUI::Window* gameScoreboard;
-    CEGUI::Window* youWinBoard;
-    CEGUI::Window* youLoseBoard;
 
     CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
     CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "GameUI/Sheet");
     //CEGUI::Window *sheet = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow(); 
 
-    gameScoreboard = wmgr.createWindow("AlfiskoSkin/Label", "Score");
-    gameScoreboard->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.0f, 0), CEGUI::UDim(0.92f, 0)),
+    score = wmgr.createWindow("AlfiskoSkin/Label", "Score");
+    score->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.0f, 0), CEGUI::UDim(0.92f, 0)),
     CEGUI::UVector2(CEGUI::UDim(0.2f, 0), CEGUI::UDim(1, 0))));
-    gameScoreboard->setText("Score: 0");
+    score->setText("Score: 0");
 
     youWinBoard = wmgr.createWindow("AlfiskoSkin/Editbox", "YouWinBoard");
     youWinBoard->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.42f, 0), CEGUI::UDim(0.33f, 0)),
         CEGUI::UVector2(CEGUI::UDim(0.58f, 0), CEGUI::UDim(0.4f, 0))));
     youWinBoard->setText("     You Win!");
-    youWinBoard->setDisabled(true);
+    //youWinBoard->setDisabled(true);
     youWinBoard->setMouseCursor("AlfiskoSkin/MouseArrow");
     //youWinBoard->hide();
 
@@ -69,7 +96,7 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     // youLoseBoard->setMouseCursor("AlfiskoSkin/MouseArrow");
     // youLoseBoard->hide();
 
-    sheet->addChild(gameScoreboard);
+    sheet->addChild(score);
     // sheet->addChild(youWinBoard);
     // sheet->addChild(youLoseBoard);
 
@@ -87,6 +114,38 @@ void GUI::createGameUI(void)
     //BaseApplication::createFrameListener();
 }
 
+void GUI::update()
+{
+    scorePoint();
+}
+
+void GUI::scorePoint()
+{
+    mScore += 1;
+    score->setText("Score: " + std::to_string(mScore));
+}
+
+void GUI::loadResources()
+{
+        // Load in resources
+    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/imagesets", "FileSystem", "Imagesets");
+    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/fonts", "FileSystem", "Fonts");
+    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/schemes", "FileSystem", "Schemes");
+    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/looknfeel", "FileSystem", "LookNFeel");
+    ResourceGroupManager::getSingleton().addResourceLocation("/lusr/opt/cegui-0.8.4/share/cegui-0/layouts", "FileSystem", "Layouts");
+
+    ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+    CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+    CEGUI::Font::setDefaultResourceGroup("Fonts");
+    CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+    CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+    CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
+    CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+    CEGUI::SchemeManager::getSingleton().createFromFile("HUDDemo.scheme");
+    CEGUI::SchemeManager::getSingleton().createFromFile("AlfiskoSkin.scheme");
+}
 
 //-------------------------------------------------------------------------------------
 // bool GUI::frameRenderingQueued(const Ogre::FrameEvent& evt)
