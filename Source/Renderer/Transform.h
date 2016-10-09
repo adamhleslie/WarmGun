@@ -14,21 +14,25 @@ class btRigidBody;
 
 enum Shape
 {
-	kBox
+	kBox,
+	kBox2D
 };
 
 class Transform : public Component
 {
 public:
-	Transform() { stopUpdating(); }
+	Transform() {  }
 	~Transform();
 
-	void attachRigidbody(Shape shape, const Ogre::Vector3& size, const Ogre::Vector3& position, float mass);
+	void attachRigidbody(Shape shape, const Ogre::Vector3& size, float mass, float restitution);
+	void removeRigidbody();
 	// void translate();
 	// void rotate();
 	// void applyForce();
 
-	Ogre::SceneNode* getSceneNode();
+	void synchronizeSceneNode();
+
+	Ogre::SceneNode* getSceneNode(); 
 
 protected:
 	void postLoad() override;

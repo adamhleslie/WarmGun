@@ -2,10 +2,12 @@
 
 #include <cassert>
 #include <algorithm>
+#include <btBulletDynamicsCommon.h>
 
 #include "Entity.h"
 #include "Module.h"
 #include "Renderer.h"
+#include "Transform.h"
 
 /// Add Modules below ///
 #include "SceneController.h"
@@ -18,9 +20,11 @@ void Core::createModules ()
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
 
+	mPhysics = new Physics();
+	loadModule(mPhysics);
+
 	loadModule(new Audio());
-	// loadModule(new GUI());
-	loadModule(new Physics());
+	loadModule(new GUI());
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -62,7 +66,7 @@ void Core::run ()
 		accumulator += newTime - time;
 		time = newTime;
 
-		while (accumulator >= kTimeStep)
+		while (accumulator >= kTimeStepMs)
 		{
 			for (Entity* entity : mEntities)
 			{
@@ -75,7 +79,15 @@ void Core::run ()
 				module->update();
 			}
 
-			accumulator -= kTimeStep;
+			// Update physics
+			mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
+			for (Entity* entity : mEntities)
+			{
+				if (entity->isUpdating())
+					entity->getTransform()->synchronizeSceneNode();
+			}
+
+			accumulator -= kTimeStepMs;
 		}
 
 		mRenderer->renderOneFrame();
@@ -119,6 +131,11 @@ void Core::destroyAllEntities ()
 Renderer* Core::getRenderer ()
 {
 	return mRenderer;
+}
+
+Physics* Core::getPhysics ()
+{
+	return mPhysics;
 }
 
 // module should not be in mUpdatingModules

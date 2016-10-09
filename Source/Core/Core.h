@@ -5,6 +5,7 @@
 class Module;
 class Entity;
 class Renderer;
+class Physics;
 
 class Core
 {
@@ -14,8 +15,9 @@ public:
 	Core();
 	virtual ~Core();
 
-	// The fixed time step taken by every tick (in ms)
-	static constexpr unsigned long kTimeStep = 4;
+	// The fixed time step taken by every tick
+	static constexpr unsigned long kTimeStepMs = 4;
+	static constexpr double kTimeStepS = 0.004;
 
 	// Begins the game loop
 	void run();
@@ -36,6 +38,7 @@ public:
 	M* getModule();
 
 	Renderer* getRenderer();
+	Physics* getPhysics();
 
 // RESTRICTED API
 	// Enables/Disables updating of the given module, used by Module
@@ -52,6 +55,7 @@ private:
 	std::vector<Entity*> mEntities;
 
 	Renderer* mRenderer = nullptr;
+	Physics* mPhysics = nullptr;
 
 	// Create/load the available modules
 	void createModules();

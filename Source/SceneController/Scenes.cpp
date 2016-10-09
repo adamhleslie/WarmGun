@@ -69,8 +69,9 @@ namespace scene1
 
 		// Create sphere entity
 		Entity* sphere = core->createEntity();
-		Ogre::SceneNode* ballNode = sphere->getTransform()->getSceneNode();
-		ballNode->setPosition(Vector3(0,150,0));
+		Transform* ballTransf = sphere->getTransform();
+		Ogre::SceneNode* ballNode = ballTransf->getSceneNode();
+		ballNode->setPosition(Vector3(0,300,100));
 
 		// Add mesh
 		Ogre::Entity* sphereEntity = mSceneMgr->createEntity("mySphere", Ogre::SceneManager::PT_SPHERE);
@@ -85,16 +86,17 @@ namespace scene1
 		WatchThis* watchThis = sphere->createComponent<WatchThis>();
 		watchThis->mCamera = mainCam;
 
-		// Add bound movement component
-		BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
-		boundMove->mBallRadius = 50;
-		boundMove->mWallDistances = Vector3(400, 400, 400);
-		srand(time(NULL));
-		boundMove->mBallVelocity = Vector3(Ogre::Math::RangeRandom(-1, 1),
-										   Ogre::Math::RangeRandom(-1, 1),
-										   Ogre::Math::RangeRandom(-1, 1));
+		// // Add bound movement component
+		// BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
+		// boundMove->mBallRadius = 50;
+		// boundMove->mWallDistances = Vector3(400, 400, 400);
+		// srand(time(NULL));
+		// boundMove->mBallVelocity = Vector3(Ogre::Math::RangeRandom(-1, 1),
+		// 								   Ogre::Math::RangeRandom(-1, 1),
+		// 								   Ogre::Math::RangeRandom(-1, 1));
 
 		// Add to physics
+		ballTransf->attachRigidbody(kBox, Vector3(1, 1, 1), .1, 1);
 
 		// // Set up walls
 		constructWall(Vector3::UNIT_Y, Vector3::UNIT_Z, Vector3(0, -400, 0), "ground");
