@@ -129,6 +129,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${OIS_INCLUDE_DIR}
 )
+message(STATUS "*******************************************************************")
+message(STATUS "OIS_LIBRARIES: ${OIS_LIBRARIES}")
+message(STATUS "OIS_INCLUDE_DIR: ${OIS_INCLUDE_DIR}")
+message(STATUS "*******************************************************************")
+
 
 ##CEGUI
 set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")

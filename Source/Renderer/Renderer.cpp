@@ -22,11 +22,12 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 	// Initialize with render system
 	selectRenderSystem(mRoot);
 	//TODO: change back to false to stop autocreating window
-	mRoot->initialise(true);
+	mRoot->initialise(false);
 
 	// Create scene manager, and render window
 	mSceneManager = mRoot->createSceneManager(sceneType);
-	mWindow = mRoot->getAutoCreatedWindow();
+	//mWindow = mRoot->getAutoCreatedWindow();
+	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
 
 	// Load in renderer resources
 	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Renderer", "FileSystem", "General");

@@ -19,10 +19,13 @@ void Core::createModules ()
 	loadModule(mRenderer);
 	
 	loadModule(new Audio());
-	loadModule(new GUI());
+	loadModule(new GUI(mRenderer->getRenderWindow()));
 
 	//Setup
-	loadModule(new InputManager(mRenderer->getRenderWindow()));
+	mInputMgr = new InputManager(mRenderer->getRenderWindow());
+	//mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
+    //mInputMgr->addMouseListener( mInputMgr, "MouseListener" );
+	loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));

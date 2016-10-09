@@ -3,12 +3,13 @@
 InputManager *InputManager::mInputManager;
  
 InputManager::InputManager( void ) :
+    mCameraMan( 0 ),
     mMouse( 0 ),
     mKeyboard( 0 ),
     mInputSystem( 0 ) {
 }
 
-InputManager::InputManager( Ogre::RenderWindow renderWindow ) :
+InputManager::InputManager( Ogre::RenderWindow* renderWindow ) :
     mMouse( 0 ),
     mKeyboard( 0 ),
     mInputSystem( 0 ) {
@@ -27,15 +28,6 @@ InputManager::~InputManager( void ) {
             mKeyboard = 0;
         }
  
-        if( mJoysticks.size() > 0 ) {
-            itJoystick    = mJoysticks.begin();
-            itJoystickEnd = mJoysticks.end();
-            for(; itJoystick != itJoystickEnd; ++itJoystick ) {
-                mInputSystem->destroyInputObject( *itJoystick );
-            }
- 
-            mJoysticks.clear();
-        }
  
         // If you use OIS1.0RC1 or above, uncomment this line
         // and comment the line below it
@@ -46,7 +38,7 @@ InputManager::~InputManager( void ) {
         // Clear Listeners
         mKeyListeners.clear();
         mMouseListeners.clear();
-        mJoystickListeners.clear();
+
     }
 }
  
@@ -90,21 +82,6 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
             // Set mouse region
             this->setWindowExtents( width, height );
         }
- 
-        // If possible create all joysticks in buffered mode
-        // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISJoyStick) > 0) {
-        //if( mInputSystem->numJoySticks() > 0 ) {
-        if (mInputSystem->getNumberOfDevices(OIS::OISJoyStick) > 0) {
-            //mJoysticks.resize( mInputSystem->numJoySticks() );
-            mJoysticks.resize( mInputSystem->getNumberOfDevices(OIS::OISJoyStick) );
- 
-            itJoystick    = mJoysticks.begin();
-            itJoystickEnd = mJoysticks.end();
-            for(; itJoystick != itJoystickEnd; ++itJoystick ) {
-                (*itJoystick) = static_cast<OIS::JoyStick*>( mInputSystem->createInputObject( OIS::OISJoyStick, true ) );
-                (*itJoystick)->setEventCallback( this );
-            }
-        }
     }
 }
  
@@ -118,13 +95,6 @@ void InputManager::update( void ) {
         mKeyboard->capture();
     }
  
-    if( mJoysticks.size() > 0 ) {
-        itJoystick    = mJoysticks.begin();
-        itJoystickEnd = mJoysticks.end();
-        for(; itJoystick != itJoystickEnd; ++itJoystick ) {
-            (*itJoystick)->capture();
-        }
-    }
 }
  
 void InputManager::addKeyListener( OIS::KeyListener *keyListener, const std::string& instanceName ) {
@@ -153,18 +123,6 @@ void InputManager::addMouseListener( OIS::MouseListener *mouseListener, const st
     }
 }
  
-void InputManager::addJoystickListener( OIS::JoyStickListener *joystickListener, const std::string& instanceName ) {
-    if( mJoysticks.size() > 0 ) {
-        // Check for duplicate items
-        itJoystickListener = mJoystickListeners.find( instanceName );
-        if( itJoystickListener == mJoystickListeners.end() ) {
-            mJoystickListeners[ instanceName ] = joystickListener;
-        }
-        else {
-            // Duplicate Item
-        }
-    }
-}
  
 void InputManager::removeKeyListener( const std::string& instanceName ) {
     // Check if item exists
@@ -188,17 +146,7 @@ void InputManager::removeMouseListener( const std::string& instanceName ) {
     }
 }
  
-void InputManager::removeJoystickListener( const std::string& instanceName ) {
-    // Check if item exists
-    itJoystickListener = mJoystickListeners.find( instanceName );
-    if( itJoystickListener != mJoystickListeners.end() ) {
-        mJoystickListeners.erase( itJoystickListener );
-    }
-    else {
-        // Doesn't Exist
-    }
-}
- 
+
 void InputManager::removeKeyListener( OIS::KeyListener *keyListener ) {
     itKeyListener    = mKeyListeners.begin();
     itKeyListenerEnd = mKeyListeners.end();
@@ -221,21 +169,12 @@ void InputManager::removeMouseListener( OIS::MouseListener *mouseListener ) {
     }
 }
  
-void InputManager::removeJoystickListener( OIS::JoyStickListener *joystickListener ) {
-    itJoystickListener    = mJoystickListeners.begin();
-    itJoystickListenerEnd = mJoystickListeners.end();
-    for(; itJoystickListener != itJoystickListenerEnd; ++itJoystickListener ) {
-        if( itJoystickListener->second == joystickListener ) {
-            mJoystickListeners.erase( itJoystickListener );
-            break;
-        }
-    }
-}
+
  
 void InputManager::removeAllListeners( void ) {
     mKeyListeners.clear();
     mMouseListeners.clear();
-    mJoystickListeners.clear();
+
 }
  
 void InputManager::removeAllKeyListeners( void ) {
@@ -246,38 +185,6 @@ void InputManager::removeAllMouseListeners( void ) {
     mMouseListeners.clear();
 }
  
-void InputManager::removeAllJoystickListeners( void ) {
-    mJoystickListeners.clear();
-}
- 
-void InputManager::setWindowExtents( int width, int height ) {
-    // Set mouse region (if window resizes, we should alter this to reflect as well)
-    const OIS::MouseState &mouseState = mMouse->getMouseState();
-    mouseState.width  = width;
-    mouseState.height = height;
-}
- 
-OIS::Mouse* InputManager::getMouse( void ) {
-    return mMouse;
-}
- 
-OIS::Keyboard* InputManager::getKeyboard( void ) {
-    return mKeyboard;
-}
- 
-OIS::JoyStick* InputManager::getJoystick( unsigned int index ) {
-    // Make sure it's a valid index
-    if( index < mJoysticks.size() ) {
-        return mJoysticks[ index ];
-    }
- 
-    return 0;
-}
- 
-int InputManager::getNumOfJoysticks( void ) {
-    // Cast to keep compiler happy ^^
-    return (int) mJoysticks.size();
-}
  
 bool InputManager::keyPressed( const OIS::KeyEvent &e ) {
     itKeyListener    = mKeyListeners.begin();
@@ -288,6 +195,16 @@ bool InputManager::keyPressed( const OIS::KeyEvent &e ) {
     }
  
     return true;
+
+
+    // if(cameraMan) cameraMan->injectKeyDown(e);
+    // mKeyPressed = e.key;
+
+    // CEGUI::GUIContext& cxt = CEGUI::System::getSingleton().getDefaultGUIContext();
+    // cxt.injectKeyDown((CEGUI::Key::Scan)e.key);
+    // cxt.injectChar((CEGUI::Key::Scan)e.text);
+
+    // return true;
 }
  
 bool InputManager::keyReleased( const OIS::KeyEvent &e ) {
@@ -299,7 +216,17 @@ bool InputManager::keyReleased( const OIS::KeyEvent &e ) {
     }
  
     return true;
+
+    // if(cameraMan) cameraMan->injectKeyUp(e);
+    // return true;
 }
+
+
+// OIS::KeyCode InputManager::lastKeyPressed() {
+//     OIS::KeyCode ret = mKeyPressed;
+//     mKeyPressed = OIS::KC_UNASSIGNED;
+//     return ret;
+// }
  
 bool InputManager::mouseMoved( const OIS::MouseEvent &e ) {
     itMouseListener    = mMouseListeners.begin();
@@ -310,6 +237,20 @@ bool InputManager::mouseMoved( const OIS::MouseEvent &e ) {
     }
  
     return true;
+
+    // if(cameraMan) cameraMan->injectMouseMove(e);
+
+    // // From -width/2 to +width/2
+    // mouseXAxis = (e.state.X.abs) - e.state.width/2;
+    // mouseYAxis = (e.state.Y.abs) - e.state.height/2;
+
+    // CEGUI::System &sys = CEGUI::System::getSingleton();
+    // sys.getDefaultGUIContext().injectMousePosition(e.state.X.abs, e.state.Y.abs);
+    // // Scroll wheel.
+    // if (e.state.Z.rel)
+    //     sys.getDefaultGUIContext().injectMouseWheelChange(e.state.Z.rel / 120.0f);
+
+    // return true;
 }
  
 bool InputManager::mousePressed( const OIS::MouseEvent &e, OIS::MouseButtonID id ) {
@@ -321,6 +262,10 @@ bool InputManager::mousePressed( const OIS::MouseEvent &e, OIS::MouseButtonID id
     }
  
     return true;
+
+    // CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(convertButton(id));
+    // if(cameraMan) cameraMan->injectMouseDown(e, id);
+    // return true;
 }
  
 bool InputManager::mouseReleased( const OIS::MouseEvent &e, OIS::MouseButtonID id ) {
@@ -332,67 +277,87 @@ bool InputManager::mouseReleased( const OIS::MouseEvent &e, OIS::MouseButtonID i
     }
  
     return true;
+
+    // CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(convertButton(id));
+    // if(cameraMan) cameraMan->injectMouseUp(e, id);
+    // return true;
 }
+
+CEGUI::MouseButton InputManager::convertButton(OIS::MouseButtonID buttonID) {
+    switch (buttonID)
+    {
+    case OIS::MB_Left:
+        return CEGUI::LeftButton;
  
-bool InputManager::povMoved( const OIS::JoyStickEvent &e, int pov ) {
-    itJoystickListener    = mJoystickListeners.begin();
-    itJoystickListenerEnd = mJoystickListeners.end();
-    for(; itJoystickListener != itJoystickListenerEnd; ++itJoystickListener ) {
-        if(!itJoystickListener->second->povMoved( e, pov ))
-            break;
+    case OIS::MB_Right:
+        return CEGUI::RightButton;
+ 
+    case OIS::MB_Middle:
+        return CEGUI::MiddleButton;
+ 
+    default:
+        return CEGUI::LeftButton;
     }
- 
-    return true;
 }
- 
-bool InputManager::axisMoved( const OIS::JoyStickEvent &e, int axis ) {
-    itJoystickListener    = mJoystickListeners.begin();
-    itJoystickListenerEnd = mJoystickListeners.end();
-    for(; itJoystickListener != itJoystickListenerEnd; ++itJoystickListener ) {
-        if(!itJoystickListener->second->axisMoved( e, axis ))
-            break;
-    }
- 
-    return true;
-}
- 
-bool InputManager::sliderMoved( const OIS::JoyStickEvent &e, int sliderID ) {
-    itJoystickListener    = mJoystickListeners.begin();
-    itJoystickListenerEnd = mJoystickListeners.end();
-    for(; itJoystickListener != itJoystickListenerEnd; ++itJoystickListener ) {
-        if(!itJoystickListener->second->sliderMoved( e, sliderID ))
-            break;
-    }
- 
-    return true;
-}
- 
-bool InputManager::buttonPressed( const OIS::JoyStickEvent &e, int button ) {
-    itJoystickListener    = mJoystickListeners.begin();
-    itJoystickListenerEnd = mJoystickListeners.end();
-    for(; itJoystickListener != itJoystickListenerEnd; ++itJoystickListener ) {
-        if(!itJoystickListener->second->buttonPressed( e, button ))
-            break;
-    }
- 
-    return true;
-}
- 
-bool InputManager::buttonReleased( const OIS::JoyStickEvent &e, int button ) {
-    itJoystickListener    = mJoystickListeners.begin();
-    itJoystickListenerEnd = mJoystickListeners.end();
-    for(; itJoystickListener != itJoystickListenerEnd; ++itJoystickListener ) {
-        if(!itJoystickListener->second->buttonReleased( e, button ))
-            break;
-    }
- 
-    return true;
-}
- 
+
+
+//Getters
+
 InputManager* InputManager::getSingletonPtr( void ) {
     if( !mInputManager ) {
         mInputManager = new InputManager();
     }
  
     return mInputManager;
+}
+
+OIS::Mouse* InputManager::getMouse( void ) {
+    return mMouse;
+}
+ 
+OIS::Keyboard* InputManager::getKeyboard( void ) {
+    return mKeyboard;
+}
+
+OIS::Mouse* InputManager::getMouse( void ) {
+    return mMouse;
+}
+ 
+OIS::Keyboard* InputManager::getKeyboard( void ) {
+    return mKeyboard;
+}
+
+OIS::KeyCode OISManager::getKeyPressed(){
+    return mKeyPressed;
+}
+
+int InputManager::getMouseXAxis() {
+    return mouseXAxis;
+}
+
+int InputManager::getMouseYAxis() {
+    return mouseYAxis;
+}
+
+
+//Setters
+
+//use if not auto-creating screen size
+void InputManager::setScreenSize(int width, int height){
+    const OIS::MouseState &mouseState = mMouse->getMouseState();
+    mouseState.width  = width;
+    mouseState.height = height;
+}
+
+void InputManager::setCameraMan(OgreBites::SdkCameraMan* cameraMan){
+    if(!mCameraMan){
+        mCameraMan = cameraMan;
+    }
+}
+
+void InputManager::setWindowExtents( int width, int height ) {
+    // Set mouse region (if window resizes, we should alter this to reflect as well)
+    const OIS::MouseState &mouseState = mMouse->getMouseState();
+    mouseState.width  = width;
+    mouseState.height = height;
 }
