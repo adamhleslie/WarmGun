@@ -87,13 +87,13 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
  
 void InputManager::update( void ) {
     // Need to capture / update each device every frame
-    if( mMouse ) {
-        mMouse->capture();
-    }
+    // if( mMouse ) {
+    //     mMouse->capture();
+    // }
  
-    if( mKeyboard ) {
-        mKeyboard->capture();
-    }
+    // if( mKeyboard ) {
+    //     mKeyboard->capture();
+    // }
  
 }
  
@@ -319,15 +319,7 @@ OIS::Keyboard* InputManager::getKeyboard( void ) {
     return mKeyboard;
 }
 
-OIS::Mouse* InputManager::getMouse( void ) {
-    return mMouse;
-}
- 
-OIS::Keyboard* InputManager::getKeyboard( void ) {
-    return mKeyboard;
-}
-
-OIS::KeyCode OISManager::getKeyPressed(){
+OIS::KeyCode InputManager::getKeyPressed(){
     return mKeyPressed;
 }
 

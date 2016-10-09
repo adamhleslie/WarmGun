@@ -69,7 +69,7 @@ namespace scene1
 
 		// Set up Sphere
 		Entity* sphere = core->createEntity();
-		sphere->createComponent<AudioPlayer>();
+		//sphere->createComponent<AudioPlayer>();
 
 		BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
 		boundMove->mCamera = mCamera;

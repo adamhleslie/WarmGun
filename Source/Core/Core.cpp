@@ -18,11 +18,22 @@ void Core::createModules ()
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
 	
-	loadModule(new Audio());
+	//loadModule(new Audio());
 	loadModule(new GUI(mRenderer->getRenderWindow()));
 
 	//Setup
-	mInputMgr = new InputManager(mRenderer->getRenderWindow());
+
+	// OIS::KeyListener* keyTest = dynamic_cast<OIS::KeyListener*>(mInputMgr);
+ //    OIS::MouseListener* mouseTest = dynamic_cast<OIS::MouseListener*>(mInputMgr);
+	mInputMgr = InputManager::getSingletonPtr();
+    mInputMgr->initialise( mRenderer->getRenderWindow() );
+
+
+    //assert(keyTest!=0 && mouseTest!=0);
+    mInputMgr->addKeyListener( (OIS::KeyListener*)mInputMgr, "keyListener" );
+    mInputMgr->addMouseListener( (OIS::MouseListener*)mInputMgr, "mouseListener" );
+
+	//mInputMgr = new InputManager(mRenderer->getRenderWindow());
 	//mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
     //mInputMgr->addMouseListener( mInputMgr, "MouseListener" );
 	loadModule(mInputMgr);

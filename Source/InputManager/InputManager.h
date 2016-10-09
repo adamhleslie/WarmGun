@@ -19,7 +19,7 @@
 
 #include "Module.h"
  
-class InputManager : public OIS::KeyListener, public OIS::MouseListener, public OIS::JoyStickListener, public Module {
+class InputManager : public OIS::KeyListener, public OIS::MouseListener, public Module {
 public:
     InputManager(Ogre::RenderWindow *renderWindow);
     virtual ~InputManager( void );
@@ -27,6 +27,7 @@ public:
     void initialise( Ogre::RenderWindow *renderWindow );
     void update( void );
     void setCameraMan(OgreBites::SdkCameraMan* cameraMan);
+    void setScreenSize(int width, int height);
  
     void addKeyListener( OIS::KeyListener *keyListener, const std::string& instanceName );
     void addMouseListener( OIS::MouseListener *mouseListener, const std::string& instanceName );
@@ -46,7 +47,7 @@ public:
     OIS::Mouse*    getMouse( void );
     OIS::Keyboard* getKeyboard( void );
 
-    OgreBites::SdkCameraMan * cameraMan;
+    OgreBites::SdkCameraMan * mCameraMan;
   
     static InputManager* getSingletonPtr( void );
 
@@ -70,6 +71,8 @@ private:
     OIS::Mouse        *mMouse;
     OIS::Keyboard     *mKeyboard;
     OIS::InputManager *mInputSystem;
+
+    CEGUI::MouseButton convertButton(OIS::MouseButtonID);
  
     std::map<std::string, OIS::KeyListener*> mKeyListeners;
     std::map<std::string, OIS::MouseListener*> mMouseListeners;
