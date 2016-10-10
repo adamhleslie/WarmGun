@@ -6,18 +6,22 @@
 GUI::GUI(Ogre::RenderWindow* mWindow)
 {
     stopUpdating();
-    //this.mRoot = mRoot;
+
+        //this.mRoot = mRoot;
     CEGUI::OgreRenderer& GUIRenderer = CEGUI::OgreRenderer::bootstrapSystem(*mWindow);
+
 
     // Load in resources
     loadResources();
 
-    CEGUI::FontManager &fmg = CEGUI::FontManager::getSingleton();
-    //CEGUI::Font &font = fmg.createFreeTypeFont("arial", 20, true, "arial.ttf");
-    CEGUI::Font &font = fmg.createFreeTypeFont("futhark adapted", 20, true, "FutharkAdapted.ttf");
+
+
+    // CEGUI::FontManager &fmg = CEGUI::FontManager::getSingleton();
+    // CEGUI::Font &font = fmg.createFreeTypeFont("arial", 20, true, "arial.ttf");
+    //CEGUI::Font &font = fmg.createFreeTypeFont("futhark adapted", 20, true, "FutharkAdapted.ttf");
     
     CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "Root");
+    CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "GameUI");
     CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
     CEGUI::Window* quitButton = wmgr.createWindow("AlfiskoSkin/Button", "QuitButton");
@@ -50,10 +54,14 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     // sheet->addChild(howToButton);
     // sheet->addChild(howToText);
 
-    howToText->hide();
+    replayButton->hide();
 
-    quitButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::Quit, this));
-    replayButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::Replay, this));
+    //***********************
+    //quitButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::Quit, this));
+    //replayButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::Replay, this));
+    
+
+
     //howToButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Game::HowTo, this));
 
 
@@ -71,8 +79,8 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     // quit->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
     //CEGUI::OgreRenderer* mRenderer;
 
-    CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "GameUI/Sheet");
+    // CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+    // CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "GameUI/Sheet");
     //CEGUI::Window *sheet = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow(); 
 
     score = wmgr.createWindow("AlfiskoSkin/Label", "Score");
@@ -80,25 +88,25 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     CEGUI::UVector2(CEGUI::UDim(0.2f, 0), CEGUI::UDim(1, 0))));
     score->setText("Score: 0");
 
-    youWinBoard = wmgr.createWindow("AlfiskoSkin/Editbox", "YouWinBoard");
-    youWinBoard->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.42f, 0), CEGUI::UDim(0.33f, 0)),
+    winBoard = wmgr.createWindow("AlfiskoSkin/Editbox", "WinBoard");
+    winBoard->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.42f, 0), CEGUI::UDim(0.33f, 0)),
         CEGUI::UVector2(CEGUI::UDim(0.58f, 0), CEGUI::UDim(0.4f, 0))));
-    youWinBoard->setText("     You Win!");
-    //youWinBoard->setDisabled(true);
-    youWinBoard->setMouseCursor("AlfiskoSkin/MouseArrow");
-    //youWinBoard->hide();
+    winBoard->setText("     You Win!");
+    //winBoard->setDisabled(true);
+    winBoard->setMouseCursor("AlfiskoSkin/MouseArrow");
+    //winBoard->hide();
 
-    // youLoseBoard = wmgr.createWindow("AlfiskoSkin/Editbox", "YouLoseBoard");
-    // youLoseBoard->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.42f, 0), CEGUI::UDim(0.33f, 0)),
+    // loseBoard = wmgr.createWindow("AlfiskoSkin/Editbox", "LoseBoard");
+    // loseBoard->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.42f, 0), CEGUI::UDim(0.33f, 0)),
     //     CEGUI::UVector2(CEGUI::UDim(0.58f, 0), CEGUI::UDim(0.4f, 0))));
-    // youLoseBoard->setText("    You Lose!");
-    // youLoseBoard->setDisabled(true);
-    // youLoseBoard->setMouseCursor("AlfiskoSkin/MouseArrow");
-    // youLoseBoard->hide();
+    // loseBoard->setText("    You Lose!");
+    // loseBoard->setDisabled(true);
+    // loseBoard->setMouseCursor("AlfiskoSkin/MouseArrow");
+    // loseBoard->hide();
 
     sheet->addChild(score);
-    // sheet->addChild(youWinBoard);
-    // sheet->addChild(youLoseBoard);
+    // sheet->addChild(winBoard);
+    // sheet->addChild(loseBoard);
 
     // sheet->addChild(score);
     CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);

@@ -26,8 +26,12 @@ protected:
     int mScore = 0;
     CEGUI::Window* score;
 
-    CEGUI::Window* youWinBoard;
-    CEGUI::Window* youLoseBoard;
+    CEGUI::Window* winBoard;
+    CEGUI::Window* loseBoard;
+    CEGUI::Window* replayButton;
+    CEGUI::Window* howToButton;
+    CEGUI::Window* howToText;
+    
  
     // virtual void createFrameListener(void);
  

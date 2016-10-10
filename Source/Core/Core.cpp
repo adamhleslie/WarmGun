@@ -33,10 +33,10 @@ void Core::createModules ()
     //mInputMgr->addKeyListener( (OIS::KeyListener*)mInputMgr, "keyListener" );
     //mInputMgr->addMouseListener( (OIS::MouseListener*)mInputMgr, "mouseListener" );
 
-	//mInputMgr = new InputManager(mRenderer->getRenderWindow());
-	//mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
-    //mInputMgr->addMouseListener( mInputMgr, "MouseListener" );
-	//loadModule(mInputMgr);
+	mInputMgr = new InputManager(mRenderer->getRenderWindow());
+	// mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
+ //    mInputMgr->addMouseListener( mInputMgr, "MouseListener" );
+	loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -195,14 +195,14 @@ void Core::unloadModule (Module* module, bool findAndRemove /* = true */)
 }
 
 
-bool Core::Quit(const CEGUI::EventArgs& e) {
+// bool Core::Quit(const CEGUI::EventArgs& e) {
 
-	mRenderer->mRunning = false;
-    return true;
-}
+// 	mRenderer->mRunning = false;
+//     return true;
+// }
 
-bool Core::Replay(const CEGUI::EventArgs &e) {
+// bool Core::Replay(const CEGUI::EventArgs &e) {
 
-	//TODO: reset values, start again
-	return true;
-}
+// 	//TODO: reset values, start again
+// 	return true;
+// }
