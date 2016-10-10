@@ -17,6 +17,7 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 	mRoot->loadPlugin("RenderSystem_GL_d");
 #else
 	mRoot->loadPlugin("RenderSystem_GL");
+	mRoot->loadPlugin("Plugin_ParticleFX");
 #endif
 
 	// Initialize with render system
@@ -31,6 +32,7 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 
 	// Load in renderer resources
 	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Renderer", "FileSystem", "General");
+	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Particle", "FileSystem", "Particle");
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener

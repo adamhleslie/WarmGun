@@ -8,6 +8,8 @@
 #include <OgreMeshManager.h>
 #include <OgreMath.h>
 
+#include <OgreParticleSystem.h>
+
 #include "Core.h"
 #include "Entity.h"
 #include "Scene.h"
@@ -96,6 +98,13 @@ namespace scene1
 		constructWall(Vector3::UNIT_Z, Vector3::UNIT_X, Vector3(0, 0, -400), "wall3");
 		constructWall(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_X, Vector3(0, 0, 400), "wall4");
 		boundMove->mWallDistances = Vector3(400, 400, 400);
+
+
+		Ogre::ParticleSystem* mParticle = mSceneMgr->createParticleSystem("Sun", "Examples/Fireworks");
+		Ogre::SceneNode* particleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Particle");
+		particleNode->setPosition(Vector3 (0,50,0));
+		particleNode->attachObject(mParticle);
+
 	}
 }
 

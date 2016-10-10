@@ -18,7 +18,7 @@ void Core::createModules ()
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
 	
-	//loadModule(new Audio());
+	loadModule(new Audio());
 	loadModule(new GUI(mRenderer->getRenderWindow()));
 
 	//Setup
