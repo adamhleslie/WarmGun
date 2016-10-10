@@ -49,11 +49,12 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
         size_t windowHnd = 0;
         std::ostringstream windowHndStr;
  
-        // Get window handle
+        //WINDOWS SPECIFIC?
+        // // Get window handle
         renderWindow->getCustomAttribute( "WINDOW", &windowHnd );
  
         // Fill parameter list
-        windowHndStr << (unsigned int) windowHnd;
+        windowHndStr << windowHnd;
         paramList.insert( std::make_pair( std::string( "WINDOW" ), windowHndStr.str() ) );
  
         // Create inputsystem
@@ -63,7 +64,7 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
         // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
         //if( mInputSystem->numKeyboards() > 0 ) {
         if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
-            mKeyboard = static_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
+            mKeyboard = dynamic_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
             mKeyboard->setEventCallback( this );
         }
  
@@ -71,7 +72,7 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
         // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISMouse) > 0) {
         //if( mInputSystem->numMice() > 0 ) {
         if (mInputSystem->getNumberOfDevices(OIS::OISMouse) > 0) {
-            mMouse = static_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
+            mMouse = dynamic_cast<OIS::Mouse*>( mInputSystem->createInputObject( OIS::OISMouse, true ) );
             mMouse->setEventCallback( this );
  
             // Get window size
@@ -86,14 +87,14 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
 }
  
 void InputManager::update( void ) {
-    // Need to capture / update each device every frame
-    // if( mMouse ) {
-    //     mMouse->capture();
-    // }
+    //Need to capture / update each device every frame
+    if( mMouse ) {
+        mMouse->capture();
+    }
  
-    // if( mKeyboard ) {
-    //     mKeyboard->capture();
-    // }
+    if( mKeyboard ) {
+        mKeyboard->capture();
+    }
  
 }
  

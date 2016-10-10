@@ -23,20 +23,10 @@ void Core::createModules ()
 
 	//Setup
 
-	// OIS::KeyListener* keyTest = dynamic_cast<OIS::KeyListener*>(mInputMgr);
- //    OIS::MouseListener* mouseTest = dynamic_cast<OIS::MouseListener*>(mInputMgr);
-	//mInputMgr = InputManager::getSingletonPtr();
-    //mInputMgr->initialise( mRenderer->getRenderWindow() );
 
+	mInputMgr = new InputManager(mRenderer->getRenderWindow());
+	loadModule(mInputMgr);
 
-    //assert(keyTest!=0 && mouseTest!=0);
-    // mInputMgr->addKeyListener( (OIS::KeyListener*)mInputMgr, "keyListener" );
-    // mInputMgr->addMouseListener( (OIS::MouseListener*)mInputMgr, "mouseListener" );
-
-	//mInputMgr = new InputManager(mRenderer->getRenderWindow());
-	//mInputMgr->addKeyListener( mInputMgr, "KeyListener" );
-    //mInputMgr->addMouseListener( mInputMgr, "MouseListener" );
-	//loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -74,6 +64,7 @@ void Core::run ()
 	
 	while (mRenderer->mRunning)
 	{
+
 		unsigned long newTime = timer.getMilliseconds();
 		accumulator += newTime - time;
 		time = newTime;
@@ -183,3 +174,16 @@ void Core::unloadModule (Module* module, bool findAndRemove /* = true */)
 			stopUpdatingModule(module);
 	}
 }
+
+
+// bool Core::Quit(const CEGUI::EventArgs& e) {
+
+// 	mRenderer->mRunning = false;
+//     return true;
+// }
+
+// bool Core::Replay(const CEGUI::EventArgs &e) {
+
+// 	//TODO: reset values, start again
+// 	return true;
+// }
