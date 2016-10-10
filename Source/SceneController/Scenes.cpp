@@ -102,8 +102,9 @@ namespace scene1
 
 		Ogre::ParticleSystem* mParticle = mSceneMgr->createParticleSystem("Sun", "Examples/Fireworks");
 		Ogre::SceneNode* particleNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Particle");
-		particleNode->setPosition(Vector3 (0,50,0));
+		particleNode->setPosition(Vector3 (0,10,0));
 		particleNode->attachObject(mParticle);
+		mParticle->setEmitting(true);
 
 	}
 }
