@@ -7,6 +7,9 @@
 #include <OgreRoot.h>
 #include <OgreMeshManager.h>
 #include <OgreMath.h>
+#include <OgrePlane.h>
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
 
 #include "Core.h"
 #include "Entity.h"
@@ -19,35 +22,22 @@
 #include "Physics.h"
 
 using Ogre::Vector3;
+using Ogre::Quaternion;
 
 namespace scene1
 {
 	Ogre::SceneManager* mSceneMgr = nullptr;
 
-	Ogre::SceneNode* constructWall(const Vector3& norm, const Vector3& up, 
-								   const Vector3& pos, const std::string& name)
+	void constructWall(Core* core, const Vector3& position, const Quaternion& rotation)
 	{
-		Ogre::Plane p(norm, 0);
-		Ogre::MeshManager::getSingleton().createPlane( name,
-			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-			p, 800, 800, 20, 20, true, 1, 1, 1, up);
-
-		Ogre::Entity* groundEntity = mSceneMgr->createEntity(name);
-		Ogre::SceneNode* node = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos);
-		node->attachObject(groundEntity);
-		groundEntity->setCastShadows(false);
-		groundEntity->setMaterialName("Rockwall");
-
-		// Add to physics!
-
-
-		return node;
+		Entity* ground = core->createEntity(kCube, "Rockwall", false, Vector3(1, 0, 1), position, rotation);
+		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25));
 	}
 
 	void load (Core* core)
 	{
 		Renderer* renderer = core->getRenderer();
-		assert(renderer);
+		Physics* physics = core->getPhysics();
 		mSceneMgr = renderer->getSceneManager();
 
 		// Set up scene lighting
@@ -57,54 +47,46 @@ namespace scene1
 		spotLight->setDiffuseColour(1, 0, 0);
 		spotLight->setSpecularColour(1, 0, 0);
 		spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-		spotLight->setDirection(-.5, -1, 0);
-		spotLight->setPosition(Vector3(400, 600, 0));
+		spotLight->setDirection(-.1, -1, 0);
+		spotLight->setPosition(Vector3(100, 600, 0));
 
 		// Set up camera
 		Ogre::Camera* mainCam = mSceneMgr->createCamera("Main Camera");
-		mainCam->setPosition(0, 0, 0);
-		mainCam->lookAt(Vector3(200, 0, 0));
+		mainCam->setPosition(0, 400, 0);
+		mainCam->lookAt(Vector3(0, 1, .1));
 		mainCam->setNearClipDistance(5);
 		renderer->switchCamera(mainCam);
 
-		// Create sphere entity
-		Entity* sphere = core->createEntity();
-		Transform* ballTransf = sphere->getTransform();
-		Ogre::SceneNode* ballNode = ballTransf->getSceneNode();
-		ballNode->setPosition(Vector3(0,300,100));
+		// Set up Sphere
+		constexpr float kScale = .1;
+		Entity* sphere = core->createEntity(kSphere, "BumpyMetal", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
+		sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 1, .1);
 
-		// Add mesh
-		Ogre::Entity* sphereEntity = mSceneMgr->createEntity("mySphere", Ogre::SceneManager::PT_SPHERE);
-		sphereEntity->setCastShadows(true);
-		sphereEntity->setMaterialName("BumpyMetal");
-		ballNode->attachObject(sphereEntity);
+		// Set up paddle
+		Entity* paddle = core->createEntity(kCube, "BumpyMetal", true, Vector3(kScale, .0001, kScale), Vector3(0, 20, 0));
+		paddle->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, .1);
 
-		// Add audio playing component
-		sphere->createComponent<AudioPlayer>();
+		// Set up ground
+		Entity* ground = core->createEntity(kCube, "Rockwall", false, Vector3(1, 0, 1));
+		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25));
+		constructWall(core, Vector3::ZERO, Quaternion::IDENTITY);
 
-		// Add camera watching component
-		WatchThis* watchThis = sphere->createComponent<WatchThis>();
-		watchThis->mCamera = mainCam;
+		// Set up walls
+		constructWall(core, Vector3(-50, 50, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(-50, 150, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(-50, 250, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
 
-		// // Add bound movement component
-		// BoundMovement* boundMove = sphere->createComponent<BoundMovement>();
-		// boundMove->mBallRadius = 50;
-		// boundMove->mWallDistances = Vector3(400, 400, 400);
-		// srand(time(NULL));
-		// boundMove->mBallVelocity = Vector3(Ogre::Math::RangeRandom(-1, 1),
-		// 								   Ogre::Math::RangeRandom(-1, 1),
-		// 								   Ogre::Math::RangeRandom(-1, 1));
+		constructWall(core, Vector3(50, 50, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(50, 150, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(50, 250, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
 
-		// Add to physics
-		ballTransf->attachRigidbody(kBox, Vector3(1, 1, 1), .1, 1);
+		constructWall(core, Vector3(0, 50, -50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 150, -50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 250, -50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
 
-		// // Set up walls
-		constructWall(Vector3::UNIT_Y, Vector3::UNIT_Z, Vector3(0, -400, 0), "ground");
-		constructWall(Vector3::NEGATIVE_UNIT_Y, Vector3::UNIT_Z, Vector3(0, 400, 0), "ceiling");
-		constructWall(Vector3::UNIT_X, Vector3::UNIT_Z, Vector3(-400, 0, 0), "wall1");
-		constructWall(Vector3::NEGATIVE_UNIT_X, Vector3::UNIT_Z, Vector3(400, 0, 0), "wall2");
-		constructWall(Vector3::UNIT_Z, Vector3::UNIT_X, Vector3(0, 0, -400), "wall3");
-		constructWall(Vector3::NEGATIVE_UNIT_Z, Vector3::UNIT_X, Vector3(0, 0, 400), "wall4");
+		constructWall(core, Vector3(0, 50, 50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 150, 50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 250, 50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
 	}
 }
 

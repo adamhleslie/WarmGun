@@ -37,21 +37,23 @@ void Transform::postLoad ()
 	assert(mPhysics);
 }
 
-void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass, float restitution)
+void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass /* = 0 */, float restitution /* = 0 */)
 {
+	assert(!mRigidBody);
+	assert(!mMotionState);
+	assert(!mCollisionShape);
 	mMass = mass;
 
-	if (shape == kBox)
+	if (shape == kCube)
 	{
 		mCollisionShape = new btBoxShape(btVector3(btScalar(size.x), btScalar(size.y), btScalar(size.z)));
 	}
-	else if (shape == kBox2D)
+	else if (shape == kSphere)
 	{
-		// mCollisionShape = new btBox2dShape(btVector3(btScalar(size.x), btScalar(size.y), 0));
+		mCollisionShape = new btSphereShape(btScalar(size.x));
 	}
 	assert(mCollisionShape);
 	btVector3 localInertia(0,0,0);
-	mCollisionShape->calculateLocalInertia(btScalar(mMass), localInertia);
 
 	btTransform transform;
 	transform.setIdentity();
@@ -63,11 +65,11 @@ void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass, f
 	transform.setRotation(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));
 
 	mMotionState = new btDefaultMotionState(transform);
+	mCollisionShape->calculateLocalInertia(btScalar(mMass), localInertia);
 
 	btRigidBody::btRigidBodyConstructionInfo groundRBInfo(mMass, mMotionState, mCollisionShape, localInertia);
 	mRigidBody = new btRigidBody(groundRBInfo);
 	mRigidBody->setRestitution(restitution);
-	mRigidBody->applyGravity();
 
 	mPhysics->getWorld()->addRigidBody(mRigidBody);
 }
@@ -96,7 +98,7 @@ void Transform::removeRigidbody ()
 
 void Transform::synchronizeSceneNode ()
 {
-	if (mRigidBody && mMass)
+	if (mRigidBody)
 	{
 		btTransform trans;
 		mRigidBody->getMotionState()->getWorldTransform(trans);

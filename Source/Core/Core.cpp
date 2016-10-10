@@ -3,17 +3,20 @@
 #include <cassert>
 #include <algorithm>
 #include <btBulletDynamicsCommon.h>
+#include <OgreSceneNode.h>
 
 #include "Entity.h"
 #include "Module.h"
 #include "Renderer.h"
+#include "Physics.h"
 #include "Transform.h"
 
 /// Add Modules below ///
 #include "SceneController.h"
 #include "Audio.h"
 #include "GUI.h"
-#include "Physics.h"
+
+using Ogre::Vector3;
 
 void Core::createModules ()
 {
@@ -24,7 +27,7 @@ void Core::createModules ()
 	loadModule(mPhysics);
 
 	loadModule(new Audio());
-	loadModule(new GUI());
+	// loadModule(new GUI());
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -33,8 +36,7 @@ void Core::createModules ()
 
 Core::Core ()
 {
-	constexpr size_t kNumModules = 4;
-	static_assert(kNumModules >= 1, "Make room for the Renderer module!");
+	constexpr size_t kNumModules = 5;
 	mModules.reserve(kNumModules);
 	
 	createModules();
@@ -99,6 +101,48 @@ Entity* Core::createEntity ()
 	Entity* entity = new Entity();
 	mEntities.push_back(entity);
 	entity->onLoad(this); // Call onLoad after actually loading
+
+	return entity;
+}
+
+Entity* Core::createEntity (Shape shape, 
+							const string& material, 
+							bool castShadows, 
+							const Vector3& size /* Vector3::UNIT_SCALE */, 
+							const Vector3& position /* = Vector3::ZERO */, 
+							const Quaternion& rotation /* = Quaternion::IDENTITY */)
+{
+	Entity* entity = createEntity();
+	Transform* transf = entity->getTransform();
+	Ogre::SceneNode* node = transf->getSceneNode();
+
+	// Add mesh
+	Ogre::Entity* mesh = nullptr;
+	Ogre::SceneManager::PrefabType meshType;
+	switch (shape)
+	{
+		case kCube:
+			meshType = Ogre::SceneManager::PT_CUBE;
+			break;
+
+		case kSphere:
+			meshType = Ogre::SceneManager::PT_SPHERE;
+			break;
+
+		default:
+			meshType = Ogre::SceneManager::PT_CUBE;
+			break;
+	}
+	mesh = mRenderer->getSceneManager()->createEntity(meshType);
+
+	assert(mesh);
+	mesh->setCastShadows(castShadows);
+	mesh->setMaterialName(material);
+	node->attachObject(mesh);
+
+	node->setScale(size);
+	node->setPosition(position);
+	node->setOrientation(rotation);
 
 	return entity;
 }

@@ -1,11 +1,19 @@
 #pragma once
 
 #include <vector>
+#include <string>
+#include <OgreVector3.h>
+#include <OgreQuaternion.h>
+#include "Transform.h"
 
 class Module;
 class Entity;
 class Renderer;
 class Physics;
+
+using std::string;
+using Ogre::Vector3;
+using Ogre::Quaternion;
 
 class Core
 {
@@ -23,8 +31,14 @@ public:
 	void run();
 
 	// Modifiers //
-	// Creates and loads an entity, using its default constructor
+	// Creates and loads an entity
 	Entity* createEntity();
+	Entity* createEntity(Shape shape, 
+						const string& material, 
+						bool castShadows, 
+						const Vector3& size = Vector3::UNIT_SCALE, 
+						const Vector3& position = Vector3::ZERO, 
+						const Quaternion& rotation = Quaternion::IDENTITY);
 
 	// Unloads the given entity, and deallocates its memory
 	void destroyEntity(Entity* entity, bool findAndRemove = true);

@@ -14,8 +14,8 @@ class btRigidBody;
 
 enum Shape
 {
-	kBox,
-	kBox2D
+	kCube,
+	kSphere
 };
 
 class Transform : public Component
@@ -24,7 +24,7 @@ public:
 	Transform() {  }
 	~Transform();
 
-	void attachRigidbody(Shape shape, const Ogre::Vector3& size, float mass, float restitution);
+	void attachRigidbody(Shape shape, const Ogre::Vector3& size, float mass = 0, float restitution = 0);
 	void removeRigidbody();
 	// void translate();
 	// void rotate();
