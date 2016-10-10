@@ -11,14 +11,27 @@
 class GUI : public Module
 {
 public:
-    GUI(/*Ogre::Root* mRoot*/);
+    GUI(Ogre::RenderWindow* mWindow);
     virtual ~GUI(void);
+
+    void update();
+    void scorePoint();
 
 private:
     //Ogre::Root* mRoot;
  
 protected:
     CEGUI::OgreRenderer* GUIRenderer;
+
+    int mScore = 0;
+    CEGUI::Window* score;
+
+    CEGUI::Window* winBoard;
+    CEGUI::Window* loseBoard;
+    CEGUI::Window* replayButton;
+    CEGUI::Window* howToButton;
+    CEGUI::Window* howToText;
+    
  
     // virtual void createFrameListener(void);
  
@@ -35,4 +48,5 @@ protected:
  
     bool quit(const CEGUI::EventArgs &e);
     void createGameUI();
+    void loadResources();
 };

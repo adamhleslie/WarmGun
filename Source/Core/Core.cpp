@@ -15,6 +15,7 @@
 #include "SceneController.h"
 #include "Audio.h"
 #include "GUI.h"
+#include "InputManager.h"
 
 using Ogre::Vector3;
 
@@ -27,7 +28,10 @@ void Core::createModules ()
 	loadModule(mPhysics);
 
 	loadModule(new Audio());
-	// loadModule(new GUI());
+	loadModule(new GUI(mRenderer->getRenderWindow()));
+
+	mInputMgr = new InputManager(mRenderer->getRenderWindow());
+	loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -36,7 +40,7 @@ void Core::createModules ()
 
 Core::Core ()
 {
-	constexpr size_t kNumModules = 5;
+	constexpr size_t kNumModules = 6;
 	mModules.reserve(kNumModules);
 	
 	createModules();
@@ -228,3 +232,16 @@ void Core::unloadModule (Module* module, bool findAndRemove /* = true */)
 			stopUpdatingModule(module);
 	}
 }
+
+
+// bool Core::Quit(const CEGUI::EventArgs& e) {
+
+// 	mRenderer->mRunning = false;
+//     return true;
+// }
+
+// bool Core::Replay(const CEGUI::EventArgs &e) {
+
+// 	//TODO: reset values, start again
+// 	return true;
+// }

@@ -17,19 +17,22 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 	mRoot->loadPlugin("RenderSystem_GL_d");
 #else
 	mRoot->loadPlugin("RenderSystem_GL");
+	mRoot->loadPlugin("Plugin_ParticleFX");
 #endif
 
 	// Initialize with render system
 	selectRenderSystem(mRoot);
 	//TODO: change back to false to stop autocreating window
-	mRoot->initialise(true);
+	mRoot->initialise(false);
 
 	// Create scene manager, and render window
 	mSceneManager = mRoot->createSceneManager(sceneType);
-	mWindow = mRoot->getAutoCreatedWindow();
+	//mWindow = mRoot->getAutoCreatedWindow();
+	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
 
 	// Load in renderer resources
 	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Renderer", "FileSystem", "General");
+	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Particle", "FileSystem", "Particle");
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener
@@ -81,6 +84,11 @@ void Renderer::destroyCamera ()
 Ogre::Root* Renderer::getRoot ()
 {
 	return mRoot;
+}
+
+Ogre::RenderWindow* Renderer::getRenderWindow()
+{
+	return mWindow;
 }
 
 Ogre::SceneManager* Renderer::getSceneManager ()

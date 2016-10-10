@@ -10,6 +10,7 @@
 #include <OgrePlane.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
+#include <OgreParticleSystem.h>
 
 #include "Core.h"
 #include "Entity.h"
@@ -61,6 +62,10 @@ namespace scene1
 		constexpr float kScale = .1;
 		Entity* sphere = core->createEntity(kSphere, "BumpyMetal", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
 		sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 1, .1);
+
+		Ogre::ParticleSystem* mParticle = mSceneMgr->createParticleSystem("Sun", "Examples/Fireworks");
+		sphere->getTransform()->getSceneNode()->attachObject(mParticle);
+		mParticle->setEmitting(true);
 
 		// Set up paddle
 		Entity* paddle = core->createEntity(kCube, "BumpyMetal", true, Vector3(kScale, .0001, kScale), Vector3(0, 20, 0));

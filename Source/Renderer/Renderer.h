@@ -27,6 +27,7 @@ public:
 
 	Ogre::Root* getRoot();
 	Ogre::SceneManager* getSceneManager();
+	Ogre::RenderWindow* getRenderWindow();
 
 	bool mRunning = true;
 
