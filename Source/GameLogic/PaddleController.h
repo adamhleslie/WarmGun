@@ -1,30 +1,36 @@
-// #pragma once
+#pragma once
 
-// #include "Component.h"
-// #include "Module.h"
-// #include "Core.h"
-// #include "InputManager.h"
+#include "Component.h"
+#include "Module.h"
+#include "Core.h"
+#include "InputManager.h"
 
-// #include <OgreSceneManager.h>
+#include <OgreSceneManager.h>
 
 
 
-// class PaddleControl : public Component
-// {
-// public:
-// 	PaddleControl() {}
-// 	~PaddleControl() {}
+class PaddleController : public Component
+{
+public:
+	PaddleController() {}
+	~PaddleController() {}
 
-// 	void update() override;
+	void update() override;
 	
 
-// 	Ogre::Camera* mCamera = nullptr;
+	Ogre::Camera* mCamera = nullptr;
 
 
 
-// protected:
-// 	void postLoad() override;
+protected:
+	void postLoad() override;
 
-// private:
+private:
 
-// };
+	Ogre::Vector3 mDirection;
+	Ogre::Vector3 mRotate;
+
+	int mTilt = 10;
+	int mMove = 10;
+
+};
