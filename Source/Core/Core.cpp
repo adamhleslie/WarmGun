@@ -74,15 +74,6 @@ void Core::run ()
 	
 	while (mRenderer->mRunning)
 	{
-		// OIS::KeyCode lastKey = InputManager->lastKeyPressed();
-
-
-		// if(lastKey == OIS::KC_ESCAPE) {
-		// 	// close window when ESC is pressed
-		// 	mRunning = false;
-		// }
-
-
 
 		unsigned long newTime = timer.getMilliseconds();
 		accumulator += newTime - time;
