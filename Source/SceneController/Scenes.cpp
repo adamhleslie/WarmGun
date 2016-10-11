@@ -31,8 +31,8 @@ namespace scene1
 
 	void constructWall(Core* core, const Vector3& position, const Quaternion& rotation)
 	{
-		Entity* ground = core->createEntity(kCube, "Rockwall", false, Vector3(1, 0, 1), position, rotation);
-		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25), 0, .5);
+		Entity* ground = core->createEntity(kCube, "BumpyMetal", false, Vector3(1, 0, 1), position, rotation);
+		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25), 0, 1.5);
 	}
 
 	void load (Core* core)
@@ -47,9 +47,16 @@ namespace scene1
 		Ogre::Light* spotLight = mSceneMgr->createLight("SpotLight");
 		spotLight->setDiffuseColour(1, 0, 0);
 		spotLight->setSpecularColour(1, 0, 0);
-		spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-		spotLight->setDirection(-.01, -1, 0);
-		spotLight->setPosition(Vector3(0, 600, 0));
+		spotLight->setType(Ogre::Light::LT_POINT);
+		spotLight->setDirection(0, 0, 0);
+		spotLight->setPosition(Vector3(0, 250, 0));
+
+		Ogre::Light* spotLight2 = mSceneMgr->createLight("SpotLight2");
+		spotLight2->setDiffuseColour(0, 0, .5);
+		spotLight2->setSpecularColour(0, 0, .5);
+		spotLight2->setType(Ogre::Light::LT_POINT);
+		spotLight2->setDirection(0, 0, 0);
+		spotLight2->setPosition(Vector3(0, 300, 0));
 
 		// Set up camera
 		Ogre::Camera* mainCam = mSceneMgr->createCamera("Main Camera");
@@ -60,7 +67,7 @@ namespace scene1
 
 		// Set up Sphere
 		constexpr float kScale = .1;
-		Entity* sphere = core->createEntity(kSphere, "BumpyMetal", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
+		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
 		sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 10, 1, true);
 		sphere->isBall = true;
 		sphere->createComponent<AudioPlayer>();
@@ -70,13 +77,13 @@ namespace scene1
 		mParticle->setEmitting(false);
 
 		// Set up paddle
-		Entity* paddle = core->createEntity(kCube, "BumpyMetal", true, Vector3(kScale, .0001, kScale), Vector3(0, 20, 0));
+		Entity* paddle = core->createEntity(kCube, "Rockwall", true, Vector3(kScale, .0001, kScale), Vector3(0, 20, 0));
 		paddle->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
 		paddle->isPaddle = true;
 		// paddle->getTransform()->getSceneNode()->attachObject(mainCam);
 
 		// Set up ground
-		Entity* ground = core->createEntity(kCube, "Rockwall", false, Vector3(1, 0, 1));
+		Entity* ground = core->createEntity(kCube, "SpaceSkyPlane", false, Vector3(1, 0, 1), Vector3::ZERO, Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
 		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25), 0, 0);
 		ground->isGround = true;
 
@@ -85,17 +92,17 @@ namespace scene1
 		constructWall(core, Vector3(-50, 150, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
 		constructWall(core, Vector3(-50, 250, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
 
-		constructWall(core, Vector3(50, 50, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
-		constructWall(core, Vector3(50, 150, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
-		constructWall(core, Vector3(50, 250, 0), Quaternion(Ogre::Degree(90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(50, 50, 0), Quaternion(Ogre::Degree(-90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(50, 150, 0), Quaternion(Ogre::Degree(-90), Vector3(1, 0, 0)));
+		constructWall(core, Vector3(50, 250, 0), Quaternion(Ogre::Degree(-90), Vector3(1, 0, 0)));
 
 		constructWall(core, Vector3(0, 50, -50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
 		constructWall(core, Vector3(0, 150, -50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
 		constructWall(core, Vector3(0, 250, -50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
 
-		constructWall(core, Vector3(0, 50, 50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
-		constructWall(core, Vector3(0, 150, 50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
-		constructWall(core, Vector3(0, 250, 50), Quaternion(Ogre::Degree(90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 50, 50), Quaternion(Ogre::Degree(-90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 150, 50), Quaternion(Ogre::Degree(-90), Vector3(0, 0, 1)));
+		constructWall(core, Vector3(0, 250, 50), Quaternion(Ogre::Degree(-90), Vector3(0, 0, 1)));
 	}
 }
 
