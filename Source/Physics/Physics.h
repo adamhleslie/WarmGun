@@ -7,11 +7,12 @@ class btCollisionDispatcher;
 class btBroadphaseInterface;
 class btSequentialImpulseConstraintSolver;
 class btDiscreteDynamicsWorld;
+class GUI;
 
 class Physics : public Module
 {
 public:
-	Physics();
+	Physics(GUI* gui);
 	~Physics();
 
 	btDiscreteDynamicsWorld* getWorld();

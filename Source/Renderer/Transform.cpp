@@ -37,7 +37,7 @@ void Transform::postLoad ()
 	assert(mPhysics);
 }
 
-void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass /* = 0 */, float restitution /* = 0 */)
+void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass /* = 0 */, float restitution /* = 0 */, bool customCallback /* = false */)
 {
 	assert(!mRigidBody);
 	assert(!mMotionState);
@@ -71,6 +71,12 @@ void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass /*
 	mRigidBody = new btRigidBody(groundRBInfo);
 	mRigidBody->setRestitution(restitution);
 
+	if (customCallback)
+	{
+		mRigidBody->setCollisionFlags(mRigidBody->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+	}
+
+	mRigidBody->setUserPointer(getEntity());
 	mPhysics->getWorld()->addRigidBody(mRigidBody);
 }
 
