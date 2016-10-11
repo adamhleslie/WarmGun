@@ -21,6 +21,7 @@
 #include "Transform.h"
 #include "AudioPlayer.h"
 #include "Physics.h"
+#include "PaddleController.h"
 
 using Ogre::Vector3;
 using Ogre::Quaternion;
@@ -70,6 +71,7 @@ namespace scene1
 		// Set up paddle
 		Entity* paddle = core->createEntity(kCube, "BumpyMetal", true, Vector3(kScale, .0001, kScale), Vector3(0, 20, 0));
 		paddle->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, .1);
+		paddle->createComponent<PaddleController>();
 
 		// Set up ground
 		Entity* ground = core->createEntity(kCube, "Rockwall", false, Vector3(1, 0, 1));

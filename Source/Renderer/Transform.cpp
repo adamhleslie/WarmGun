@@ -110,3 +110,21 @@ void Transform::synchronizeSceneNode ()
 		mNode->setOrientation(orientation.getW(), orientation.getX(), orientation.getY(), orientation.getZ());
 	}
 }
+
+void Transform::translate(const Ogre::Vector3 &direction){
+	// btTransform transform;
+	// transform.setIdentity();
+	mRigidBody->translate(btVector3(direction.x, direction.y, direction.z));
+	synchronizeSceneNode ();
+}
+
+void Transform::rotate(const Ogre::Quaternion& rotation){
+	btMatrix3x3 orn = mRigidBody->getWorldTransform().getBasis(); //get basis of world transformation
+  	orn *= btMatrix3x3(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));     //Multiply it by rotation matrix
+ 	mRigidBody->getWorldTransform().setBasis(orn); //set new rotation for the object
+
+	// transform.setRotation(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));
+
+	// mRigidBody->setCenterOfMassTransform(transform);
+	synchronizeSceneNode ();
+}

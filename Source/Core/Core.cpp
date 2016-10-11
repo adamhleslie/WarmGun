@@ -181,6 +181,11 @@ Renderer* Core::getRenderer ()
 	return mRenderer;
 }
 
+// void Core::stopRenderer()
+// {
+// 	mRenderer = false;
+// }
+
 Physics* Core::getPhysics ()
 {
 	return mPhysics;

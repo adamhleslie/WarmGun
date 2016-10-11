@@ -34,6 +34,9 @@ public:
 
 	Ogre::SceneNode* getSceneNode(); 
 
+	void translate(const Ogre::Vector3&);
+	void rotate(const Ogre::Quaternion&);
+
 protected:
 	void postLoad() override;
 
