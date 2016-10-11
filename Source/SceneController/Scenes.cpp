@@ -84,6 +84,7 @@ namespace scene1
 		PaddleController* pt = paddle->createComponent<PaddleController>();
 		pt->mCamera = mainCam;
 
+
 		// Set up ground
 		Entity* ground = core->createEntity(kCube, "SpaceSkyPlane", false, Vector3(1, .01, 1), Vector3::ZERO, Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
 		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 1, 25), 0, 0);
