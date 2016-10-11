@@ -15,6 +15,7 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 	// Load Plugins
 #if _DEBUG
 	mRoot->loadPlugin("RenderSystem_GL_d");
+	mRoot->loadPlugin("Plugin_ParticleFX");
 #else
 	mRoot->loadPlugin("RenderSystem_GL");
 	mRoot->loadPlugin("Plugin_ParticleFX");
