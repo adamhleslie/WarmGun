@@ -16,6 +16,7 @@ public:
 
     void update();
     void scorePoint();
+    void lose();
 
 private:
     //Ogre::Root* mRoot;

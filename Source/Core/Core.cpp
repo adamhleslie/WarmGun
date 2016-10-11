@@ -24,14 +24,16 @@ void Core::createModules ()
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
 
-	mPhysics = new Physics();
+	GUI* gui = new GUI(mRenderer->getRenderWindow());
+	loadModule(gui);
+
+	mPhysics = new Physics(gui);
 	loadModule(mPhysics);
 
 	loadModule(new Audio());
-	loadModule(new GUI(mRenderer->getRenderWindow()));
 
-	mInputMgr = new InputManager(mRenderer->getRenderWindow());
-	loadModule(mInputMgr);
+	// mInputMgr = new InputManager(mRenderer->getRenderWindow());
+	// loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));

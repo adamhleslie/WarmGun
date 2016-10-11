@@ -24,7 +24,7 @@ public:
 	Transform() {  }
 	~Transform();
 
-	void attachRigidbody(Shape shape, const Ogre::Vector3& size, float mass = 0, float restitution = 0);
+	void attachRigidbody(Shape shape, const Ogre::Vector3& size, float mass = 0, float restitution = 0, bool customCallback = false);
 	void removeRigidbody();
 	// void translate();
 	// void rotate();
