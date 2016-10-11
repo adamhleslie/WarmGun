@@ -51,37 +51,9 @@ public:
 	void startUpdatingComponent(Component* component);
 	void stopUpdatingComponent(Component* component);
 
-// 	//BBPW
-// 	BulletContactCallback* cCallBack;
-
-// protected:
-
-// 	//ball, brick, paddle, wall (BBPW) variables START
-// 	Ogre::String name; //TODO: do we also need a type?
-// 	Ogre::Entity* geometry;
-// 	Ogre::Real scale;
-// 	Ogre::Vector3 vscale;
-// 	Ogre::Vector3 startPos;
-// 	OgreMotionState* motionState;
-
-// 	//TODO: Need a renderer or gamelogic object?
-// 	btCollisionShape* shape;
-// 	btRigidBody* body;
-// 	btTransform bulletTransform;
-// 	btVector3 inertia;
-
-// 	bool exploded;
-
-// 	CollisionContext* context;
-
-// 	btScalar mass;
-// 	btScalar friction;
-// 	btScalar restitution;
-
-// 	bool needsUpdates;
-
-// 	Ogre::ParticleSystem* particle;
-// 	//BBPW END
+	bool isBall = false;
+	bool isPaddle = false;
+	bool isGround = false;
 
 private:
 	// The components that are loaded

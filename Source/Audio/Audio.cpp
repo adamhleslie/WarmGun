@@ -17,13 +17,12 @@ Audio::Audio()
 	s2 = Mix_LoadWAV( "Media/Audio/s2.wav" );
 	s3 = Mix_LoadWAV( "Media/Audio/s3.wav" );
 	s4 = Mix_LoadWAV( "Media/Audio/s4.wav" );
-	s5 = Mix_LoadWAV( "Media/Audio/s5.wav" );
 
 	assert( s1 != NULL );
 	assert( s2 != NULL );
 	assert( s3 != NULL );
 	assert( s4 != NULL );
-	// assert( s5 != NULL );
+	play_s4();
 }
 
 Audio::~Audio()
@@ -32,7 +31,6 @@ Audio::~Audio()
 	Mix_FreeChunk( s2 );
 	Mix_FreeChunk( s3 );
 	Mix_FreeChunk( s4 );
-	Mix_FreeChunk( s5 );
 
 	Mix_CloseAudio();
 }

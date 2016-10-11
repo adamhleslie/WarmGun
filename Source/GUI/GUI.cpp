@@ -27,7 +27,7 @@ GUI::GUI(Ogre::RenderWindow* mWindow)
     CEGUI::Window* quitButton = wmgr.createWindow("AlfiskoSkin/Button", "QuitButton");
     quitButton->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.0f, 0), CEGUI::UDim(0.0f, 0)),
         CEGUI::UVector2(CEGUI::UDim(0.1f, 0), CEGUI::UDim(0.05f, 0))));
-    quitButton->setText("Quit");
+    quitButton->setText("ESC = quit");
 
     replayButton = wmgr.createWindow("AlfiskoSkin/Button", "ReplayButton");
     replayButton->setArea(CEGUI::URect(CEGUI::UVector2(CEGUI::UDim(0.3f, 0), CEGUI::UDim(0.4f, 0)),
@@ -131,6 +131,11 @@ void GUI::scorePoint()
 {
     mScore += 1;
     score->setText("Score: " + std::to_string(mScore));
+}
+
+void GUI::lose()
+{
+    score->setText("DANG! Your score was " + std::to_string(mScore));
 }
 
 void GUI::loadResources()
