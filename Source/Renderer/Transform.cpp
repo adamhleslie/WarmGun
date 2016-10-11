@@ -104,7 +104,7 @@ void Transform::removeRigidbody ()
 
 void Transform::synchronizeSceneNode ()
 {
-	if (mRigidBody)
+	if (mRigidBody && !getEntity()->isPaddle)
 	{
 		btTransform trans;
 		mRigidBody->getMotionState()->getWorldTransform(trans);
@@ -117,20 +117,21 @@ void Transform::synchronizeSceneNode ()
 	}
 }
 
-void Transform::translate(const Ogre::Vector3 &direction){
+void Transform::translate (const Ogre::Vector3 &direction)
+{
 	// btTransform transform;
 	// transform.setIdentity();
 	mRigidBody->translate(btVector3(direction.x, direction.y, direction.z));
-	synchronizeSceneNode ();
+	mNode->translate(direction);
+	// synchronizeSceneNode();
 }
 
-void Transform::rotate(const Ogre::Quaternion& rotation){
+void Transform::rotate (const Ogre::Quaternion& rotation)
+{
 	btMatrix3x3 orn = mRigidBody->getWorldTransform().getBasis(); //get basis of world transformation
   	orn *= btMatrix3x3(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));     //Multiply it by rotation matrix
  	mRigidBody->getWorldTransform().setBasis(orn); //set new rotation for the object
+	mNode->rotate(rotation);
 
-	// transform.setRotation(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));
-
-	// mRigidBody->setCenterOfMassTransform(transform);
 	synchronizeSceneNode ();
 }

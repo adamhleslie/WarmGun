@@ -32,8 +32,8 @@ void Core::createModules ()
 
 	loadModule(new Audio());
 
-	// mInputMgr = new InputManager(mRenderer->getRenderWindow());
-	// loadModule(mInputMgr);
+	mInputMgr = new InputManager(mRenderer->getRenderWindow());
+	loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));

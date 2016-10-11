@@ -28,7 +28,6 @@ public:
 	bool keyReleased(const OIS::KeyEvent& ke);
 
 
-
 protected:
 	void postLoad() override;
 
@@ -37,8 +36,7 @@ private:
 	Ogre::Vector3 mDirection;
 	Ogre::Quaternion mRotate;
 
-	int mTilt = 5;
-	int mMove = 5;
-	int test;
+	float mTilt = 1;
+	float mMove = .25;
 
 };

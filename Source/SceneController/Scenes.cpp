@@ -33,7 +33,7 @@ namespace scene1
 	void constructWall(Core* core, const Vector3& position, const Quaternion& rotation)
 	{
 		Entity* ground = core->createEntity(kCube, "BumpyMetal", false, Vector3(1, 0, 1), position, rotation);
-		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25), 0, 1.5);
+		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 1, 25), 0, 1.5);
 	}
 
 	void load (Core* core)
@@ -78,14 +78,15 @@ namespace scene1
 		mParticle->setEmitting(false);
 
 		// Set up paddle
-		Entity* paddle = core->createEntity(kCube, "Rockwall", true, Vector3(kScale, .0001, kScale), Vector3(0, 20, 0));
+		Entity* paddle = core->createEntity(kCube, "Rockwall", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
 		paddle->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
 		paddle->isPaddle = true;
-		// paddle->getTransform()->getSceneNode()->attachObject(mainCam);
+		PaddleController* pt = paddle->createComponent<PaddleController>();
+		pt->mCamera = mainCam;
 
 		// Set up ground
-		Entity* ground = core->createEntity(kCube, "SpaceSkyPlane", false, Vector3(1, 0, 1), Vector3::ZERO, Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
-		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 0, 25), 0, 0);
+		Entity* ground = core->createEntity(kCube, "SpaceSkyPlane", false, Vector3(1, .01, 1), Vector3::ZERO, Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
+		ground->getTransform()->attachRigidbody(kCube, Vector3(25, 1, 25), 0, 0);
 		ground->isGround = true;
 
 		// Set up walls

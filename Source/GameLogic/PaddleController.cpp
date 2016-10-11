@@ -1,7 +1,7 @@
 #include "PaddleController.h"
 
 // #include <cstdlib>
-// #include <OgreCamera.h>
+#include <OgreCamera.h>
 // #include <OgreEntity.h>
 // #include <OgreSceneNode.h>
 
@@ -10,7 +10,6 @@ using Ogre::Vector3;
 PaddleController::PaddleController(){
   mDirection = Ogre::Vector3(0, 0, 0);
   mRotate = Ogre::Quaternion(1, 1, 1, 1);
-  test = 0;
 }
 
 void PaddleController::postLoad(){
@@ -21,6 +20,7 @@ void PaddleController::postLoad(){
 void PaddleController::update(){
   Transform* transform = getEntity()->getComponent<Transform>();
   transform->translate(mDirection);
+  mCamera->move(mDirection);
   transform->rotate(mRotate);
 }
 
@@ -33,37 +33,39 @@ bool PaddleController::keyPressed(const OIS::KeyEvent& ke)
     break;
  
 
+  case OIS::KC_A:
+    mDirection.x = mMove;
+    break;
+ 
+  case OIS::KC_D:
+    mDirection.x = -mMove;
+    break;
+
+  case OIS::KC_W:
+    mDirection.z = mMove;
+    break;
+
+  case OIS::KC_S:
+    mDirection.z = -mMove;
+    break;
+
+
   case OIS::KC_UP:
     mRotate.z = -mTilt;
     break;
 
-  case OIS::KC_W:
-    mDirection.z = -mMove;
-    break;
- 
   case OIS::KC_DOWN:
     mRotate.z = mTilt;
-    break;
-
-  case OIS::KC_S:
-    mDirection.z = mMove;
     break;
  
   case OIS::KC_LEFT:
     mRotate.x = -mTilt;
     break;
 
-  case OIS::KC_A:
-    mDirection.x = -mMove;
-    break;
- 
-  case OIS::KC_RIGHT:
+    case OIS::KC_RIGHT:
     mRotate.x = mTilt;
     break;
 
-  case OIS::KC_D:
-    mDirection.x = mMove;
-    break;
  
   // case OIS::KC_PGDOWN:
   // case OIS::KC_E:
@@ -86,36 +88,41 @@ bool PaddleController::keyReleased(const OIS::KeyEvent& ke)
 {
   switch (ke.key)
   {
-  case OIS::KC_UP:
-    mRotate.z = 0;
+
+
+  case OIS::KC_A:
+    mDirection.x = 0;
+    break;
+
+  case OIS::KC_D:
+    mDirection.x = 0;
     break;
 
   case OIS::KC_W:
     mDirection.z = 0;
-    break;
- 
-  case OIS::KC_DOWN:
-    mRotate.z = 0;
     break;
 
   case OIS::KC_S:
     mDirection.z = 0;
     break;
  
+
+  case OIS::KC_UP:
+    mRotate.z = 0;
+    break;
+
+  case OIS::KC_DOWN:
+    mRotate.z = 0;
+    break;
+
   case OIS::KC_LEFT:
     mRotate.x = 0;
-
-  case OIS::KC_A:
-    mDirection.x = 0;
-    break;
  
   case OIS::KC_RIGHT:
     mRotate.x = 0;
     break;
 
-  case OIS::KC_D:
-    mDirection.x = 0;
-    break;
+
  
   // case OIS::KC_PGDOWN:
   //  //tilt
