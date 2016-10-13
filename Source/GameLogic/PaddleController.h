@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "Entity.h"
 #include "InputManager.h"
+#include "AudioPlayer.h"
 
 #include <OgreSceneManager.h>
 #include <OISKeyboard.h>
@@ -23,6 +24,7 @@ public:
 	void update();
 	
 
+	AudioPlayer* ap = nullptr;
 	Ogre::Camera* mCamera = nullptr;
 	bool keyPressed(const OIS::KeyEvent& ke);
 	bool keyReleased(const OIS::KeyEvent& ke);

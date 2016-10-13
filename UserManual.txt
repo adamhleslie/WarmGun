@@ -1,0 +1,21 @@
+PLANETARY TUNNEL EXTINCTION MANUAL
+
+Premise:
+You have trapped an enemy planet in your galaxy tunnel.  Smash them against your giant space paddle as many times as you can to eliminate all of their disgusting alien statues.
+
+Goal of the game:
+Try to score as many points as possible.  Whenever you hit the planet with the space paddle, you get a destroy a disgusting alien monument. If you hit the planet with passionate force, you make destroy more than one statues.  You may even access the secret hard mode outside of the well.
+
+Please note the beautiful smoke
+.
+Controls:
+W = Move paddle up
+A = Move paddle left
+S = Move paddle down
+D = Move paddle right
+Arrow Up = tilt up
+Arrow Down = tilt down
+Arrow Left = tilt left
+Arrow Right = tilt right
+Esc = quit game
+P = Pause Music

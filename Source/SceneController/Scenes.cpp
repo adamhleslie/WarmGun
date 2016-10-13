@@ -71,7 +71,7 @@ namespace scene1
 		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
 		sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 10, 1, true);
 		sphere->isBall = true;
-		sphere->createComponent<AudioPlayer>();
+		AudioPlayer* ap = sphere->createComponent<AudioPlayer>();
 
 		Ogre::ParticleSystem* mParticle = mSceneMgr->createParticleSystem("Sun", "Examples/Fireworks");
 		sphere->getTransform()->getSceneNode()->attachObject(mParticle);
@@ -83,6 +83,7 @@ namespace scene1
 		paddle->isPaddle = true;
 		PaddleController* pt = paddle->createComponent<PaddleController>();
 		pt->mCamera = mainCam;
+		pt->ap = ap;
 
 
 		// Set up ground

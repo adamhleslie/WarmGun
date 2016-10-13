@@ -62,10 +62,13 @@ bool PaddleController::keyPressed(const OIS::KeyEvent& ke)
     mRotate.x = -mTilt;
     break;
 
-    case OIS::KC_RIGHT:
+  case OIS::KC_RIGHT:
     mRotate.x = mTilt;
     break;
 
+  case OIS::KC_P:
+    ap->muteBackgroundMusic();
+    break;
  
   // case OIS::KC_PGDOWN:
   // case OIS::KC_E:
