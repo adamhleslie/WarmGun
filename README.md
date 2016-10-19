@@ -1,3 +1,5 @@
+## This project2 branch is for backup purpose
+
 ## Design Overview
 Core is the basic functionality of the engine. It runs the game loop, which calls update on Modules and Entities, then renders.  
 Modules are the overarching engine extensions - large additions to total functionality  
