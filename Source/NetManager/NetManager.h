@@ -17,7 +17,9 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "SDLnet/SDL_net.h"
+#include <SDL/SDL_net.h>
+
+#include "Module.h"
 
 
 /* ****************************************************************************
@@ -120,7 +122,7 @@ static const Uint32 UINT_PRGRS(0xFF001000);
  * of that sort should be minimal if not non-existent.  That said, If any code
  * errors are encountered, please fix them or contact me at the header address.
  */
-class NetManager {
+class NetManager : public Module {
 public:
   /* ***************************************************
    * Public

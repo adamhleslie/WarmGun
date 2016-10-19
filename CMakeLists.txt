@@ -79,6 +79,7 @@ add_project_module(GameLogic		GameLogic)
 add_project_module(GUI				GUI)
 add_project_module(Physics			Physics)
 add_project_module(InputManager		InputManager)
+add_project_module(NetManager		NetManager)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
@@ -156,6 +157,7 @@ find_package(SDL REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	${SDL_LIBRARY}
 	SDL_mixer
+	SDL_net
 )
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${SDL_INCLUDE_DIR}

@@ -11,6 +11,7 @@ class Module;
 class Entity;
 class Renderer;
 class Physics;
+class NetManager;
 
 using std::string;
 using Ogre::Vector3;
@@ -72,6 +73,7 @@ private:
 	Renderer* mRenderer = nullptr;
 	Physics* mPhysics = nullptr;
 	InputManager* mInputMgr = nullptr;
+	NetManager* mNetMgr = nullptr;
 
 	// Create/load the available modules
 	void createModules();

@@ -16,8 +16,11 @@
 #include "Audio.h"
 #include "GUI.h"
 #include "InputManager.h"
+#include "NetManager.h"
 
 using Ogre::Vector3;
+
+bool server = true;
 
 void Core::createModules ()
 {
@@ -34,6 +37,20 @@ void Core::createModules ()
 
 	mInputMgr = new InputManager(mRenderer->getRenderWindow());
 	loadModule(mInputMgr);
+
+ 	mNetMgr = new NetManager();
+	loadModule(mNetMgr);
+
+	if (server)
+	{
+		mNetMgr->addNetworkInfo(PROTOCOL_TCP);
+		mNetMgr->multiPlayerInit();
+		// mNetMgr->close();
+	}
+	else
+	{
+
+	}
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));

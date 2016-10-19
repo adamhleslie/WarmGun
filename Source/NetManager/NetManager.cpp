@@ -37,6 +37,7 @@ netPort(0)
   } else if (-1 == SDLNet_Init()) {
     printf("SDLNet_Init: %s\n", SDLNet_GetError());
   }
+  initNetManager();
 }
 
 /**
