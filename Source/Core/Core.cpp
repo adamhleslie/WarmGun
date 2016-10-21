@@ -43,9 +43,15 @@ void Core::createModules ()
 
 	if (server)
 	{
-		mNetMgr->addNetworkInfo(PROTOCOL_TCP);
+		mNetMgr->addNetworkInfo(PROTOCOL_ALL, NULL, 51215);
+		bool startServer = mNetMgr->startServer();
+		printf("\t\t\tstartServer: %d\n", startServer);
+		bool scanForActivity = mNetMgr->scanForActivity();
+		printf("\t\t\tscanForActivity: %d\n", scanForActivity);
+		
 		mNetMgr->multiPlayerInit();
-		// mNetMgr->close();
+
+		mNetMgr->close();
 	}
 	else
 	{
