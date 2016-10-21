@@ -17,9 +17,19 @@ release:
 	@cd Build && cmake -DCMAKE_BUILD_TYPE=Release .. && make
 .PHONY: release
 
+client:
+	-@rm -r ClientBuild
+	@mkdir ClientBuild
+	@cd ClientBuild && cmake -DCMAKE_BUILD_TYPE=Debug .. && make
+.PHONY: client
+
 run:
 	@cd Build/Binaries && ./GameEngine
 .PHONY: run
+
+run_client:
+	@cd ClientBuild/Binaries && ./GameEngine
+.PHONY: run_client
 
 val:
 	@cd Build/Binaries && valgrind ./GameEngine
@@ -31,4 +41,5 @@ gdb:
 
 clean:
 	-@rm -r Build
+	-@rm -r ClientBuild
 .PHONY: clean

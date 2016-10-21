@@ -63,10 +63,10 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
         // If possible create a buffered keyboard
         // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
         //if( mInputSystem->numKeyboards() > 0 ) {
-        if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
-            mKeyboard = dynamic_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
-            mKeyboard->setEventCallback( this );
-        }
+        // if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
+        //     mKeyboard = dynamic_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
+        //     mKeyboard->setEventCallback( this );
+        // }
  
         // If possible create a buffered mouse
         // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISMouse) > 0) {
@@ -92,9 +92,9 @@ void InputManager::update( void ) {
     //     mMouse->capture();
     // }
  
-    if( mKeyboard ) {
-        mKeyboard->capture();
-    }
+    // if( mKeyboard ) {
+    //     mKeyboard->capture();
+    // }
  
 }
  

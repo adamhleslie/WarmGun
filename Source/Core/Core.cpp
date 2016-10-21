@@ -41,21 +41,18 @@ void Core::createModules ()
  	mNetMgr = new NetManager();
 	loadModule(mNetMgr);
 
+	//NETWORKING
+	mNetMgr->addNetworkInfo();
+	bool startServer = mNetMgr->startServer();
+	printf("\t\t\tstartServer: %d\n", startServer);
+
 	if (server)
 	{
-		mNetMgr->addNetworkInfo(PROTOCOL_ALL, NULL, 51215);
-		bool startServer = mNetMgr->startServer();
-		printf("\t\t\tstartServer: %d\n", startServer);
-		bool scanForActivity = mNetMgr->scanForActivity();
-		printf("\t\t\tscanForActivity: %d\n", scanForActivity);
-		
 		mNetMgr->multiPlayerInit();
-
-		mNetMgr->close();
 	}
 	else
 	{
-
+		mNetMgr->pollForActivity(10000);
 	}
 
 	// Create SceneController last, since it sets up the initial scene
@@ -109,6 +106,9 @@ void Core::run ()
 			{
 				module->update();
 			}
+
+			// bool pollForActivity = mNetMgr->pollForActivity(0);
+			// printf("\t\t\tscanForActivity: %d\n", pollForActivity);
 
 			// Update physics
 			mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
