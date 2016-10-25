@@ -1,5 +1,6 @@
 #include "Core.h"
 
+#include <iostream>
 #include <cassert>
 #include <algorithm>
 #include <btBulletDynamicsCommon.h>
@@ -20,7 +21,7 @@
 
 using Ogre::Vector3;
 
-bool server = true;
+bool server = false;
 
 void Core::createModules ()
 {
@@ -41,18 +42,13 @@ void Core::createModules ()
  	mNetMgr = new NetManager();
 	loadModule(mNetMgr);
 
-	//NETWORKING
-	mNetMgr->addNetworkInfo();
-	bool startServer = mNetMgr->startServer();
-	printf("\t\t\tstartServer: %d\n", startServer);
-
 	if (server)
 	{
-		mNetMgr->multiPlayerInit();
+		mNetMgr->startGameServer();
 	}
 	else
 	{
-		mNetMgr->pollForActivity(10000);
+		mNetMgr->startGameClient();
 	}
 
 	// Create SceneController last, since it sets up the initial scene

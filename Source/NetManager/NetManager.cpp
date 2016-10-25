@@ -37,7 +37,6 @@ netPort(0)
   } else if (-1 == SDLNet_Init()) {
     printf("SDLNet_Init: %s\n", SDLNet_GetError());
   }
-  initNetManager();
 }
 
 /**
@@ -691,6 +690,28 @@ void NetManager::denyConnections() {
   acceptNewClients = false;
 }
 
+void NetManager::startGameServer ()
+{
+  initNetManager();
+  addNetworkInfo();
+  std::cout << "Starting Servers Server Returns: " << startServer() << std::endl;
+  std::cout << "Initial Broadcast self-recieved: " << multiPlayerInit() << std::endl;
+
+  while (true)
+  {
+    broadcastUDPInvitation();
+    // std::cout << "Connections = " << getUDPClients() << std::endl;
+  }
+}
+
+void NetManager::startGameClient ()
+{
+  initNetManager();
+  addNetworkInfo();
+  std::cout << "Starting Clients Server Returns: " << startServer() << std::endl;
+  std::cout << "Recieved Server Broadcast: " << pollForActivity(10000) << std::endl;
+}
+
 /**
  * @brief Initiates multiplayer functionality by launching the server instance.
  *
@@ -726,7 +747,7 @@ bool NetManager::broadcastUDPInvitation(int maskDepth) {
   IPaddress addr;
   UDPpacket *packet;
 
-  SDLNet_ResolveHost(&addr, getMaskedIPstring(maskDepth).c_str(), PORT_DEFAULT);
+  SDLNet_ResolveHost(&addr, "128.83.144.178", PORT_DEFAULT);
 
   broadcast << STR_OPEN << getIPstring();
   data = broadcast.str();

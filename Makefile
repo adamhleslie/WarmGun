@@ -31,5 +31,4 @@ gdb:
 
 clean:
 	-@rm -r Build
-	-@rm -r ClientBuild
 .PHONY: clean
