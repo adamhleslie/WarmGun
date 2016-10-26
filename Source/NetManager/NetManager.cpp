@@ -107,7 +107,10 @@ void NetManager::addNetworkInfo(Protocol protocol, const char *host, Uint16 port
   netProtocol = protocol;
   netPort = port ? : PORT_DEFAULT;
   if (host)
+  {
+    printf("\t\t\t host: %s\n", host);
     netHostname = host;
+  }
 
   netStatus |= NET_WAITING;
 }
@@ -704,7 +707,7 @@ void NetManager::startGameServer ()
   }
 }
 
-void NetManager::startGameClient (std::string ip)
+bool NetManager::startGameClient (std::string ip)
 {
   // initNetManager();
   // addNetworkInfo();
@@ -770,10 +773,10 @@ bool NetManager::broadcastUDPInvitation(int maskDepth) {
  * @return Success of starting the client against the target host.
  */
 bool NetManager::joinMultiPlayer(std::string invitation) {
-  std::string svrAddr = invitation.substr(STR_OPEN.length());
+  // std::string svrAddr = invitation.substr(STR_OPEN.length());
   // stopServer();
   initNetManager();
-  addNetworkInfo(PROTOCOL_ALL, svrAddr.c_str());
+  addNetworkInfo(PROTOCOL_ALL, invitation.c_str());
 
   return startClient();
 }
