@@ -21,6 +21,7 @@
 
 using Ogre::Vector3;
 
+// bool server = true;
 bool server = false;
 
 void Core::createModules ()
@@ -52,7 +53,10 @@ void Core::createModules ()
 		bool startGameClient = mNetMgr->startGameClient(ip);
 		printf("\t\t\t startGameClient: %d\n",startGameClient);
 
-
+		// while(!mNetMgr->scanForActivity())
+		// {
+		// 	// check the external bin
+		// }
 	}
 
 	// Create SceneController last, since it sets up the initial scene

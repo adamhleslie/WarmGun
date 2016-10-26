@@ -693,7 +693,7 @@ void NetManager::denyConnections() {
   acceptNewClients = false;
 }
 
-void NetManager::startGameServer ()
+bool NetManager::startGameServer ()
 {
   initNetManager();
   addNetworkInfo();
