@@ -704,12 +704,14 @@ void NetManager::startGameServer ()
   }
 }
 
-void NetManager::startGameClient ()
+void NetManager::startGameClient (std::string ip)
 {
-  initNetManager();
-  addNetworkInfo();
-  std::cout << "Starting Clients Server Returns: " << startServer() << std::endl;
-  std::cout << "Recieved Server Broadcast: " << pollForActivity(10000) << std::endl;
+  // initNetManager();
+  // addNetworkInfo();
+  // std::cout << "Starting Clients Server Returns: " << startServer() << std::endl;
+  // std::cout << "Recieved Server Broadcast: " << pollForActivity(10000) << std::endl;
+  joinMultiPlayer(ip);
+  // while(pollForActivity(10000) == false)
 }
 
 /**
@@ -769,7 +771,7 @@ bool NetManager::broadcastUDPInvitation(int maskDepth) {
  */
 bool NetManager::joinMultiPlayer(std::string invitation) {
   std::string svrAddr = invitation.substr(STR_OPEN.length());
-  stopServer();
+  // stopServer();
   initNetManager();
   addNetworkInfo(PROTOCOL_ALL, svrAddr.c_str());
 

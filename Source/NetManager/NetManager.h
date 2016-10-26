@@ -170,7 +170,7 @@ public:
 
   /** @name Game-functions.                                         *////@{
   void startGameServer();
-  void startGameClient();
+  void startGameClient(std::string ip);
   bool multiPlayerInit(int maskDepth = MASK_DEPTH);
   bool broadcastUDPInvitation(int maskDepth = MASK_DEPTH);
   bool joinMultiPlayer(std::string invitation);

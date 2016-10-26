@@ -48,7 +48,8 @@ void Core::createModules ()
 	}
 	else
 	{
-		mNetMgr->startGameClient();
+		std::string ip = "128.83.144.162";
+		mNetMgr->startGameClient(ip);
 	}
 
 	// Create SceneController last, since it sets up the initial scene
