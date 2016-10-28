@@ -21,8 +21,8 @@
 
 using Ogre::Vector3;
 
-// bool server = true;
-bool server = false;
+bool server = true;
+// bool server = false;
 
 void Core::createModules ()
 {
@@ -46,17 +46,18 @@ void Core::createModules ()
 	if (server)
 	{
 		mNetMgr->startGameServer();
-	}
-	else
-	{
-		std::string ip = "128.83.144.162";
-		bool startGameClient = mNetMgr->startGameClient(ip);
-		printf("\t\t\t startGameClient: %d\n",startGameClient);
-
 		// while(!mNetMgr->scanForActivity())
 		// {
 		// 	// check the external bin
 		// }
+	}
+	else
+	{
+		std::string ip = "128.83.144.121";
+		bool startGameClient = mNetMgr->startGameClient(ip);
+		printf("\t\t\t startGameClient: %d\n",startGameClient);
+		const char tmp = 'z'; 
+		mNetMgr->messageServer(PROTOCOL_UDP, &tmp, 1);
 	}
 
 	// Create SceneController last, since it sets up the initial scene

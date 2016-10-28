@@ -776,7 +776,7 @@ bool NetManager::joinMultiPlayer(std::string invitation) {
   // std::string svrAddr = invitation.substr(STR_OPEN.length());
   // stopServer();
   initNetManager();
-  addNetworkInfo(PROTOCOL_ALL, invitation.c_str());
+  addNetworkInfo(PROTOCOL_UDP, invitation.c_str());
 
   return startClient();
 }

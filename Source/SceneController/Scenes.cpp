@@ -69,7 +69,7 @@ namespace scene1
 		// Set up Sphere
 		constexpr float kScale = .1;
 		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
-		sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 10, 1, true);
+		sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 10000, 1, true);
 		sphere->isBall = true;
 		AudioPlayer* ap = sphere->createComponent<AudioPlayer>();
 
