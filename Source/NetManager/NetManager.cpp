@@ -696,15 +696,15 @@ void NetManager::denyConnections() {
 bool NetManager::startGameServer ()
 {
   initNetManager();
-  addNetworkInfo();
+  addNetworkInfo(PROTOCOL_UDP);
   std::cout << "Starting Servers Server Returns: " << startServer() << std::endl;
-  std::cout << "Initial Broadcast self-recieved: " << multiPlayerInit() << std::endl;
+  // std::cout << "Initial Broadcast self-recieved: " << multiPlayerInit() << std::endl;
 
-  while (true)
-  {
-    broadcastUDPInvitation();
-    // std::cout << "Connections = " << getUDPClients() << std::endl;
-  }
+  // while (true)
+  // {
+  //   broadcastUDPInvitation();
+  //   // std::cout << "Connections = " << getUDPClients() << std::endl;
+  // }
 }
 
 bool NetManager::startGameClient (std::string ip)

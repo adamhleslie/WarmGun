@@ -21,8 +21,8 @@
 
 using Ogre::Vector3;
 
-bool server = true;
-// bool server = false;
+// bool server = true;
+bool server = false;
 
 void Core::createModules ()
 {
@@ -46,14 +46,16 @@ void Core::createModules ()
 	if (server)
 	{
 		mNetMgr->startGameServer();
-		// while(!mNetMgr->scanForActivity())
-		// {
-		// 	// check the external bin
-		// }
+		printf("\t\t\t doing scanForActivity\n");
+		while(!mNetMgr->scanForActivity())
+		{
+			// check the external bin
+		}
+		printf("\t\t\t finished scanForActivity\n");
 	}
 	else
 	{
-		std::string ip = "128.83.144.121";
+		std::string ip = "128.83.144.122";
 		bool startGameClient = mNetMgr->startGameClient(ip);
 		printf("\t\t\t startGameClient: %d\n",startGameClient);
 		const char tmp = 'z'; 
