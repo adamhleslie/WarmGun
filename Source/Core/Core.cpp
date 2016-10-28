@@ -52,20 +52,10 @@ void Core::createModules ()
 
 		}
 		printf("\t\t\t finished scanForActivity\n");
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[0].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[1].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[2].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[3].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[4].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[5].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[6].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[7].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[8].updated);
-		printf("\t\t\t %d\n", mNetMgr->udpServerData[9].updated);
 	}
 	else
 	{
-		std::string ip = "128.83.144.122";
+		std::string ip = "128.83.144.145";
 		bool startGameClient = mNetMgr->startGameClient(ip);
 		printf("\t\t\t startGameClient: %d\n",startGameClient);
 		const char tmp = 'z'; 

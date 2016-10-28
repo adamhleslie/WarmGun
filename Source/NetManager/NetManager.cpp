@@ -1565,31 +1565,38 @@ int NetManager::readUDPSocket(int clientIdx) {
     printError("NetManager: Failed to read UDP packet.");
     ret = 0;
   } else {
+    printf("\t\t\t numPackets: %d\n", numPackets);
     ret = numPackets;
 
     for (i = 0; i < numPackets; i++) {
+      printf("\t\t\t in the loop\n");
 
       if (bufV[i]->channel == -1) {                         // Unbound sender.
         if (bufV[i]->address.host == getIPnbo() || (netStatus & NET_CLIENT)) {
           //   Our own packet from broadcast    OR  non-server to a client.
+          printf("\t\t\t Our own packet from broadcast    OR  non-server to a client.\n");
           if (netStatus & NET_CLIENT)
             printError("NetManager: Invalid packet source.");
           ret--;
         } else if (0 == STR_DENY.compare((const char *) bufV[i]->data)) {
           // Received rejection packet.  Don't process it (for now).
+          printf("Received rejection packet.  Don't process it (for now).\n");
           ret--;
         } else if (!addUDPClient(bufV[i])) {
           // Try to add the client; if not, at least copy the data.
+          printf("Try to add the client; if not, at least copy the data.\n");
           memcpy(cData[i].output, bufV[i]->data, bufV[i]->len);
           cData[i].updated = true;
         }
       } else {                                               // Bound sender.
         if (netStatus & NET_CLIENT) {
           // Message comes from server, cData default is good (above).
+          printf("Message comes from server, cData default is good (above).\n");
           memcpy(cData[i].output, bufV[i]->data, bufV[i]->len);
           cData[i].updated = true;
         } else if ((client = lookupClient(bufV[i]->address.host, false))) {
           // Message comes from client, lookup new cData.
+          printf("Message comes from client, lookup new cData.\n");
           cData = udpClientData[client->udpDataIdx];
           memcpy(cData->output, bufV[i]->data, bufV[i]->len);
           cData->updated = true;
@@ -1605,6 +1612,7 @@ int NetManager::readUDPSocket(int clientIdx) {
   if (bufV)
     freeUDPpacketV(&bufV);
 
+  printf("\t\t\t about to finish readUDPSocket\n");
   return ret;
 }
 
