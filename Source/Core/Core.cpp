@@ -46,12 +46,22 @@ void Core::createModules ()
 	if (server)
 	{
 		mNetMgr->startGameServer();
-		printf("\t\t\t doing scanForActivity\n");
+		printf("\t\t\t about to scanForActivity\n");
 		while(!mNetMgr->scanForActivity())
 		{
-			// check the external bin
+
 		}
 		printf("\t\t\t finished scanForActivity\n");
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[0].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[1].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[2].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[3].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[4].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[5].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[6].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[7].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[8].updated);
+		printf("\t\t\t %d\n", mNetMgr->udpServerData[9].updated);
 	}
 	else
 	{
@@ -59,7 +69,7 @@ void Core::createModules ()
 		bool startGameClient = mNetMgr->startGameClient(ip);
 		printf("\t\t\t startGameClient: %d\n",startGameClient);
 		const char tmp = 'z'; 
-		mNetMgr->messageServer(PROTOCOL_UDP, &tmp, 1);
+		mNetMgr->messageServer(PROTOCOL_UDP, &tmp, 100);
 	}
 
 	// Create SceneController last, since it sets up the initial scene
