@@ -42,6 +42,10 @@ enum {
   PROTOCOL_ALL        = PROTOCOL_TCP | PROTOCOL_UDP     //!< Combined bit flag.
 };
 
+enum {
+  GAME_START, GAME_OVER 
+};
+
 /**
  * Internal state information packaging.
  */

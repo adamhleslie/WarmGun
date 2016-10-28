@@ -55,7 +55,7 @@ void Core::createModules ()
 	}
 	else
 	{
-		std::string ip = "128.83.144.145";
+		std::string ip = "128.83.144.133";
 		bool startGameClient = mNetMgr->startGameClient(ip);
 		printf("\t\t\t startGameClient: %d\n",startGameClient);
 		const char tmp = 'z'; 
