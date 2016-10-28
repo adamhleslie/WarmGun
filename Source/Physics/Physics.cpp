@@ -42,7 +42,7 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 		if (notBall->isPaddle)
 		{
 			// Play sound 1
-			ballAudio->playSound(1);
+			// ballAudio->playSound(1);
 			sGui->scorePoint();
 		}
 		else if (notBall->isGround)
@@ -52,14 +52,14 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 			Ogre::ParticleSystem* particle = dynamic_cast<Ogre::ParticleSystem*>(ball->getTransform()->getSceneNode()->getAttachedObject(1));
 			assert(particle);
 			particle->setEmitting(true);
-			ballAudio->playSound(2);
+			// ballAudio->playSound(2);
 			sGui->lose();
 			sHitGround = true;
 		}
 		else
 		{
 			// Play sound 3
-			ballAudio->playSound(3);
+			// ballAudio->playSound(3);
 		}
 	}
 

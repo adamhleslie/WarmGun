@@ -55,18 +55,20 @@ void InputManager::initialise( Ogre::RenderWindow *renderWindow ) {
  
         // Fill parameter list
         windowHndStr << windowHnd;
-        paramList.insert( std::make_pair( std::string( "WINDOW" ), windowHndStr.str() ) );
- 
+        paramList.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+        paramList.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
+        paramList.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+
         // Create inputsystem
         mInputSystem = OIS::InputManager::createInputSystem( paramList );
  
         // If possible create a buffered keyboard
         // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
-        //if( mInputSystem->numKeyboards() > 0 ) {
-        // if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
-        //     mKeyboard = dynamic_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
-        //     mKeyboard->setEventCallback( this );
-        // }
+        // if( mInputSystem->numKeyboards() > 0 ) {
+        if (mInputSystem->getNumberOfDevices(OIS::OISKeyboard) > 0) {
+            mKeyboard = dynamic_cast<OIS::Keyboard*>( mInputSystem->createInputObject( OIS::OISKeyboard, true ) );
+            mKeyboard->setEventCallback( this );
+        }
  
         // If possible create a buffered mouse
         // (note: if below line doesn't compile, try:  if (mInputSystem->getNumberOfDevices(OIS::OISMouse) > 0) {
@@ -92,9 +94,9 @@ void InputManager::update( void ) {
     //     mMouse->capture();
     // }
  
-    // if( mKeyboard ) {
-    //     mKeyboard->capture();
-    // }
+    if( mKeyboard ) {
+        mKeyboard->capture();
+    }
  
 }
  

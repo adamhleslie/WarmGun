@@ -5,12 +5,11 @@
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 #include <OgreVector3.h>
+#include <btBulletDynamicsCommon.h>
 
 class Entity;
 class Physics;
 class btCollisionShape;
-class btDefaultMotionState;
-class btRigidBody;
 
 enum Shape
 {
@@ -18,24 +17,25 @@ enum Shape
 	kSphere
 };
 
-class Transform : public Component
+class Transform : public Component, public btMotionState
 {
 public:
-	Transform() {  }
+	Transform () {}
 	~Transform();
 
 	void attachRigidbody(Shape shape, const Ogre::Vector3& size, float mass = 0, float restitution = 0, bool customCallback = false);
 	void removeRigidbody();
-	// void translate();
-	// void rotate();
-	// void applyForce();
 
-	void synchronizeSceneNode();
+	void getWorldTransform(btTransform& worldTrans) const override;
+	void setWorldTransform(const btTransform& worldTrans) override;
+
+	void updateWorldTransformPosition();
+	void updateWorldTransformRotation();
+
+	void translate(const Ogre::Vector3& direction);
+	void rotate(const Ogre::Quaternion& rotation);
 
 	Ogre::SceneNode* getSceneNode(); 
-
-	void translate(const Ogre::Vector3&);
-	void rotate(const Ogre::Quaternion&);
 
 protected:
 	void postLoad() override;
@@ -46,9 +46,10 @@ private:
 	Ogre::SceneNode* mNode = nullptr;
 
 	// Physics state
+	bool mKinematic = true;
+
 	Physics* mPhysics = nullptr;
-	float mMass = 0;
 	btCollisionShape* mCollisionShape = nullptr;
-	btDefaultMotionState* mMotionState = nullptr;
 	btRigidBody* mRigidBody = nullptr;
+	btTransform mWorldTrans;
 };

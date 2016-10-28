@@ -111,16 +111,13 @@ void Core::run ()
 				module->update();
 			}
 
-			// bool pollForActivity = mNetMgr->pollForActivity(0);
-			// printf("\t\t\tscanForActivity: %d\n", pollForActivity);
-
 			// Update physics
 			mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
-			for (Entity* entity : mEntities)
-			{
-				if (entity->isUpdating())
-					entity->getTransform()->synchronizeSceneNode();
-			}
+			// for (Entity* entity : mEntities)
+			// {
+			// 	if (entity->isUpdating())
+			// 		entity->getTransform()->synchronizeSceneNode();
+			// }
 
 			accumulator -= kTimeStepMs;
 		}
@@ -210,11 +207,6 @@ Renderer* Core::getRenderer ()
 	return mRenderer;
 }
 
-// void Core::stopRenderer()
-// {
-// 	mRenderer = false;
-// }
-
 Physics* Core::getPhysics ()
 {
 	return mPhysics;
@@ -266,16 +258,3 @@ void Core::unloadModule (Module* module, bool findAndRemove /* = true */)
 			stopUpdatingModule(module);
 	}
 }
-
-
-// bool Core::Quit(const CEGUI::EventArgs& e) {
-
-// 	mRenderer->mRunning = false;
-//     return true;
-// }
-
-// bool Core::Replay(const CEGUI::EventArgs &e) {
-
-// 	//TODO: reset values, start again
-// 	return true;
-// }
