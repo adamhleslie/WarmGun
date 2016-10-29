@@ -42,7 +42,7 @@ void PaddleController::update ()
 	}
 	else
 	{
-		// both non-zero
+		// both non-zero and different
 		rotation = Ogre::Quaternion(Ogre::Degree(mRotate.x), Vector3(-1, 0, -1));
 	}
 	transform->rotate(rotation);
@@ -109,19 +109,19 @@ bool PaddleController::keyReleased (const OIS::KeyEvent& ke)
 	{
 		// Translation
 		case OIS::KC_A:
-			mDirection.x = 0;
+			mDirection.x -= mMove;
 			break;
 
 		case OIS::KC_D:
-			mDirection.x = 0;
+			mDirection.x += mMove;
 			break;
 
 		case OIS::KC_W:
-			mDirection.z = 0;
+			mDirection.z -= mMove;
 			break;
 
 		case OIS::KC_S:
-			mDirection.z = 0;
+			mDirection.z += mMove;
 			break;
 		 
 		// Rotation

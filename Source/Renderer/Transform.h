@@ -17,6 +17,7 @@ enum Shape
 	kSphere
 };
 
+// Rendering/Physics location component - handles all interaction between Ogre and Bullet
 class Transform : public Component, public btMotionState
 {
 public:
