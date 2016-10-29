@@ -14,5 +14,4 @@ class Audio : public Module
 		int play_s2();
 		int play_s3();
 		int play_s4();
-		int play_s5();
 };

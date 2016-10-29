@@ -71,9 +71,6 @@ int AudioPlayer::playSound(int i)
 		case 4:
 			audio->play_s4();
 			break;
-		case 5:
-			audio->play_s5();
-			break;
 	}
 }
 
