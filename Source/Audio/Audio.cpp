@@ -23,7 +23,7 @@ Audio::Audio ()
 	assert( s3 != NULL );
 	assert( s4 != NULL );
 
-	play_s4();
+	// play_s4();
 }
 
 Audio::~Audio ()

@@ -18,8 +18,11 @@
 #include <sstream>
 #include <iostream>
 #include <SDL/SDL_net.h>
+#include <initializer_list>
 
 #include "Module.h"
+
+class Transform;
 
 
 /* ****************************************************************************
@@ -35,29 +38,27 @@ typedef int Protocol;
  * Flags exposed to the user for function calls.
  */
 enum {
-  NET_SERVER          = 256,                            //!< Server bit flag.
-  NET_CLIENT          = 512,                            //!< Client bit flag.
-  PROTOCOL_TCP        = 1024,                           //!< TCP bit flag.
-  PROTOCOL_UDP        = 2048,                           //!< UDP bit flag.
-  PROTOCOL_ALL        = PROTOCOL_TCP | PROTOCOL_UDP     //!< Combined bit flag.
+	NET_SERVER          = 256,                            //!< Server bit flag.
+	NET_CLIENT          = 512,                            //!< Client bit flag.
+	PROTOCOL_TCP        = 1024,                           //!< TCP bit flag.
+	PROTOCOL_UDP        = 2048,                           //!< UDP bit flag.
+	PROTOCOL_ALL        = PROTOCOL_TCP | PROTOCOL_UDP     //!< Combined bit flag.
 };
 
-enum {
-  GAME_START, GAME_OVER 
-};
+enum GameStatusChange { kNone, kServerScored, kClientScored, kGameOver };
 
 /**
  * Internal state information packaging.
  */
 struct ConnectionInfo {
-  IPaddress address;                  //!< This connection's IPaddress.
-  Protocol protocols;                 //!< Associated protocols.
-  int tcpSocketIdx;                   //!< Index into the tcpSocket vector.
-  int udpSocketIdx;                   //!< Index into the udpSocket vector.
-  int tcpDataIdx;                     //!< Index into the tcpClientData vector.
-  int udpDataIdx;                     //!< Index into the udpClientData vector.
-  int udpChannel;                     //!< The associated UDP channel.
-  int clientIdx;                      //!< Index into the tcpClients vector.
+	IPaddress address;                  //!< This connection's IPaddress.
+	Protocol protocols;                 //!< Associated protocols.
+	int tcpSocketIdx;                   //!< Index into the tcpSocket vector.
+	int udpSocketIdx;                   //!< Index into the udpSocket vector.
+	int tcpDataIdx;                     //!< Index into the tcpClientData vector.
+	int udpDataIdx;                     //!< Index into the udpClientData vector.
+	int udpChannel;                     //!< The associated UDP channel.
+	int clientIdx;                      //!< Index into the tcpClients vector.
 };
 
 /**
@@ -67,10 +68,10 @@ struct ConnectionInfo {
  * \b flag \b when \b data \b is \b retrieved!
  */
 struct ClientData {
-  Uint32 host;                        //!< To differentiate bin owners.
-  bool updated;                       //!< Indicates new network output.
-  char output[128];                   //!< Received network data.
-  char input[128];                    //!< Target for automatic data pulls.
+	Uint32 host;                        //!< To differentiate bin owners.
+	bool updated;                       //!< Indicates new network output.
+	char output[128];                   //!< Received network data.
+	char input[128];                    //!< Target for automatic data pulls.
 };
 
 
@@ -128,166 +129,184 @@ static const Uint32 UINT_PRGRS(0xFF001000);
  */
 class NetManager : public Module {
 public:
-  /* ***************************************************
-   * Public
-   */
+	/* ***************************************************
+	 * Public
+	 */
 
-  NetManager();
-  virtual ~NetManager();
+	NetManager();
+	virtual ~NetManager();
 
-  /** @name Required Initialization Functions.                      *////@{
-  bool initNetManager();
-  void addNetworkInfo(Protocol protocol = PROTOCOL_ALL,
-      const char *host = NULL, Uint16 port = 0);
-  //! @}
+	/** @name Required Initialization Functions.                      *////@{
+	bool initNetManager();
+	void addNetworkInfo(Protocol protocol = PROTOCOL_ALL,
+			const char *host = NULL, Uint16 port = 0);
+	//! @}
 
-  /** @name Control Functions.                                      *////@{
-  bool startServer();
-  bool startClient();
-  int scanForActivity();
-  int pollForActivity(Uint32 timeout_ms = 5000);
-  void messageClients(Protocol protocol, const char *buf = NULL, int len = 0);
-  void messageServer(Protocol protocol, const char *buf = NULL, int len = 0);
-  void messageClient(Protocol protocol, int clientDataIdx, const char *buf, int len);
-  void dropClient(Protocol protocol, Uint32 host);
-  void stopServer(Protocol protocol = PROTOCOL_ALL);
-  void stopClient(Protocol protocol = PROTOCOL_ALL);
-  void close();
-  //! @}
+	/** @name Control Functions.                                      *////@{
+	bool startServer();
+	bool startClient();
+	int scanForActivity();
+	int pollForActivity(Uint32 timeout_ms = 5000);
+	void messageClients(Protocol protocol, const char *buf = NULL, int len = 0);
+	void messageServer(Protocol protocol, const char *buf = NULL, int len = 0);
+	void messageClient(Protocol protocol, int clientDataIdx, const char *buf, int len);
+	void dropClient(Protocol protocol, Uint32 host);
+	void stopServer(Protocol protocol = PROTOCOL_ALL);
+	void stopClient(Protocol protocol = PROTOCOL_ALL);
+	void close();
+	//! @}
 
-  /** @name Getters & Setters.                                      *////@{
-  bool addProtocol(Protocol protocol);
-  void setProtocol(Protocol protocol);
-  void setPort(Uint16 port);
-  void setHost(const char *host);
-  Uint32 getProtocol();
-  Uint16 getPort();
-  std::string getHostname();
-  std::string getIPstring();
-  std::string getMaskedIPstring(int subnetMask);
-  Uint32 getIPnbo();
-  int getClients();
-  int getUDPClients();
-  void acceptConnections();
-  void denyConnections();
-  //! @}
+	/** @name Getters & Setters.                                      *////@{
+	bool addProtocol(Protocol protocol);
+	void setProtocol(Protocol protocol);
+	void setPort(Uint16 port);
+	void setHost(const char *host);
+	Uint32 getProtocol();
+	Uint16 getPort();
+	std::string getHostname();
+	std::string getIPstring();
+	std::string getMaskedIPstring(int subnetMask);
+	Uint32 getIPnbo();
+	int getClients();
+	int getUDPClients();
+	void acceptConnections();
+	void denyConnections();
+	//! @}
 
-  /** @name Game-functions.                                         *////@{
-  bool startGameServer();
-  bool startGameClient(std::string ip);
-  bool multiPlayerInit(int maskDepth = MASK_DEPTH);
-  bool broadcastUDPInvitation(int maskDepth = MASK_DEPTH);
-  bool joinMultiPlayer(std::string invitation);
-  //! @}
+	/** @name Game-functions.                                         *////@{
+	void startGameServer(std::initializer_list<Transform*> recievedTransforms, std::initializer_list<Transform*> sentTransforms);
+	void recieveGameServer();
+	void sendGameServer();
 
-  ClientData tcpServerData;
-  ClientData udpServerData[10];
-  std::vector<ClientData *> tcpClientData;
-  std::vector<ClientData *> udpClientData;
+	void startGameClient(std::string ip, std::initializer_list<Transform*> recievedTransforms, std::initializer_list<Transform*> sentTransforms);
+	void recieveGameClient();
+	void sendGameClient();
+
+	GameStatusChange getStatusChange();
+	void setStatusChange(GameStatusChange status);
+
+	bool multiPlayerInit(int maskDepth = MASK_DEPTH);
+	bool broadcastUDPInvitation(int maskDepth = MASK_DEPTH);
+	bool joinMultiPlayer(std::string invitation);
+	//! @}
+
+	ClientData tcpServerData;
+	ClientData udpServerData[10];
+	std::vector<ClientData *> tcpClientData;
+	std::vector<ClientData *> udpClientData;
 
 
 private:
-  /* ***************************************************
-   * Private
-   */
-  enum {
-    ///@{
-    /** State management flag bits. */
-    NET_UNINITIALIZED   = 0,
-    NET_INITIALIZED     = 1,
-    NET_WAITING         = 2,
-    NET_RESOLVED        = 4,
-    NET_TCP_OPEN        = 8,
-    NET_UDP_OPEN        = 16,
-    NET_TCP_ACCEPT      = 32,
-    NET_UDP_BOUND       = 64,
-    ///@}
-    ///@{
-    /** Constants.                  */
-    PORT_RANDOM         = 0,
-    PORT_DEFAULT        = 51215,
-    CHANNEL_AUTO        = -1,
-    CHANNEL_DEFAULT     = 1,
-    CHANNEL_MAX         = 32,
-    SOCKET_TCP_MAX      = 12,
-    SOCKET_UDP_MAX      = 12,
-    SOCKET_ALL_MAX      = SOCKET_TCP_MAX + SOCKET_UDP_MAX,
-    SOCKET_SELF         = SOCKET_ALL_MAX + 1,
-    MESSAGE_COUNT       = 10,
-    MESSAGE_LENGTH      = 256,
-    MASK_DEPTH          = 24
-    ///@}
-  };
+	/* ***************************************************
+	 * Private
+	 */
+	enum {
+		///@{
+		/** State management flag bits. */
+		NET_UNINITIALIZED   = 0,
+		NET_INITIALIZED     = 1,
+		NET_WAITING         = 2,
+		NET_RESOLVED        = 4,
+		NET_TCP_OPEN        = 8,
+		NET_UDP_OPEN        = 16,
+		NET_TCP_ACCEPT      = 32,
+		NET_UDP_BOUND       = 64,
+		///@}
+		///@{
+		/** Constants.                  */
+		PORT_RANDOM         = 0,
+		PORT_DEFAULT        = 51215,
+		CHANNEL_AUTO        = -1,
+		CHANNEL_DEFAULT     = 1,
+		CHANNEL_MAX         = 32,
+		SOCKET_TCP_MAX      = 12,
+		SOCKET_UDP_MAX      = 12,
+		SOCKET_ALL_MAX      = SOCKET_TCP_MAX + SOCKET_UDP_MAX,
+		SOCKET_SELF         = SOCKET_ALL_MAX + 1,
+		MESSAGE_COUNT       = 10,
+		MESSAGE_LENGTH      = 256,
+		MASK_DEPTH          = 24
+		///@}
+	};
 
-  /** @name Direct SDL Call Wrappers                                *////@{
-  bool openServer(Protocol protocol, Uint16 port);
-  bool openClient(Protocol protocol, std::string addr, Uint16 port);
-  bool openTCPSocket (IPaddress *addr);
-  bool openUDPSocket (Uint16 port);
-  bool acceptTCP(TCPsocket server);
-  bool bindUDPSocket (UDPsocket sock, int channel, IPaddress *addr);
-  void unbindUDPSocket(UDPsocket sock, int channel);
-  bool sendTCP(TCPsocket sock, const void *data, int len);
-  bool sendUDP(UDPsocket sock, int channel, UDPpacket *pack);
-  bool recvTCP(TCPsocket sock, void *data, int maxlen);
-  bool recvUDP(UDPsocket sock, UDPpacket *pack);
-  bool sendUDPV(UDPsocket sock, UDPpacket **packetV, int npackets);
-  int recvUDPV(UDPsocket sock, UDPpacket **packetV);
-  void closeTCP(TCPsocket sock);
-  void closeUDP(UDPsocket sock);
-  IPaddress* queryTCPAddress(TCPsocket sock);
-  IPaddress* queryUDPAddress(UDPsocket sock, int channel);
-  //! @}
+	/** @name Direct SDL Call Wrappers                                *////@{
+	bool openServer(Protocol protocol, Uint16 port);
+	bool openClient(Protocol protocol, std::string addr, Uint16 port);
+	bool openTCPSocket (IPaddress *addr);
+	bool openUDPSocket (Uint16 port);
+	bool acceptTCP(TCPsocket server);
+	bool bindUDPSocket (UDPsocket sock, int channel, IPaddress *addr);
+	void unbindUDPSocket(UDPsocket sock, int channel);
+	bool sendTCP(TCPsocket sock, const void *data, int len);
+	bool sendUDP(UDPsocket sock, int channel, UDPpacket *pack);
+	bool recvTCP(TCPsocket sock, void *data, int maxlen);
+	bool recvUDP(UDPsocket sock, UDPpacket *pack);
+	bool sendUDPV(UDPsocket sock, UDPpacket **packetV, int npackets);
+	int recvUDPV(UDPsocket sock, UDPpacket **packetV);
+	void closeTCP(TCPsocket sock);
+	void closeUDP(UDPsocket sock);
+	IPaddress* queryTCPAddress(TCPsocket sock);
+	IPaddress* queryUDPAddress(UDPsocket sock, int channel);
+	//! @}
 
-  /** @name  UDP Packet Management.                                  *////@{
-  UDPpacket* craftUDPpacket(const char *buf, int len);
-  UDPpacket* allocUDPpacket(int size);
-  UDPpacket** allocUDPpacketV(int count, int size);
-  bool resizeUDPpacket(UDPpacket *pack, int size);
-  void freeUDPpacket(UDPpacket **pack);
-  void freeUDPpacketV(UDPpacket ***pack);
-  void processPacketData(const char *data);
-  //! @}
+	/** @name  UDP Packet Management.                                  *////@{
+	UDPpacket* craftUDPpacket(const char *buf, int len);
+	UDPpacket* allocUDPpacket(int size);
+	UDPpacket** allocUDPpacketV(int count, int size);
+	bool resizeUDPpacket(UDPpacket *pack, int size);
+	void freeUDPpacket(UDPpacket **pack);
+	void freeUDPpacketV(UDPpacket ***pack);
+	void processPacketData(const char *data);
+	//! @}
 
-  /** @name Socket Registration & Handling.                          *////@{
-  void watchSocket(TCPsocket sock);
-  void watchSocket(UDPsocket sock);
-  void unwatchSocket(TCPsocket sock);
-  void unwatchSocket(UDPsocket sock);
-  int checkSockets(Uint32 timeout_ms);
-  void readTCPSocket(int clientIdx);
-  int readUDPSocket(int clientIdx);
-  //! @}
+	/** @name Socket Registration & Handling.                          *////@{
+	void watchSocket(TCPsocket sock);
+	void watchSocket(UDPsocket sock);
+	void unwatchSocket(TCPsocket sock);
+	void unwatchSocket(UDPsocket sock);
+	int checkSockets(Uint32 timeout_ms);
+	void readTCPSocket(int clientIdx);
+	int readUDPSocket(int clientIdx);
+	//! @}
 
-  /** @name Client Manipulation.                                     *////@{
-  bool addUDPClient(UDPpacket *pack);
-  void rejectTCPClient(TCPsocket sock);
-  void rejectUDPClient(UDPpacket *pack);
-  ConnectionInfo* lookupClient(Uint32 host, bool create);
-  //! @}
+	/** @name Client Manipulation.                                     *////@{
+	bool addUDPClient(UDPpacket *pack);
+	void rejectTCPClient(TCPsocket sock);
+	void rejectUDPClient(UDPpacket *pack);
+	ConnectionInfo* lookupClient(Uint32 host, bool create);
+	//! @}
 
-  /** @name Helper Functions.                                        *////@{
-  std::string ipToString(Uint32 host, int subnetMask);
-  bool statusCheck(int state);
-  bool statusCheck(int state1, int state2);
-  void clearFlags(int state);
-  void printError(std::string errorText);
-  void resetManager();
-  //! @}
+	/** @name Helper Functions.                                        *////@{
+	std::string ipToString(Uint32 host, int subnetMask);
+	bool statusCheck(int state);
+	bool statusCheck(int state1, int state2);
+	void clearFlags(int state);
+	void printError(std::string errorText);
+	void resetManager();
+	//! @}
 
-  bool forceClientRandomUDP;
-  bool acceptNewClients;
-  int nextUDPChannel;
-  int netStatus;
-  int netPort;
-  Uint32 netLocalHost;
-  Protocol netProtocol;
-  std::string netHostname;
-  ConnectionInfo netServer;
-  std::vector<ConnectionInfo *> netClients;
-  std::vector<TCPsocket> tcpSockets;
-  std::vector<UDPsocket> udpSockets;
-  SDLNet_SocketSet socketNursery;
+	// Game helper functions
+	char* createPacket();
+	void parsePacket(char* charPacket);
+
+	// Game-Variables
+	std::vector<Transform*> mRecievedTransforms;
+	std::vector<Transform*> mSentTransforms;
+	GameStatusChange mCurStatusChange = kNone;
+
+	bool forceClientRandomUDP;
+	bool acceptNewClients;
+	int nextUDPChannel;
+	int netStatus;
+	int netPort;
+	Uint32 netLocalHost;
+	Protocol netProtocol;
+	std::string netHostname;
+	ConnectionInfo netServer;
+	std::vector<ConnectionInfo *> netClients;
+	std::vector<TCPsocket> tcpSockets;
+	std::vector<UDPsocket> udpSockets;
+	SDLNet_SocketSet socketNursery;
 };
 
 #endif /* NETMANAGER_H_ */

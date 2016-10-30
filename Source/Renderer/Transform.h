@@ -36,6 +36,10 @@ public:
 	void translate(const Ogre::Vector3& direction);
 	void rotate(const Ogre::Quaternion& rotation);
 
+	const Ogre::Vector3& getPosition();
+	const Ogre::Quaternion& getRotation();
+	void setPositionAndRotation (const Ogre::Vector3& position, const Ogre::Quaternion& rotation);
+
 	Ogre::SceneNode* getSceneNode(); 
 
 protected:

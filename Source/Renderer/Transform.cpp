@@ -123,17 +123,45 @@ void Transform::updateWorldTransformRotation ()
 void Transform::translate (const Vector3& direction)
 {
 	mNode->translate(direction);
-	updateWorldTransformPosition();
 
-	mRigidBody->setCenterOfMassTransform(mWorldTrans);
+	if (mRigidBody)
+	{
+		updateWorldTransformPosition();
+		mRigidBody->setCenterOfMassTransform(mWorldTrans);
+	}
 }
 
 void Transform::rotate (const Ogre::Quaternion& rotation)
 {
 	Ogre::Quaternion totalRotation = rotation * mNode->getOrientation();
-
 	mNode->setOrientation(totalRotation);
-	updateWorldTransformRotation();
 
-	mRigidBody->setCenterOfMassTransform(mWorldTrans);
+	if (mRigidBody)
+	{
+		updateWorldTransformRotation();
+		mRigidBody->setCenterOfMassTransform(mWorldTrans);
+	}
+}
+
+const Vector3& Transform::getPosition ()
+{
+	return mNode->getPosition();
+}
+
+const Ogre::Quaternion& Transform::getRotation ()
+{
+	return mNode->getOrientation();
+}
+
+void Transform::setPositionAndRotation (const Vector3& position, const Ogre::Quaternion& rotation)
+{
+	mNode->setPosition(position);
+	mNode->setOrientation(rotation);
+
+	if (mRigidBody)
+	{
+		updateWorldTransformPosition();
+		updateWorldTransformRotation();
+		mRigidBody->setCenterOfMassTransform(mWorldTrans);
+	}
 }

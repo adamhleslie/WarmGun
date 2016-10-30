@@ -55,6 +55,7 @@ public:
 
 	Renderer* getRenderer();
 	Physics* getPhysics();
+	NetManager* getNetManager();
 
 // RESTRICTED API
 	// Enables/Disables updating of the given module, used by Module

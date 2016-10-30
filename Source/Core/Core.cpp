@@ -21,8 +21,8 @@
 
 using Ogre::Vector3;
 
-// bool server = true;
-bool server = false;
+bool server = true;
+// bool server = false;
 
 void Core::createModules ()
 {
@@ -42,25 +42,6 @@ void Core::createModules ()
 
  	mNetMgr = new NetManager();
 	loadModule(mNetMgr);
-
-	if (server)
-	{
-		mNetMgr->startGameServer();
-		printf("\t\t\t about to scanForActivity\n");
-		while(!mNetMgr->scanForActivity())
-		{
-
-		}
-		printf("\t\t\t finished scanForActivity\n");
-	}
-	else
-	{
-		std::string ip = "128.83.144.133";
-		bool startGameClient = mNetMgr->startGameClient(ip);
-		printf("\t\t\t startGameClient: %d\n",startGameClient);
-		const char tmp = 'z'; 
-		mNetMgr->messageServer(PROTOCOL_UDP, &tmp, 100);
-	}
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -115,12 +96,17 @@ void Core::run ()
 			}
 
 			// Update physics
-			mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
-			// for (Entity* entity : mEntities)
-			// {
-			// 	if (entity->isUpdating())
-			// 		entity->getTransform()->synchronizeSceneNode();
-			// }
+			if (server)
+			{
+				mNetMgr->recieveGameServer();
+				mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
+				mNetMgr->sendGameServer();
+			}
+			else
+			{
+				mNetMgr->sendGameClient();
+				mNetMgr->recieveGameClient();
+			}
 
 			accumulator -= kTimeStepMs;
 		}
@@ -213,6 +199,11 @@ Renderer* Core::getRenderer ()
 Physics* Core::getPhysics ()
 {
 	return mPhysics;
+}
+
+NetManager* Core::getNetManager ()
+{
+	return mNetMgr;
 }
 
 // module should not be in mUpdatingModules
