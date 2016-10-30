@@ -135,3 +135,4 @@ void Transform::rotate (const Ogre::Quaternion& rotation)
 
 	synchronizeSceneNode ();
 }
+

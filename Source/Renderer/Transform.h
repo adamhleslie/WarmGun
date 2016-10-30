@@ -37,6 +37,8 @@ public:
 	void translate(const Ogre::Vector3&);
 	void rotate(const Ogre::Quaternion&);
 
+	btRigidBody* mRigidBody = nullptr;
+	
 protected:
 	void postLoad() override;
 
@@ -50,5 +52,4 @@ private:
 	float mMass = 0;
 	btCollisionShape* mCollisionShape = nullptr;
 	btDefaultMotionState* mMotionState = nullptr;
-	btRigidBody* mRigidBody = nullptr;
 };
