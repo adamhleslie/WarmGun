@@ -76,6 +76,8 @@ Physics::Physics (GUI* gui)
 	mOverlappingPairs = new btDbvtBroadphase();
 	mSolver = new btSequentialImpulseConstraintSolver();
 	mWorld = new btDiscreteDynamicsWorld(mCollisionDispatcher, mOverlappingPairs, mSolver, mCollisionConfig);
+	btVector3 tmp(0,0,0);
+	mWorld->setGravity(tmp);
 
 	gContactProcessedCallback = (ContactProcessedCallback) HandleBallContact;
 
