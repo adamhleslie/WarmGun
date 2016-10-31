@@ -130,7 +130,7 @@ namespace wellGame
 		else if (client)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameClient("128.83.144.170", {sphere->getTransform()}, {paddle->getTransform()});
+			netMgr->startGameClient("128.83.144.121", {sphere->getTransform()}, {paddle->getTransform()});
 		}
 	}
 

@@ -55,6 +55,8 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 			ballAudio->playSound(2);
 			sGui->lose();
 			sHitGround = true;
+
+			printf("\t\t\t the client won\n");
 		}
 		else
 		{
