@@ -78,20 +78,18 @@ namespace wellGame
 		if (createRigidbody)
 			paddle->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
 		paddle->isPaddle = true;
-		// if (server || !client)
-		// {
-			Ogre::Camera* paddleCam = core->getRenderer()->getSceneManager()->createCamera("Main Camera");
-			paddleCam->setPosition(0, 400, 0);
-			paddleCam->lookAt(Vector3(0, 1, .1));
-			paddleCam->setNearClipDistance(5);
-			renderer->switchCamera(paddleCam);
+
+		Ogre::Camera* paddleCam = core->getRenderer()->getSceneManager()->createCamera("Main Camera");
+		paddleCam->setPosition(0, 400, 0);
+		paddleCam->lookAt(Vector3(0, 1, .1));
+		paddleCam->setNearClipDistance(5);
+		renderer->switchCamera(paddleCam);
 		if (!server)
 		{
 			PaddleController* pt = paddle->createComponent<PaddleController>();
 			pt->mCamera = paddleCam;
 			pt->ap = ap;
 		}
-		// }
 		
 		// // Set up paddle 2
 		// Entity* paddle2 = core->createEntity(kCube, "Rockwall", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));

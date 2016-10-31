@@ -45,7 +45,7 @@ enum {
 	PROTOCOL_ALL        = PROTOCOL_TCP | PROTOCOL_UDP     //!< Combined bit flag.
 };
 
-enum GameStatusChange { kNone, kServerScored, kClientScored, kGameOver };
+enum GameStatusChange { kNone, kServerWon, kClientWon, kOtherPlyerQuit };
 
 /**
  * Internal state information packaging.
