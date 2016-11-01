@@ -93,23 +93,17 @@ namespace wellGame
 			pt->ap = ap;
 		}
 		
-		// // Set up paddle 2
-		// Entity* paddle2 = core->createEntity(kCube, "Rockwall", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
-		// if (createRigidbody)
-		// 	paddle2->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
-		// paddle2->isPaddle = true;
-		// if (client)
-		// {
-		// 	Ogre::Camera* paddleCam = core->getRenderer()->getSceneManager()->createCamera("Main Camera");
-		// 	paddleCam->setPosition(0, 400, 0);
-		// 	paddleCam->lookAt(Vector3(0, 1, .1));
-		// 	paddleCam->setNearClipDistance(5);
-		// 	renderer->switchCamera(paddleCam);
-
-		// 	PaddleController* pt = paddle2->createComponent<PaddleController>();
-		// 	pt->mCamera = paddleCam;
-		// 	pt->ap = ap;
-		// }
+		// Set up paddle 2
+		Entity* paddle2 = core->createEntity(kCube, "RockwallBlue", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
+		if (createRigidbody)
+			paddle2->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
+		paddle2->isPaddle = true;
+		if (client)
+		{
+			PaddleController* pt = paddle2->createComponent<PaddleController>();
+			pt->mCamera = paddleCam;
+			pt->ap = ap;
+		}
 
 		// Set up ground
 		Entity* ground = core->createEntity(kCube, "SpaceSkyPlane", false, Vector3(1, .01, 1), Vector3::ZERO, Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
