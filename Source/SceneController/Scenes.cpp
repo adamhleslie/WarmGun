@@ -35,7 +35,7 @@ namespace wellGame
 	{
 		Entity* ground = core->createEntity(kCube, "BumpyMetal", false, size, position, rotation);
 		if (createRigidbody)
-			ground->getTransform()->attachRigidbody(kCube, rigidbodySize, 0, 1.5);
+			ground->getTransform()->attachRigidbody(kCube, rigidbodySize, 0, 1);
 	}
 
 	void createWellLevel (Core* core, bool createRigidbody, bool server, bool client)
@@ -63,7 +63,7 @@ namespace wellGame
 
 		// Set up Sphere
 		constexpr float kScale = .1;
-		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
+		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 200, 0));
 		if (createRigidbody)
 			sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 1, 1, true);
 		btVector3 tmp1(0,-100000/2,0);
@@ -114,6 +114,11 @@ namespace wellGame
 		if (createRigidbody)
 			ground->getTransform()->attachRigidbody(kCube, Vector3(50, 1, 50), 0, 0);
 		ground->isGround = true;
+
+		// Set up the ceiling
+		Entity* ceiling = core->createEntity(kCube, "SpaceSkyPlaneTransparent", false, Vector3(1, .01, 1), Vector3(0, 300, 0), Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
+		if (createRigidbody)
+			ceiling->getTransform()->attachRigidbody(kCube, Vector3(50, 1, 50), 0, 1);
 
 		// Set up walls
 		constructWall(core, createRigidbody, Vector3(1, 0, 3), Vector3(50, 1, 150), Vector3(0, 150, 50), Quaternion(Ogre::Degree(-90), Vector3(1, 0, 0)));

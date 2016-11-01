@@ -69,6 +69,26 @@ material SpaceSkyPlane
 	}
 }
 
+material SpaceSkyPlaneTransparent
+{
+	technique
+	{
+		pass
+		{
+			scene_blend alpha_blend
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				texture spacesky.jpg
+				colour_op_ex source1 src_manual src_current 1 0 0
+				alpha_op_ex source1 src_manual src_current 0
+			}
+		}
+	}
+}
+
 material Chrome
 {
 	technique
