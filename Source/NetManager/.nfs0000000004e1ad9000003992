@@ -45,7 +45,7 @@ enum {
 	PROTOCOL_ALL        = PROTOCOL_TCP | PROTOCOL_UDP     //!< Combined bit flag.
 };
 
-enum GameStatusChange { kNone, kServerWon, kClientWon, kOtherPlayerQuit };
+enum GameStatusChange { kNone, kServerWon, kClientWon, kOtherPlyerQuit };
 
 /**
  * Internal state information packaging.
@@ -292,8 +292,7 @@ private:
 	// Game-Variables
 	std::vector<Transform*> mRecievedTransforms;
 	std::vector<Transform*> mSentTransforms;
-	GameStatusChange mReceivedStatusChange = kNone;
-	GameStatusChange mSentStatusChange = kNone;
+	GameStatusChange mCurStatusChange = kNone;
 
 	bool forceClientRandomUDP;
 	bool acceptNewClients;

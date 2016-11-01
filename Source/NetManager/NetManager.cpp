@@ -746,14 +746,18 @@ void NetManager::recieveGameClient ()
 {
 	while(!pollForActivity()) {}
 	parsePacket(tcpServerData.output);
+	if (getStatusChange() == kServerWon)
+	{
+		std::cout << "!!!!!!!!!SERVER WON!!!!!!!!" << std::endl;
+	}
 }
 
 char* NetManager::createPacket ()
 {
 	double* packet = new double[(mSentTransforms.size() * 7) + 1];
 
-	packet[0] = *((double*) &(mCurStatusChange));
-	mCurStatusChange = kNone;
+	packet[0] = *((double*) &(mSentStatusChange));
+	mSentStatusChange = kNone;
 
 	for (int i = 0; i < mSentTransforms.size(); i++)
 	{
@@ -778,7 +782,7 @@ char* NetManager::createPacket ()
 void NetManager::parsePacket (char* charPacket)
 {
 	double* packet = (double*) charPacket;
-	mCurStatusChange = (GameStatusChange) packet[0];
+	mReceivedStatusChange = (GameStatusChange) packet[0];
 
 	for (int i = 0; i < mRecievedTransforms.size(); i++)
 	{
@@ -793,12 +797,12 @@ void NetManager::parsePacket (char* charPacket)
 
 GameStatusChange NetManager::getStatusChange ()
 {
-	return mCurStatusChange;
+	return mReceivedStatusChange;
 }
 
 void NetManager::setStatusChange (GameStatusChange status)
 {
-	mCurStatusChange = status;
+	mSentStatusChange = status;
 }
 
 

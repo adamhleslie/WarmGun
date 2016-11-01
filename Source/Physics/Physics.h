@@ -8,11 +8,12 @@ class btBroadphaseInterface;
 class btSequentialImpulseConstraintSolver;
 class btDiscreteDynamicsWorld;
 class GUI;
+class NetManager;
 
 class Physics : public Module
 {
 public:
-	Physics(GUI* gui);
+	Physics(GUI* gui, NetManager* netMgr);
 	~Physics();
 
 	btDiscreteDynamicsWorld* getWorld();

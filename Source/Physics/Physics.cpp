@@ -6,12 +6,14 @@
 #include "AudioPlayer.h"
 #include <OgreParticleSystem.h>
 #include "GUI.h"
+#include "NetManager.h"
 
 // Temporary Begin
 extern ContactProcessedCallback gContactProcessedCallback;
 
 static bool sHitGround = false;
 static GUI* sGui = nullptr;
+static NetManager* sNetMgr = nullptr;
 static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0, btCollisionObject* body1)
 {
 	if (!sHitGround)
@@ -55,8 +57,7 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 			ballAudio->playSound(2);
 			sGui->lose();
 			sHitGround = true;
-
-			printf("\t\t\t the client won\n");
+			sNetMgr->setStatusChange(kServerWon);
 		}
 		else
 		{
@@ -69,7 +70,7 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 }
 // Temporary End
 
-Physics::Physics (GUI* gui)
+Physics::Physics (GUI* gui, NetManager* netMgr)
 {
 	stopUpdating();
 
@@ -85,6 +86,9 @@ Physics::Physics (GUI* gui)
 
 	assert(gui);
 	sGui = gui;
+
+	assert(netMgr);
+	sNetMgr = netMgr;
 }
 
 Physics::~Physics ()

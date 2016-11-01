@@ -35,7 +35,7 @@ namespace wellGame
 	{
 		Entity* ground = core->createEntity(kCube, "BumpyMetal", false, size, position, rotation);
 		if (createRigidbody)
-			ground->getTransform()->attachRigidbody(kCube, rigidbodySize, 0, 1);
+			ground->getTransform()->attachRigidbody(kCube, rigidbodySize, 0, 1.5);
 	}
 
 	void createWellLevel (Core* core, bool createRigidbody, bool server, bool client)
@@ -63,11 +63,9 @@ namespace wellGame
 
 		// Set up Sphere
 		constexpr float kScale = .1;
-		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 200, 0));
+		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
 		if (createRigidbody)
-			sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 1, 1, true);
-		btVector3 tmp1(0,-100000/2,0);
-		sphere->getTransform()->mRigidBody->applyCentralForce(tmp1);
+			sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 10000, 1, true);
 		sphere->isBall = true;
 		AudioPlayer* ap = sphere->createComponent<AudioPlayer>();
 
@@ -86,39 +84,36 @@ namespace wellGame
 		paddleCam->lookAt(Vector3(0, 1, .1));
 		paddleCam->setNearClipDistance(5);
 		renderer->switchCamera(paddleCam);
-		if (!client)
+		if (!server)
 		{
 			PaddleController* pt = paddle->createComponent<PaddleController>();
 			pt->mCamera = paddleCam;
 			pt->ap = ap;
 		}
 		
-		// Set up paddle 2
-		Entity* paddle2 = nullptr;
-		if(server || client)
-		{
-			paddle2 = core->createEntity(kCube, "RockwallBlue", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
-			if (createRigidbody)
-				paddle2->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
-			paddle2->isPaddle = true;
-			if (client)
-			{
-				PaddleController* pt = paddle2->createComponent<PaddleController>();
-				pt->mCamera = paddleCam;
-				pt->ap = ap;
-			}
-		}
+		// // Set up paddle 2
+		// Entity* paddle2 = core->createEntity(kCube, "Rockwall", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
+		// if (createRigidbody)
+		// 	paddle2->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
+		// paddle2->isPaddle = true;
+		// if (client)
+		// {
+		// 	Ogre::Camera* paddleCam = core->getRenderer()->getSceneManager()->createCamera("Main Camera");
+		// 	paddleCam->setPosition(0, 400, 0);
+		// 	paddleCam->lookAt(Vector3(0, 1, .1));
+		// 	paddleCam->setNearClipDistance(5);
+		// 	renderer->switchCamera(paddleCam);
+
+		// 	PaddleController* pt = paddle2->createComponent<PaddleController>();
+		// 	pt->mCamera = paddleCam;
+		// 	pt->ap = ap;
+		// }
 
 		// Set up ground
 		Entity* ground = core->createEntity(kCube, "SpaceSkyPlane", false, Vector3(1, .01, 1), Vector3::ZERO, Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
 		if (createRigidbody)
 			ground->getTransform()->attachRigidbody(kCube, Vector3(50, 1, 50), 0, 0);
 		ground->isGround = true;
-
-		// Set up the ceiling
-		Entity* ceiling = core->createEntity(kCube, "SpaceSkyPlaneTransparent", false, Vector3(1, .01, 1), Vector3(0, 300, 0), Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
-		if (createRigidbody)
-			ceiling->getTransform()->attachRigidbody(kCube, Vector3(50, 1, 50), 0, 1);
 
 		// Set up walls
 		constructWall(core, createRigidbody, Vector3(1, 0, 3), Vector3(50, 1, 150), Vector3(0, 150, 50), Quaternion(Ogre::Degree(-90), Vector3(1, 0, 0)));
@@ -130,12 +125,12 @@ namespace wellGame
 		if (server)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameServer({paddle2->getTransform()}, {sphere->getTransform(), paddle->getTransform()});
+			netMgr->startGameServer({paddle->getTransform()}, {sphere->getTransform()});
 		}
 		else if (client)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameClient("128.83.144.121", {sphere->getTransform(), paddle->getTransform()}, {paddle2->getTransform()}); // receive, send
+			netMgr->startGameClient("128.83.144.170", {sphere->getTransform()}, {paddle->getTransform()});
 		}
 	}
 
@@ -157,8 +152,6 @@ namespace wellGame
 
 void SceneController::initScenes ()
 {
-	// Scene scene1(wellGame::loadSingleplayer);
 	Scene scene1(wellGame::loadGameServer);
-	// Scene scene1(wellGame::loadGameClient);
 	addScene(scene1);
 }
