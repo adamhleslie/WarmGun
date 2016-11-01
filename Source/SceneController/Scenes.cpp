@@ -86,7 +86,7 @@ namespace wellGame
 		paddleCam->lookAt(Vector3(0, 1, .1));
 		paddleCam->setNearClipDistance(5);
 		renderer->switchCamera(paddleCam);
-		if (!server)
+		if (!client)
 		{
 			PaddleController* pt = paddle->createComponent<PaddleController>();
 			pt->mCamera = paddleCam;
@@ -94,15 +94,19 @@ namespace wellGame
 		}
 		
 		// Set up paddle 2
-		Entity* paddle2 = core->createEntity(kCube, "RockwallBlue", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
-		if (createRigidbody)
-			paddle2->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
-		paddle2->isPaddle = true;
-		if (client)
+		Entity* paddle2 = nullptr;
+		if(server || client)
 		{
-			PaddleController* pt = paddle2->createComponent<PaddleController>();
-			pt->mCamera = paddleCam;
-			pt->ap = ap;
+			paddle2 = core->createEntity(kCube, "RockwallBlue", true, Vector3(kScale, kScale, kScale), Vector3(0, 20, 0));
+			if (createRigidbody)
+				paddle2->getTransform()->attachRigidbody(kCube, Vector3(kScale * 50, kScale * 50, kScale * 50), 0, 1);
+			paddle2->isPaddle = true;
+			if (client)
+			{
+				PaddleController* pt = paddle2->createComponent<PaddleController>();
+				pt->mCamera = paddleCam;
+				pt->ap = ap;
+			}
 		}
 
 		// Set up ground
