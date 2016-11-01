@@ -121,12 +121,12 @@ namespace wellGame
 		if (server)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameServer({paddle->getTransform()}, {sphere->getTransform()});
+			netMgr->startGameServer({paddle2->getTransform()}, {sphere->getTransform(), paddle->getTransform()});
 		}
 		else if (client)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameClient("128.83.144.121", {sphere->getTransform()}, {paddle->getTransform()});
+			netMgr->startGameClient("128.83.144.121", {sphere->getTransform(), paddle->getTransform()}, {paddle2->getTransform()}); // receive, send
 		}
 	}
 
