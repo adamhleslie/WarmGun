@@ -65,7 +65,9 @@ namespace wellGame
 		constexpr float kScale = .1;
 		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 300, 0));
 		if (createRigidbody)
-			sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 10000, 1, true);
+			sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 1, 1, true);
+		btVector3 tmp1(0,-100000/2,0);
+		sphere->getTransform()->mRigidBody->applyCentralForce(tmp1);
 		sphere->isBall = true;
 		AudioPlayer* ap = sphere->createComponent<AudioPlayer>();
 
@@ -152,6 +154,8 @@ namespace wellGame
 
 void SceneController::initScenes ()
 {
-	Scene scene1(wellGame::loadGameServer);
+	Scene scene1(wellGame::loadSingleplayer);
+	// Scene scene1(wellGame::loadGameServer);
+	// Scene scene1(wellGame::loadGameClient);
 	addScene(scene1);
 }

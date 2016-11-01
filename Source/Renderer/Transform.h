@@ -42,6 +42,8 @@ public:
 
 	Ogre::SceneNode* getSceneNode(); 
 
+	btRigidBody* mRigidBody = nullptr;
+	
 protected:
 	void postLoad() override;
 
@@ -55,6 +57,6 @@ private:
 
 	Physics* mPhysics = nullptr;
 	btCollisionShape* mCollisionShape = nullptr;
-	btRigidBody* mRigidBody = nullptr;
 	btTransform mWorldTrans;
+	btDefaultMotionState* mMotionState = nullptr;
 };

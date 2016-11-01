@@ -98,9 +98,9 @@ void Core::run ()
 			// Update physics
 			if (server)
 			{
-				mNetMgr->recieveGameServer();
+				// mNetMgr->recieveGameServer();
 				mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
-				mNetMgr->sendGameServer();
+				// mNetMgr->sendGameServer();
 			}
 			else
 			{
