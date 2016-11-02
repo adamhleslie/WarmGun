@@ -138,7 +138,7 @@ namespace wellGame
 		else if (client)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameClient("128.83.144.121", {sphere->getTransform(), paddle->getTransform()}, {paddle2->getTransform()}); // receive, send
+			netMgr->startGameClient("128.83.144.133", {sphere->getTransform(), paddle->getTransform()}, {paddle2->getTransform()}); // receive, send
 		}
 	}
 
@@ -161,7 +161,7 @@ namespace wellGame
 void SceneController::initScenes ()
 {
 	// Scene scene1(wellGame::loadSingleplayer);
-	Scene scene1(wellGame::loadGameServer);
-	// Scene scene1(wellGame::loadGameClient);
+	// Scene scene1(wellGame::loadGameServer);
+	Scene scene1(wellGame::loadGameClient);
 	addScene(scene1);
 }

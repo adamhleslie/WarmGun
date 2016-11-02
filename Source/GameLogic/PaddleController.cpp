@@ -96,6 +96,11 @@ bool PaddleController::keyPressed (const OIS::KeyEvent& ke)
 			break;
 
 
+		// Other
+		case OIS::KC_1:
+			printf("\t\t\t PRESSED 1 \n");
+			break;
+
 		default:
 			break;
 	}

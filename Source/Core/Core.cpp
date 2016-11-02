@@ -21,8 +21,8 @@
 
 using Ogre::Vector3;
 
-bool server = true;
-// bool server = false;
+// bool server = true;
+bool server = false;
 
 void Core::createModules ()
 {

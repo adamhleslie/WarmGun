@@ -193,7 +193,9 @@ bool InputManager::keyPressed( const OIS::KeyEvent &e ) {
     itKeyListener    = mKeyListeners.begin();
     itKeyListenerEnd = mKeyListeners.end();
     for(; itKeyListener != itKeyListenerEnd; ++itKeyListener ) {
+        printf("\t\t\t InputManager::keyPressed\n"); // only happens when you press the key
         if(!itKeyListener->second->keyPressed( e ))
+            printf("\t\t\t if in the InputManager::keyPressed\n"); // only happens when you press the key
             break;
     }
  

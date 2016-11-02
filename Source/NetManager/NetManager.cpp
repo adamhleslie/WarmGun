@@ -1657,7 +1657,8 @@ int NetManager::readUDPSocket(int clientIdx) {
 			printf("\t\t\t in the loop\n");
 
 			if (bufV[i]->channel == -1) {                         // Unbound sender.
-				if (bufV[i]->address.host == getIPnbo() || (netStatus & NET_CLIENT)) {
+				// if (bufV[i]->address.host == getIPnbo() || (netStatus & NET_CLIENT)) {
+				if (false) {
 					//   Our own packet from broadcast    OR  non-server to a client.
 					printf("\t\t\t Our own packet from broadcast    OR  non-server to a client.\n");
 					if (netStatus & NET_CLIENT)
