@@ -158,10 +158,18 @@ namespace wellGame
 	}
 }
 
+void SceneController::initSingleplayer ()
+{
+	Scene scene1(wellGame::loadSingleplayer);
+	addScene(scene1);
+
+	loadInitialScene();
+}
+
 void SceneController::initScenes ()
 {
 	// Scene scene1(wellGame::loadSingleplayer);
 	// Scene scene1(wellGame::loadGameServer);
-	Scene scene1(wellGame::loadGameClient);
-	addScene(scene1);
+	// Scene scene1(wellGame::loadGameClient);
+	// addScene(scene1);
 }

@@ -20,6 +20,8 @@ public:
 	// if additive, prior scenes are not unloaded
 	void loadNextScene(bool additive = false);
 
+	void initSingleplayer();
+
 protected:
 	void postLoad() override;
 

@@ -21,27 +21,27 @@
 
 using Ogre::Vector3;
 
-// bool server = true;
-bool server = false;
+bool server = true;
+// bool server = false;
 
 void Core::createModules ()
 {
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
 
-	GUI* gui = new GUI(mRenderer->getRenderWindow());
-	loadModule(gui);
-
 	mNetMgr = new NetManager();
 	loadModule(mNetMgr);
-
-	mPhysics = new Physics(gui, mNetMgr);
-	loadModule(mPhysics);
 
 	loadModule(new Audio());
 
 	mInputMgr = new InputManager(mRenderer->getRenderWindow());
 	loadModule(mInputMgr);
+
+	GUI* gui = new GUI(mRenderer->getRenderWindow());
+	loadModule(gui);
+
+	mPhysics = new Physics(gui, mNetMgr);
+	loadModule(mPhysics);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -98,9 +98,9 @@ void Core::run ()
 			// Update physics
 			if (server)
 			{
-				mNetMgr->recieveGameServer();
+				// mNetMgr->recieveGameServer();
 				mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
-				mNetMgr->sendGameServer();
+				// mNetMgr->sendGameServer();
 			}
 			else
 			{

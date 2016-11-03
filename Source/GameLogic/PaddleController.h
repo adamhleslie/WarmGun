@@ -17,8 +17,7 @@ public:
 	PaddleController();
 	~PaddleController () {};
 
-	//void update() override;
-	void update();
+	void update() override;
 
 	AudioPlayer* ap = nullptr;
 	Ogre::Camera* mCamera = nullptr;

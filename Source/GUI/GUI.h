@@ -2,13 +2,16 @@
 
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h> //from 0.8 it's just Ogre/Renderer.h
+#include <OISKeyboard.h>
+#include <OISInputManager.h>
+
 #include "Renderer.h"
-
 #include "CoreConfig.h"
-
 #include "Module.h"
+#include "Core.h"
+#include "SceneController.h"
  
-class GUI : public Module
+class GUI : public Module, public OIS::KeyListener
 {
 public:
     GUI(Ogre::RenderWindow* mWindow);
@@ -18,8 +21,8 @@ public:
     void scorePoint();
     void lose();
 
-private:
-    //Ogre::Root* mRoot;
+    bool keyPressed(const OIS::KeyEvent& ke);
+    bool keyReleased(const OIS::KeyEvent& ke);
  
 protected:
     CEGUI::OgreRenderer* GUIRenderer;
@@ -50,4 +53,6 @@ protected:
     bool quit(const CEGUI::EventArgs &e);
     void createGameUI();
     void loadResources();
+
+    void postLoad() override;
 };

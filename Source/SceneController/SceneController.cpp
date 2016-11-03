@@ -40,7 +40,7 @@ void SceneController::loadNextScene (bool additive /* = false */)
 
 void SceneController::postLoad ()
 {
-	loadInitialScene();
+	// loadInitialScene();
 }
 
 void SceneController::loadInitialScene ()
