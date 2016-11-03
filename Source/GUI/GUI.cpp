@@ -235,3 +235,13 @@ bool GUI::keyReleased (const OIS::KeyEvent& ke)
 {
 	return true;
 }
+
+void GUI::clientLose ()
+{
+	score->setText("THE CLIENT LOST!");
+}
+
+void GUI::serverLose ()
+{
+	score->setText("THE SERVER LOST!");
+}

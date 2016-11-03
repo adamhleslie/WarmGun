@@ -27,6 +27,8 @@
 using Ogre::Vector3;
 using Ogre::Quaternion;
 
+static std::string sIP;
+
 namespace wellGame
 {
 	Ogre::SceneManager* mSceneMgr = nullptr;
@@ -35,7 +37,7 @@ namespace wellGame
 	{
 		Entity* ground = core->createEntity(kCube, "BumpyMetal", false, size, position, rotation);
 		if (createRigidbody)
-			ground->getTransform()->attachRigidbody(kCube, rigidbodySize, 0, 1);
+			ground->getTransform()->attachRigidbody(kCube, rigidbodySize, 0, .9);
 	}
 
 	void createWellLevel (Core* core, bool createRigidbody, bool server, bool client)
@@ -65,11 +67,7 @@ namespace wellGame
 		constexpr float kScale = .1;
 		Entity* sphere = core->createEntity(kSphere, "Chrome", true, Vector3(kScale, kScale, kScale), Vector3(0, 200, 0));
 		if (createRigidbody)
-		{
 			sphere->getTransform()->attachRigidbody(kSphere, Vector3(kScale * 50, 0, 0), 1, 1, true);
-			btVector3 tmp1(0,-100000/2,0);
-			sphere->getTransform()->mRigidBody->applyCentralForce(tmp1);
-		}
 		
 		sphere->isBall = true;
 		AudioPlayer* ap = sphere->createComponent<AudioPlayer>();
@@ -94,6 +92,8 @@ namespace wellGame
 			PaddleController* pt = paddle->createComponent<PaddleController>();
 			pt->mCamera = paddleCam;
 			pt->ap = ap;
+			if (server)
+				paddle->isServerPaddle = true;
 		}
 		
 		// Set up paddle 2
@@ -109,6 +109,7 @@ namespace wellGame
 				PaddleController* pt = paddle2->createComponent<PaddleController>();
 				pt->mCamera = paddleCam;
 				pt->ap = ap;
+				paddle2->isClientPaddle = true;
 			}
 		}
 
@@ -120,6 +121,7 @@ namespace wellGame
 
 		// Set up the ceiling
 		Entity* ceiling = core->createEntity(kCube, "SpaceSkyPlaneTransparent", false, Vector3(1, .01, 1), Vector3(0, 300, 0), Quaternion(Ogre::Degree(180), Vector3(1, 0, 0)));
+		ceiling->isCeiling = true;
 		if (createRigidbody)
 			ceiling->getTransform()->attachRigidbody(kCube, Vector3(50, 1, 50), 0, 1);
 
@@ -138,7 +140,7 @@ namespace wellGame
 		else if (client)
 		{
 			NetManager* netMgr = core->getNetManager();
-			netMgr->startGameClient("128.83.144.133", {sphere->getTransform(), paddle->getTransform()}, {paddle2->getTransform()});
+			netMgr->startGameClient("128.83.130.38", {sphere->getTransform(), paddle->getTransform()}, {paddle2->getTransform()});
 		}
 	}
 
@@ -170,6 +172,8 @@ void SceneController::initServer ()
 {
 	Scene scene(wellGame::loadGameServer);
 	addScene(scene);
+	getCore()->singlePlayer = false;
+	getCore()->server = true;
 
 	loadInitialScene();
 }
@@ -178,6 +182,9 @@ void SceneController::initClient ()
 {
 	Scene scene(wellGame::loadGameClient);
 	addScene(scene);
+	sIP = getIP();
+	getCore()->singlePlayer = false;
+	getCore()->server = false;
 
 	loadInitialScene();
 }

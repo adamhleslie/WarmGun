@@ -62,6 +62,9 @@ public:
 	void startUpdatingModule(Module* module);
 	void stopUpdatingModule(Module* module);
 
+	bool singlePlayer = true;
+	bool server = false;
+
 private:
 	// The modules that are loaded, and those that have update called every tick
 	std::vector<Module*> mModules;

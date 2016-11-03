@@ -2,6 +2,7 @@
 
 #include "Module.h"
 
+#include <string>
 #include <list>
 #include "Scene.h"
 
@@ -23,6 +24,8 @@ public:
 	void initSingleplayer();
 	void initServer();
 	void initClient();
+
+	std::string getIP();
 
 protected:
 	void postLoad() override;

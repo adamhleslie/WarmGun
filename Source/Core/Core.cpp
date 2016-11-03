@@ -21,9 +21,6 @@
 
 using Ogre::Vector3;
 
-bool server = true;
-// bool server = false;
-
 void Core::createModules ()
 {
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
@@ -95,12 +92,16 @@ void Core::run ()
 				module->update();
 			}
 
-			// Update physics
-			if (server)
+			// Update physics/Networking
+			if (singlePlayer)
 			{
-				// mNetMgr->recieveGameServer();
 				mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
-				// mNetMgr->sendGameServer();
+			}
+			else if (server)
+			{
+				mNetMgr->recieveGameServer();
+				mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
+				mNetMgr->sendGameServer();
 			}
 			else
 			{

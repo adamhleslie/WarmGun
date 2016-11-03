@@ -14,6 +14,9 @@ extern ContactProcessedCallback gContactProcessedCallback;
 static bool sHitGround = false;
 static GUI* sGui = nullptr;
 static NetManager* sNetMgr = nullptr;
+static btDiscreteDynamicsWorld* sDiscrete = nullptr;
+static bool serverBall = true;
+
 static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0, btCollisionObject* body1)
 {
 	if (!sHitGround)
@@ -41,11 +44,28 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 		AudioPlayer* ballAudio = ball->getComponent<AudioPlayer>();
 		assert(ballAudio);
 
-		if (notBall->isPaddle)
+
+		if (notBall->isServerPaddle)
+		{
+			ballAudio->playSound(1);
+			btVector3 tmp(0, 10, 0);
+			sDiscrete->setGravity(tmp);
+			serverBall = false;
+		}
+		else if (notBall->isClientPaddle)
+		{
+			ballAudio->playSound(1);
+			btVector3 tmp(0, 10, 0);
+			sDiscrete->setGravity(tmp);
+			serverBall = true;
+		}
+		else if (notBall->isPaddle)
 		{
 			// Play sound 1
 			ballAudio->playSound(1);
 			sGui->scorePoint();
+			btVector3 tmp(0, 10, 0);
+			sDiscrete->setGravity(tmp);
 		}
 		else if (notBall->isGround)
 		{
@@ -55,9 +75,24 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 			assert(particle);
 			particle->setEmitting(true);
 			ballAudio->playSound(2);
-			sGui->lose();
+			if (serverBall)
+			{
+				sNetMgr->setStatusChange(kClientWon);
+				sGui->serverLose();
+			}
+			else
+			{
+				sNetMgr->setStatusChange(kServerWon);
+				sGui->clientLose();
+			}
 			sHitGround = true;
-			sNetMgr->setStatusChange(kServerWon);
+		}
+		else if (notBall->isCeiling)
+		{
+			// Play sound 1
+			ballAudio->playSound(3);
+			btVector3 tmp(0, -10, 0);
+			sDiscrete->setGravity(tmp);
 		}
 		else
 		{
@@ -79,7 +114,8 @@ Physics::Physics (GUI* gui, NetManager* netMgr)
 	mOverlappingPairs = new btDbvtBroadphase();
 	mSolver = new btSequentialImpulseConstraintSolver();
 	mWorld = new btDiscreteDynamicsWorld(mCollisionDispatcher, mOverlappingPairs, mSolver, mCollisionConfig);
-	btVector3 tmp(0,0,0);
+	sDiscrete = mWorld;
+	btVector3 tmp(0, -10, 0);
 	mWorld->setGravity(tmp);
 
 	gContactProcessedCallback = (ContactProcessedCallback) HandleBallContact;

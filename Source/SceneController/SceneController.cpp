@@ -1,5 +1,7 @@
 #include "SceneController.h"
 
+#include <string>
+#include <iostream>
 #include <cassert>
 #include <OgreSceneManager.h>
 
@@ -41,6 +43,14 @@ void SceneController::loadNextScene (bool additive /* = false */)
 void SceneController::postLoad ()
 {
 	// loadInitialScene();
+}
+
+std::string SceneController::getIP ()
+{
+	string retVal;
+	std::cout << "INPUT IP ADDRESS: " << std::endl;
+	std::cin >> retVal;
+	return retVal;
 }
 
 void SceneController::loadInitialScene ()

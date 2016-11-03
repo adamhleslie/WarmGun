@@ -1,14 +1,13 @@
-PLANETARY TUNNEL EXTINCTION MANUAL
+Assignment 3 Milestone Week 3 (Oct. 31 Monday): Final game.
+Team Macaw: Adam Leslie, David Alexander, Rhyn Cai
 
-Premise:
-You have trapped an enemy planet in your galaxy tunnel.  Smash them against your giant space paddle as many times as you can to eliminate all of their disgusting alien statues.
+User manual:
+Space Racquetball Manual
 
-Goal of the game:
-Try to score as many points as possible.  Whenever you hit the planet with the space paddle, you get a destroy a disgusting alien monument. If you hit the planet with passionate force, you make destroy more than one statues.  You may even access the secret hard mode outside of the well.
+What is this game about:
+You are playing racquetball in space. This game provides single player for practice, and multiplayer for competition. Single player mode is more of a practice mode, there is no win condition, but there is score that you can keep track off, the game will end once the ball hits the ground (the score will be replaced by an incorrect string that is a leftover of our shoddy GUI). In multiplayer mode, the last player that hits the ball before it touches the background, wins.
 
-Please note the beautiful smoke
-.
-Controls:
+How to play this game:
 W = Move paddle up
 A = Move paddle left
 S = Move paddle down
@@ -18,4 +17,28 @@ Arrow Down = tilt down
 Arrow Left = tilt left
 Arrow Right = tilt right
 Esc = quit game
-P = Pause Music
+
+How to build/run the game:
+$ make debug
+$ make
+
+How to enter into different player mode:
+One player should be the server, another should be the client connecting to said server, or one player can play singleplayer. When the game is launched it opens to a black screen with no instructions. This is because we did not get a main menu GUI implemented. There are 4 keyboard options here:
+“z” - Enter Single Player Game
+“x” - Enter Game as Server
+“c” - Enter Game as Client
+“esc” - Quit the game
+
+How to change the ip of the server that the client is going to connect:
+The server should run first using the “x” key, then the client should connect to the server using the “c” key. The client is then able to input the server's IP address from the command line in which it was run. We have tried to connect the client to the server automatically, through server’s broadcast, to save the hassle from manually entering server’s ip, but it didn’t work. We were unable to add a more intuitive way to enter the IP in time. 
+
+=====
+
+Final project update
+details and explains places where you've managed to do better or worse than you had planned and why:
+
+The original plan for the game has been changed. We originally planned a 3D version of pong, however we have changed that to a 3D version of racquetball, given that the latter was easier to make.
+We failed in attempts to create a better GUI with mouse controls. We have tried every bit of our force, in hoping that we can resolve the issue by the time of the deadline. All UI updates which were in progress are now gone.
+We used NetManager for networking, but all of the functionality that was programmed for the networking is not used by our game. We have the implemented the ability to tell the Client who has won or lost, but it was not used. If we had more time we might have been able to get that done.
+It is truly unfortunate, that GUI has stalled a major proportion of our progress. There are features that we have worked on for a very long time, such as, asking the client to enter the ip of the server, and displaying that information on screen; and displaying rows of menus, so that the player can choose with either their keyboard or their mouse, to enter into single player or multiplayer mode. None of those made it into the final submission, due to the continuing difficulties we are having with CEGUI. 
+

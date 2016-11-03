@@ -52,8 +52,11 @@ public:
 	void stopUpdatingComponent(Component* component);
 
 	bool isBall = false;
+	bool isServerPaddle = false;
+	bool isClientPaddle = false;
 	bool isPaddle = false;
 	bool isGround = false;
+	bool isCeiling = false;
 
 private:
 	// The components that are loaded

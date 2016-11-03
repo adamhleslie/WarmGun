@@ -20,6 +20,8 @@ public:
     void update();
     void scorePoint();
     void lose();
+    void clientLose();
+    void serverLose();
 
     bool keyPressed(const OIS::KeyEvent& ke);
     bool keyReleased(const OIS::KeyEvent& ke);
