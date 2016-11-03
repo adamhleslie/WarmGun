@@ -202,11 +202,6 @@ void GUI::update ()
 
 bool GUI::keyPressed (const OIS::KeyEvent& ke)
 {
-	return true;
-}
-
-bool GUI::keyReleased (const OIS::KeyEvent& ke)
-{
 	switch (ke.key)
 	{
 		// Special keys
@@ -214,14 +209,29 @@ bool GUI::keyReleased (const OIS::KeyEvent& ke)
 			getCore()->getRenderer()->mRunning = false;
 			break;
 
-		case OIS::KC_UP:
+		case OIS::KC_Z:
 			getCore()->getModule<InputManager>()->removeKeyListener(this);
 			getCore()->getModule<SceneController>()->initSingleplayer();
+			break;
+
+		case OIS::KC_X:
+			getCore()->getModule<InputManager>()->removeKeyListener(this);
+			getCore()->getModule<SceneController>()->initServer();
+			break;
+
+		case OIS::KC_C:
+			getCore()->getModule<InputManager>()->removeKeyListener(this);
+			getCore()->getModule<SceneController>()->initClient();
 			break;
 
 		default:
 			break;
 	}
 
+	return true;
+}
+
+bool GUI::keyReleased (const OIS::KeyEvent& ke)
+{
 	return true;
 }

@@ -21,6 +21,8 @@ public:
 	void loadNextScene(bool additive = false);
 
 	void initSingleplayer();
+	void initServer();
+	void initClient();
 
 protected:
 	void postLoad() override;
