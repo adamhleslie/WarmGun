@@ -1,4 +1,6 @@
-## This project2 branch is for backup purpose
+# This is a work in progress
+The repository is currently being cleaned up and standardized.  
+This began as group project for a class, but all non-original code is being removed.
 
 ## Design Overview
 Core is the basic functionality of the engine. It runs the game loop, which calls update on Modules and Entities, then renders.  

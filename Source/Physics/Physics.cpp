@@ -5,13 +5,11 @@
 #include "Entity.h"
 #include "AudioPlayer.h"
 #include <OgreParticleSystem.h>
-#include "GUI.h"
 
 // Temporary Begin
 extern ContactProcessedCallback gContactProcessedCallback;
 
 static bool sHitGround = false;
-static GUI* sGui = nullptr;
 static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0, btCollisionObject* body1)
 {
 	if (!sHitGround)
@@ -43,7 +41,6 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 		{
 			// Play sound 1
 			ballAudio->playSound(1);
-			sGui->scorePoint();
 		}
 		else if (notBall->isGround)
 		{
@@ -53,7 +50,6 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 			assert(particle);
 			particle->setEmitting(true);
 			ballAudio->playSound(2);
-			sGui->lose();
 			sHitGround = true;
 		}
 		else
@@ -67,7 +63,7 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 }
 // Temporary End
 
-Physics::Physics (GUI* gui)
+Physics::Physics ()
 {
 	stopUpdating();
 
@@ -78,9 +74,6 @@ Physics::Physics (GUI* gui)
 	mWorld = new btDiscreteDynamicsWorld(mCollisionDispatcher, mOverlappingPairs, mSolver, mCollisionConfig);
 
 	gContactProcessedCallback = (ContactProcessedCallback) HandleBallContact;
-
-	assert(gui);
-	sGui = gui;
 }
 
 Physics::~Physics ()

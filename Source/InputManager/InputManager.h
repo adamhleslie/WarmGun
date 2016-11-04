@@ -5,8 +5,8 @@
 #include <OISKeyboard.h>
 #include <OISInputManager.h>
 
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
+// #include <CEGUI/CEGUI.h>
+// #include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include <SdkCameraMan.h>
 
@@ -71,7 +71,7 @@ private:
     OIS::Keyboard     *mKeyboard;
     OIS::InputManager *mInputSystem;
 
-    CEGUI::MouseButton convertButton(OIS::MouseButtonID);
+    // CEGUI::MouseButton convertButton(OIS::MouseButtonID);
  
     std::map<std::string, OIS::KeyListener*> mKeyListeners;
     std::map<std::string, OIS::MouseListener*> mMouseListeners;

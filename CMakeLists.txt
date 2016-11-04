@@ -76,7 +76,6 @@ add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
 add_project_module(Audio			Audio)
 add_project_module(GameLogic		GameLogic)
-add_project_module(GUI				GUI)
 add_project_module(Physics			Physics)
 add_project_module(InputManager		InputManager)
 # End module list
@@ -120,36 +119,6 @@ message(STATUS "****************************************************************
 message(STATUS "OIS_LIBRARIES: ${OIS_LIBRARIES}")
 message(STATUS "OIS_INCLUDE_DIR: ${OIS_INCLUDE_DIR}")
 message(STATUS "*******************************************************************")
-
-
-##CEGUI
-set(CEGUI_HOME "/lusr/opt/cegui-0.8.4" CACHE PATH "Path to CEGUI")
-
-set(CEGUI_LIBRARIES "${CEGUI_HOME}/lib/libCEGUIBase-0.so" CACHE PATH "Path to CEGUI Libraries")
-set(CEGUI_INCLUDE_DIR "${CEGUI_HOME}/include/cegui-0" CACHE PATH "Path to CEGUI Include_dir")
-set(CEGUI_OgreRenderer_LIBRARIES "${CEGUI_HOME}/lib/libCEGUIOgreRenderer-0.so" CACHE PATH "Path to CEGUI OgreRenderer Libraries")
-# set(CEGUI_OgreRenderer_INCLUDE_DIR "${CEGUI_HOME}/include/cegui-0/CEGUI/RendererModules/Ogre" CACHE PATH "Path to CEGUI OgreRenderer Include_dir")
-
-# find_package(CEGUI 0.8.4 EXACT REQUIRED COMPONENTS OgreRenderer)
-# if(NOT CEGUI_FOUND)
-#   message(SEND_ERROR "Failed to find CEGUI.")
-# endif()
-
-# message(STATUS "*******************************************************************")
-# message(STATUS "CEGUI_LIBRARIES: ${CEGUI_LIBRARIES}")
-# message(STATUS "CEGUI_INCLUDE_DIR: ${CEGUI_INCLUDE_DIR}")
-# message(STATUS "CEGUI_OgreRenderer_LIBRARIES: ${CEGUI_OgreRenderer_LIBRARIES}")
-# message(STATUS "CEGUI_OgreRenderer_INCLUDE_DIR: ${CEGUI_OgreRenderer_INCLUDE_DIR}")
-# message(STATUS "*******************************************************************")
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-	${CEGUI_LIBRARIES}
-	${CEGUI_OgreRenderer_LIBRARIES}
-)
-target_include_directories(${PROJECT_NAME} PRIVATE
-	${CEGUI_INCLUDE_DIR}
-	${CEGUI_OgreRenderer_INCLUDE_DIR}
-)
 
 ##SDL
 find_package(SDL REQUIRED)

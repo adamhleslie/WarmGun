@@ -14,7 +14,6 @@
 /// Add Modules below ///
 #include "SceneController.h"
 #include "Audio.h"
-#include "GUI.h"
 #include "InputManager.h"
 
 using Ogre::Vector3;
@@ -24,10 +23,7 @@ void Core::createModules ()
 	mRenderer = new Renderer(Ogre::ST_GENERIC);
 	loadModule(mRenderer);
 
-	GUI* gui = new GUI(mRenderer->getRenderWindow());
-	loadModule(gui);
-
-	mPhysics = new Physics(gui);
+	mPhysics = new Physics();
 	loadModule(mPhysics);
 
 	loadModule(new Audio());
@@ -239,16 +235,3 @@ void Core::unloadModule (Module* module, bool findAndRemove /* = true */)
 			stopUpdatingModule(module);
 	}
 }
-
-
-// bool Core::Quit(const CEGUI::EventArgs& e) {
-
-// 	mRenderer->mRunning = false;
-//     return true;
-// }
-
-// bool Core::Replay(const CEGUI::EventArgs &e) {
-
-// 	//TODO: reset values, start again
-// 	return true;
-// }
