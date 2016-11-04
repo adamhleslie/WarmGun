@@ -74,10 +74,8 @@ add_project_module(Config			Config)
 add_project_module(Core				Core)
 add_project_module(Renderer			Renderer)
 add_project_module(SceneController	SceneController)
-add_project_module(Audio			Audio)
 add_project_module(GameLogic		GameLogic)
 add_project_module(Physics			Physics)
-add_project_module(InputManager		InputManager)
 # End module list
 
 add_executable(${PROJECT_NAME} WIN32 ${PROJECT_MODULE_SOURCES})
@@ -106,19 +104,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${OGRE_Overlay_LIBRARIES}
 	${OGRE_RenderSystem_GL_LIBRARIES}
 )
-
-##OIS
-find_package(OIS REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE
-	${OIS_LIBRARIES}
-)
-target_include_directories(${PROJECT_NAME} PRIVATE
-	${OIS_INCLUDE_DIR}
-)
-message(STATUS "*******************************************************************")
-message(STATUS "OIS_LIBRARIES: ${OIS_LIBRARIES}")
-message(STATUS "OIS_INCLUDE_DIR: ${OIS_INCLUDE_DIR}")
-message(STATUS "*******************************************************************")
 
 ##SDL
 find_package(SDL REQUIRED)

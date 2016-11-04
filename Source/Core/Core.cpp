@@ -13,8 +13,6 @@
 
 /// Add Modules below ///
 #include "SceneController.h"
-#include "Audio.h"
-#include "InputManager.h"
 
 using Ogre::Vector3;
 
@@ -25,11 +23,6 @@ void Core::createModules ()
 
 	mPhysics = new Physics();
 	loadModule(mPhysics);
-
-	loadModule(new Audio());
-
-	mInputMgr = new InputManager(mRenderer->getRenderWindow());
-	loadModule(mInputMgr);
 
 	// Create SceneController last, since it sets up the initial scene
 	loadModule(new SceneController(mRenderer));
@@ -178,11 +171,6 @@ Renderer* Core::getRenderer ()
 {
 	return mRenderer;
 }
-
-// void Core::stopRenderer()
-// {
-// 	mRenderer = false;
-// }
 
 Physics* Core::getPhysics ()
 {

@@ -4,8 +4,6 @@
 
 #include <OgreSceneManager.h>
 
-class AudioPlayer;
-
 class BoundMovement : public Component
 {
 public:
@@ -17,10 +15,4 @@ public:
 	size_t mBallRadius;
 	Ogre::Vector3 mBallVelocity;
 	Ogre::Vector3 mWallDistances;
-
-protected:
-	void postLoad() override;
-
-private:
-	AudioPlayer* mAudioPlayer = nullptr;
 };

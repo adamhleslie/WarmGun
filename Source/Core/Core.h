@@ -5,7 +5,6 @@
 #include <OgreVector3.h>
 #include <OgreQuaternion.h>
 #include "Transform.h"
-#include "InputManager.h"
 
 class Module;
 class Entity;
@@ -71,7 +70,6 @@ private:
 
 	Renderer* mRenderer = nullptr;
 	Physics* mPhysics = nullptr;
-	InputManager* mInputMgr = nullptr;
 
 	// Create/load the available modules
 	void createModules();

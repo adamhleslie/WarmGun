@@ -3,7 +3,7 @@
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include "Entity.h"
-#include "AudioPlayer.h"
+#include "Transform.h"
 #include <OgreParticleSystem.h>
 
 // Temporary Begin
@@ -34,28 +34,20 @@ static bool HandleBallContact (btManifoldPoint& point, btCollisionObject* body0,
 			notBall = entity0;
 		}
 		assert(ball);
-		AudioPlayer* ballAudio = ball->getComponent<AudioPlayer>();
-		assert(ballAudio);
 
 		if (notBall->isPaddle)
 		{
-			// Play sound 1
-			ballAudio->playSound(1);
 		}
 		else if (notBall->isGround)
 		{
-			// Play sound 2
 			// Enable emission
 			Ogre::ParticleSystem* particle = dynamic_cast<Ogre::ParticleSystem*>(ball->getTransform()->getSceneNode()->getAttachedObject(1));
 			assert(particle);
 			particle->setEmitting(true);
-			ballAudio->playSound(2);
 			sHitGround = true;
 		}
 		else
 		{
-			// Play sound 3
-			ballAudio->playSound(3);
 		}
 	}
 
