@@ -78,11 +78,6 @@ void Core::run ()
 
 			// Update physics
 			mPhysics->getWorld()->stepSimulation(kTimeStepS, 0);
-			for (Entity* entity : mEntities)
-			{
-				if (entity->isUpdating())
-					entity->getTransform()->synchronizeSceneNode();
-			}
 
 			accumulator -= kTimeStepMs;
 		}

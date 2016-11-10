@@ -40,9 +40,10 @@ void Transform::postLoad ()
 void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass /* = 0 */, float restitution /* = 0 */, bool customCallback /* = false */)
 {
 	assert(!mRigidBody);
-	assert(!mMotionState);
 	assert(!mCollisionShape);
-	mMass = mass;
+
+	if (mass != 0)
+		mKinematic = false;
 
 	if (shape == kCube)
 	{
@@ -54,20 +55,11 @@ void Transform::attachRigidbody (Shape shape, const Vector3& size, float mass /*
 	}
 	assert(mCollisionShape);
 	btVector3 localInertia(0,0,0);
+	mCollisionShape->calculateLocalInertia(btScalar(mass), localInertia);
 
-	btTransform transform;
-	transform.setIdentity();
-
-	Vector3 position = mNode->getPosition();
-	transform.setOrigin(btVector3(position.x, position.y, position.z));
-
-	Ogre::Quaternion rotation = mNode->getOrientation();
-	transform.setRotation(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));
-
-	mMotionState = new btDefaultMotionState(transform);
-	mCollisionShape->calculateLocalInertia(btScalar(mMass), localInertia);
-
-	btRigidBody::btRigidBodyConstructionInfo groundRBInfo(mMass, mMotionState, mCollisionShape, localInertia);
+	updateWorldTransformPosition();
+	updateWorldTransformRotation();
+	btRigidBody::btRigidBodyConstructionInfo groundRBInfo(mass, this, mCollisionShape, localInertia);
 	mRigidBody = new btRigidBody(groundRBInfo);
 	mRigidBody->setRestitution(restitution);
 
@@ -89,12 +81,6 @@ void Transform::removeRigidbody ()
 		mRigidBody = nullptr;
 	}
 
-	if (mMotionState)
-	{
-		delete mMotionState;
-		mMotionState = nullptr;
-	}
-
 	if (mCollisionShape)
 	{
 		delete mCollisionShape;
@@ -102,36 +88,52 @@ void Transform::removeRigidbody ()
 	}
 }
 
-void Transform::synchronizeSceneNode ()
+// Updates bullet with stored bullet information
+void Transform::getWorldTransform (btTransform& worldTrans) const
 {
-	if (mRigidBody && !getEntity()->isPaddle)
-	{
-		btTransform trans;
-		mRigidBody->getMotionState()->getWorldTransform(trans);
-
-		btVector3 position = trans.getOrigin();
-		mNode->setPosition(position.getX(), position.getY(), position.getZ());
-
-		btQuaternion orientation = trans.getRotation();
-		mNode->setOrientation(orientation.getW(), orientation.getX(), orientation.getY(), orientation.getZ());
-	}
+	worldTrans = mWorldTrans;
 }
 
-void Transform::translate (const Ogre::Vector3 &direction)
+// Updates Ogre SceneNode with bullet information
+void Transform::setWorldTransform (const btTransform& worldTrans)
 {
-	// btTransform transform;
-	// transform.setIdentity();
-	mRigidBody->translate(btVector3(direction.x, direction.y, direction.z));
+	mWorldTrans = worldTrans;
+
+	btVector3 position = worldTrans.getOrigin();
+	mNode->setPosition(position.x(), position.y(), position.z());
+
+	btQuaternion rotation = worldTrans.getRotation();
+	mNode->setOrientation(rotation.w(), rotation.x(), rotation.y(), rotation.z());
+}
+
+// Updates stored bullet information with Ogre SceneNode position
+void Transform::updateWorldTransformPosition ()
+{
+	Vector3 position = mNode->getPosition();
+	mWorldTrans.setOrigin(btVector3(position.x, position.y, position.z));
+}
+
+// Updates stored bullet information with Ogre SceneNode rotation
+void Transform::updateWorldTransformRotation ()
+{
+	Ogre::Quaternion rotation = mNode->getOrientation();
+	mWorldTrans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+}
+
+void Transform::translate (const Vector3& direction)
+{
 	mNode->translate(direction);
-	// synchronizeSceneNode();
+	updateWorldTransformPosition();
+
+	mRigidBody->setCenterOfMassTransform(mWorldTrans);
 }
 
 void Transform::rotate (const Ogre::Quaternion& rotation)
 {
-	btMatrix3x3 orn = mRigidBody->getWorldTransform().getBasis(); //get basis of world transformation
-  	orn *= btMatrix3x3(btQuaternion(rotation.w, rotation.x, rotation.y, rotation.z));     //Multiply it by rotation matrix
- 	mRigidBody->getWorldTransform().setBasis(orn); //set new rotation for the object
-	mNode->rotate(rotation);
+	Ogre::Quaternion totalRotation = rotation * mNode->getOrientation();
 
-	synchronizeSceneNode ();
+	mNode->setOrientation(totalRotation);
+	updateWorldTransformRotation();
+
+	mRigidBody->setCenterOfMassTransform(mWorldTrans);
 }
