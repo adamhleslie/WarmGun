@@ -28,7 +28,6 @@ Resources should be in the Media directory, which will be copied to the Build/Bi
 Create a branch for each feature you are working on, with a descriptive name!  
 Only merge it to master when your feature is verified finished and working  
 If you want a branch to be a sub-branch use a forward slash, eg "parent-branch/child-branch"  
-When the project is due, we will turn in whatever the master branch builds  
 
 ## Naming Comventions
 Classes should be UpperCamelCase  
