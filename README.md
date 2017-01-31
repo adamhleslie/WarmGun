@@ -1,6 +1,6 @@
 # This is a work in progress
 The repository is currently being cleaned up and standardized.  
-It is not currently possible to compile and run, unless done so from a UTCS Lab machine.
+It is not currently possible to compile and run, unless done so from a UTCS Lab machine.  
 This began as group project for a class, but all non-original code has been removed.
 
 ## Design Overview
