@@ -1,6 +1,4 @@
-/Build/
-/Builds/
-/build/
-/builds/
+.idea/
+.vs/
 
-*~
+out/

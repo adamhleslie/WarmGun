@@ -1,22 +1,17 @@
 #include <iostream>
 #include <exception>
 
-#include "Core.h"
-
-using namespace std;
-
 int main (int argc, char** argv)
 {
-	Core core;
-	
-	try
-	{
-		core.run();
-	}
-	catch (exception e)
-	{
-		cerr << "Uncaught exception: " << e.what() << endl;
-	}
+    try
+    {
+        // Run program!
+        std::cout << "Hello World!" << std::endl;
+    }
+    catch (std::exception e)
+    {
+        std::cerr << "Uncaught exception: " << e.what() << std::endl;
+    }
 
-	return 0;
+    return 0;
 }
