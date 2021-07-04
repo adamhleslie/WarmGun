@@ -1,7 +1,5 @@
 # This is a work in progress
-The repository is currently being cleaned up and standardized.  
-It is not currently possible to compile and run, unless done so from a UTCS Lab machine.  
-This began as group project for a class, but all non-original code has been removed.
+The repository is currently being cleaned up and standardized.
 
 ## Design Overview
 Core is the basic functionality of the engine. It runs the game loop, which calls update on Modules and Entities, then renders.  
@@ -38,28 +36,4 @@ Variables should by lowerCamelCase
 ### Prefixes
 m : Member Variable, mInputDevice  
 s : Static Variable, sNumBugs  
-k : Constant Variable, kMaxInputDevices  
-
-## Compiling
-
-### Linux
-
-First time:
-
-	$ make release
-
-or
-
-	$ make debug
-
-After:
-
-    $ make build
-
-To Run:
-
-	$ make run
-
-To Build then Run:
-
-	$ make
+k : Constant Variable, kMaxInputDevices

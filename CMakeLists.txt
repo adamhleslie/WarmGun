@@ -9,6 +9,9 @@ cmake_policy(SET CMP0079 NEW)
 # Enable verbose building messages
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# Enable verbose find messages
+set(CMAKE_FIND_DEBUG_MODE TRUE)
+
 # PROJECT #
 if(NOT DEFINED ENV{PROJECT})
     message(FATAL_ERROR "Please set PROJECT in your environment")
@@ -23,15 +26,22 @@ endif()
 # Set the default search path for modules when using include / find_package
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+# Log information
 message(STATUS "Project Name: " ${PROJECT_NAME})
 message(STATUS "Using C compiler: " ${CMAKE_C_COMPILER})
 message(STATUS "Using C++ compiler: " ${CMAKE_CXX_COMPILER})
 
+# Add 3rd party libraries
+include(project.glfw)
+
+# Add project exe
 add_executable(${PROJECT_NAME} WIN32)
 
+# Set up project exe as a CXX target
 include(project.cxx)
 setup_cxx_target(${PROJECT_NAME})
 
+# Add subdirectory libraries
 include(project.library)
 add_subdirectory(Source/Application)
 
