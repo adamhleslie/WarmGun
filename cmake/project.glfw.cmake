@@ -1,4 +1,4 @@
-# Find GLFW
+# Find GLFW - use add_library_glfw to link
 find_path(GLFW3_INCLUDE_DIR "GLFW/glfw3.h" PATHS "Libraries/glfw/Include" NO_DEFAULT_PATH)
 find_library(GLFW3_LIBRARY_DEBUG "glfw3" PATHS "Libraries/glfw/Debug" NO_DEFAULT_PATH)
 find_library(GLFW3_LIBRARY_RELEASE "glfw3" PATHS "Libraries/glfw/Release" NO_DEFAULT_PATH)

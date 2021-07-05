@@ -1,12 +1,14 @@
 #include <iostream>
 #include <exception>
+#include "Core.h"
 
 int main (int argc, char** argv)
 {
     try
     {
-        // Run program!
-        std::cout << "Hello World!" << std::endl;
+        // Run the application!
+        Core core;
+        core.Run();
     }
     catch (std::exception e)
     {
