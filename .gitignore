@@ -1,5 +1,7 @@
 .idea/
 .vs/
 
-Libraries/
 out/
+
+Libraries/*
+!Libraries/glad/
