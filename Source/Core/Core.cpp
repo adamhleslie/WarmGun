@@ -8,6 +8,7 @@ namespace
 {
     constexpr unsigned int g_screenWidth = 800;
     constexpr unsigned int g_screenHeight = 600;
+    bool g_renderWireframe = false;
 
     const char *g_vertexShaderSource = "#version 410 core\n"
                                        "layout (location = 0) in vec3 aPos;\n"
@@ -30,10 +31,24 @@ namespace
 
     void ProcessInput(GLFWwindow* window)
     {
-        // Close window if escape key is pressed
+        // Close window w/ "ESC"
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, true);
+        }
+
+        // Toggle between fill and wireframe modes w/ "W"
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            g_renderWireframe = !g_renderWireframe;
+            if (g_renderWireframe)
+            {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            }
+            else
+            {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
         }
     }
 
@@ -88,7 +103,7 @@ namespace
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Render_Triangle_Setup(GLuint& vaoId, GLuint& shaderProgramId)
+    void Render_Rectangle_Setup(GLuint& vaoId, GLuint& shaderProgramId)
     {
         // Create shader program
         GLuint vertexShaderId = CreateShader(GL_VERTEX_SHADER, g_vertexShaderSource);
@@ -105,33 +120,61 @@ namespace
         glGenVertexArrays(1, &vaoId);
         glBindVertexArray(vaoId);
 
+        #pragma region VBO
         // Create a vertex buffer object (VBO)
         GLuint vboId;
         glGenBuffers(1, &vboId);
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
 
-        // Define Normalized Device Coordinates (NDC) vertices for an isosceles triangle
-        GLfloat isoscelesVertices[] =
+        // Define Normalized Device Coordinates (NDC) vertices for rectangle
+        GLfloat rectangleVertices[] =
         {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
+            0.5f,  0.5f, 0.0f,      // top right
+            0.5f, -0.5f, 0.0f,      // bottom right
+            -0.5f, -0.5f, 0.0f,     // bottom left
+            -0.5f,  0.5f, 0.0f      // top left
         };
 
         // Copy NDCs into the VBO
-        glBufferData(GL_ARRAY_BUFFER, sizeof(isoscelesVertices), isoscelesVertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(rectangleVertices), rectangleVertices, GL_STATIC_DRAW);
 
         // Tell OpenGL how to parse the array of vertices: Pass vertices into the vertex attribute with "(location = 0)"
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*) 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
         glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        #pragma endregion
+
+        #pragma region EBO
+        // Create an element buffer object (EBO)
+        GLuint eboId;
+        glGenBuffers(1, &eboId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+
+        // Define indices for indexed drawing of vertices
+        GLuint rectangleIndices[] =
+        {
+            0, 1, 3,    // first triangle
+            1, 2, 3     // second triangle
+        };
+
+        // Copy indices into the EBO
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rectangleIndices), rectangleIndices, GL_STATIC_DRAW);
+
+        // Do NOT unbind the EBO while a VAO is active as the bound EBO is stored in the bound VAO when it is unbound
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        #pragma endregion
+
+        glBindVertexArray(0);
     }
 
-    void Render_Triangle_Update(GLuint vaoId, GLuint shaderProgramId)
+    void Render_Rectangle_Update(GLuint vaoId, GLuint shaderProgramId)
     {
         Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
         glUseProgram(shaderProgramId);
         glBindVertexArray(vaoId);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
     }
 }
 
@@ -174,7 +217,7 @@ void Core::Run()
 
     #pragma region Rendering Commands Setup
     GLuint vaoId, shaderProgramId;
-    Render_Triangle_Setup(vaoId, shaderProgramId);
+    Render_Rectangle_Setup(vaoId, shaderProgramId);
     #pragma endregion
 
     // Render loop until close requested
@@ -183,7 +226,7 @@ void Core::Run()
         ProcessInput(window);
 
         #pragma region Rendering Commands
-        Render_Triangle_Update(vaoId, shaderProgramId);
+        Render_Rectangle_Update(vaoId, shaderProgramId);
         #pragma endregion
 
         // Swap front and back buffers (double buffered)
