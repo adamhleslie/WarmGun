@@ -10,19 +10,47 @@ namespace
     constexpr unsigned int g_screenHeight = 600;
     bool g_renderWireframe = false;
 
-    const char *g_vertexShaderSource = "#version 410 core\n"
+    #pragma region Shaders
+    const char* g_vertexShaderSource = "#version 410 core\n"
                                        "layout (location = 0) in vec3 aPos;\n"
                                        "void main()\n"
                                        "{\n"
                                        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
                                        "}\0";
 
-    const char *g_fragmentShaderSource = "#version 410 core\n"
+    const char* g_fragmentShaderSource = "#version 410 core\n"
                                          "out vec4 FragColor;\n"
                                          "void main()\n"
                                          "{\n"
                                          "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
                                          "}\0";
+    #pragma endregion
+
+    #pragma region Rectangle
+    const GLfloat g_rectangleVertices[] =
+    {
+        0.5f,  0.5f, 0.0f,      // top right
+        0.5f, -0.5f, 0.0f,      // bottom right
+        -0.5f, -0.5f, 0.0f,     // bottom left
+        -0.5f,  0.5f, 0.0f      // top left
+    };
+
+    const GLuint g_rectangleIndices[] =
+    {
+        0, 1, 3,    // first triangle
+        1, 2, 3     // second triangle
+    };
+    #pragma endregion
+
+    #pragma region Triangle
+    const GLfloat g_triangleVertices[] =
+    {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
+    };
+    const GLuint g_triangleIndices[] = { 0, 1, 2 };
+    #pragma endregion
 
     void FrameBufferSizeCallback(GLFWwindow* window, int width, int height)
     {
@@ -52,91 +80,20 @@ namespace
         }
     }
 
-    GLuint CreateShader(GLenum shaderType, const char* shaderSource)
+    void CreateEBO(const GLfloat* vertices, GLsizeiptr verticesSize, const GLuint* indices, GLsizeiptr indicesSize, GLuint& vaoId, GLuint& vboId, GLuint& eboId)
     {
-        GLuint shaderHandle = glCreateShader(shaderType);
-        glShaderSource(shaderHandle, 1, &shaderSource, nullptr);
-        glCompileShader(shaderHandle);
-
-        GLint success;
-        glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            char infoLog[512];
-            glGetShaderInfoLog(shaderHandle, 512, nullptr, infoLog);
-            std::cout << "[Core.CreateShader] Compilation failed: " << infoLog << std::endl;
-        }
-
-        return shaderHandle;
-    }
-
-    GLuint CreateShaderProgram(std::initializer_list<GLuint> shaderIds)
-    {
-        if (shaderIds.size() == 0)
-        {
-            std::cout << "[Core.CreateShaderProgram] No shader IDs provided" << std::endl;
-        }
-
-        GLuint shaderProgram = glCreateProgram();
-        for (GLuint shaderId : shaderIds)
-        {
-            glAttachShader(shaderProgram, shaderId);
-        }
-
-        glLinkProgram(shaderProgram);
-
-        GLint success;
-        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-        if (!success)
-        {
-            char infoLog[512];
-            glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-            std::cout << "[Core.CreateShaderProgram] Compilation failed: " << infoLog << std::endl;
-        }
-
-        return shaderProgram;
-    }
-
-    void Render_ClearToColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a)
-    {
-        glClearColor(r, g, b, a);
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
-
-    void Render_Rectangle_Setup(GLuint& vaoId, GLuint& shaderProgramId)
-    {
-        // Create shader program
-        GLuint vertexShaderId = CreateShader(GL_VERTEX_SHADER, g_vertexShaderSource);
-        GLuint fragmentShaderId = CreateShader(GL_FRAGMENT_SHADER, g_fragmentShaderSource);
-        shaderProgramId = CreateShaderProgram({ vertexShaderId, fragmentShaderId });
-
-        // Clean up compiled shaders
-        glDeleteShader(vertexShaderId);
-        glDeleteShader(fragmentShaderId);
-
-        // --- //
-
-        // Create a vertex array object (VAO)
+        #pragma region VAO
+        // Create a vertex array object (VAO) for rectangle
         glGenVertexArrays(1, &vaoId);
         glBindVertexArray(vaoId);
 
         #pragma region VBO
         // Create a vertex buffer object (VBO)
-        GLuint vboId;
         glGenBuffers(1, &vboId);
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
 
-        // Define Normalized Device Coordinates (NDC) vertices for rectangle
-        GLfloat rectangleVertices[] =
-        {
-            0.5f,  0.5f, 0.0f,      // top right
-            0.5f, -0.5f, 0.0f,      // bottom right
-            -0.5f, -0.5f, 0.0f,     // bottom left
-            -0.5f,  0.5f, 0.0f      // top left
-        };
-
         // Copy NDCs into the VBO
-        glBufferData(GL_ARRAY_BUFFER, sizeof(rectangleVertices), rectangleVertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
 
         // Tell OpenGL how to parse the array of vertices: Pass vertices into the vertex attribute with "(location = 0)"
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
@@ -147,33 +104,56 @@ namespace
 
         #pragma region EBO
         // Create an element buffer object (EBO)
-        GLuint eboId;
         glGenBuffers(1, &eboId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
-        // Define indices for indexed drawing of vertices
-        GLuint rectangleIndices[] =
-        {
-            0, 1, 3,    // first triangle
-            1, 2, 3     // second triangle
-        };
-
         // Copy indices into the EBO
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rectangleIndices), rectangleIndices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
 
         // Do NOT unbind the EBO while a VAO is active as the bound EBO is stored in the bound VAO when it is unbound
         // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         #pragma endregion
 
         glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        #pragma endregion
     }
 
-    void Render_Rectangle_Update(GLuint vaoId, GLuint shaderProgramId)
+    void Render_ClearToColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a)
+    {
+        glClearColor(r, g, b, a);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void Render_RectangleAndTriangle_Setup(GLuint& rectangleVaoId, GLuint& triangleVaoId, GLuint& shaderProgramId)
+    {
+        // Create shader program
+        GLuint vertexShaderId = CreateShader(GL_VERTEX_SHADER, g_vertexShaderSource);
+        GLuint fragmentShaderId = CreateShader(GL_FRAGMENT_SHADER, g_fragmentShaderSource);
+        shaderProgramId = CreateShaderProgram({ vertexShaderId, fragmentShaderId });
+
+        // Clean up compiled shaders
+        glDeleteShader(vertexShaderId);
+        glDeleteShader(fragmentShaderId);
+
+        GLuint rectangleVboId, rectangleEboId;
+        CreateEBO(g_rectangleVertices, sizeof(g_rectangleVertices), g_rectangleIndices, sizeof(g_rectangleIndices), rectangleVaoId, rectangleVboId, rectangleEboId);
+
+        GLuint triangleVboId, triangleEboId;
+        CreateEBO(g_triangleVertices, sizeof(g_triangleVertices), g_triangleIndices, sizeof(g_triangleIndices), triangleVaoId, triangleVboId, triangleEboId);
+    }
+
+    void Render_RectangleAndTriangle_Update(GLuint rectangleVaoId, GLuint triangleVaoId, GLuint shaderProgramId)
     {
         Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
         glUseProgram(shaderProgramId);
-        glBindVertexArray(vaoId);
+
+        glBindVertexArray(rectangleVaoId);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glBindVertexArray(triangleVaoId);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+
         glBindVertexArray(0);
     }
 }
@@ -216,8 +196,8 @@ void Core::Run()
     glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
 
     #pragma region Rendering Commands Setup
-    GLuint vaoId, shaderProgramId;
-    Render_Rectangle_Setup(vaoId, shaderProgramId);
+    GLuint rectangleVaoId, triangleVaoId, shaderProgramId;
+    Render_RectangleAndTriangle_Setup(rectangleVaoId, triangleVaoId, shaderProgramId);
     #pragma endregion
 
     // Render loop until close requested
@@ -226,7 +206,7 @@ void Core::Run()
         ProcessInput(window);
 
         #pragma region Rendering Commands
-        Render_Rectangle_Update(vaoId, shaderProgramId);
+        Render_RectangleAndTriangle_Update(rectangleVaoId, triangleVaoId, shaderProgramId);
         #pragma endregion
 
         // Swap front and back buffers (double buffered)
