@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "Shader.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -125,28 +126,24 @@ namespace
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Render_RectangleAndTriangle_Setup(GLuint& rectangleVaoId, GLuint& triangleVaoId, GLuint& shaderProgramId)
+	std::tuple<Shader, GLuint, GLuint> Render_RectangleAndTriangle_Setup()
     {
         // Create shader program
-        GLuint vertexShaderId = CreateShader(GL_VERTEX_SHADER, g_vertexShaderSource);
-        GLuint fragmentShaderId = CreateShader(GL_FRAGMENT_SHADER, g_fragmentShaderSource);
-        shaderProgramId = CreateShaderProgram({ vertexShaderId, fragmentShaderId });
+        Shader shader{g_vertexShaderSource, g_fragmentShaderSource};
 
-        // Clean up compiled shaders
-        glDeleteShader(vertexShaderId);
-        glDeleteShader(fragmentShaderId);
-
-        GLuint rectangleVboId, rectangleEboId;
+        GLuint rectangleVboId, rectangleEboId, rectangleVaoId;
         CreateEBO(g_rectangleVertices, sizeof(g_rectangleVertices), g_rectangleIndices, sizeof(g_rectangleIndices), rectangleVaoId, rectangleVboId, rectangleEboId);
 
-        GLuint triangleVboId, triangleEboId;
+        GLuint triangleVboId, triangleEboId, triangleVaoId;
         CreateEBO(g_triangleVertices, sizeof(g_triangleVertices), g_triangleIndices, sizeof(g_triangleIndices), triangleVaoId, triangleVboId, triangleEboId);
-    }
 
-    void Render_RectangleAndTriangle_Update(GLuint rectangleVaoId, GLuint triangleVaoId, GLuint shaderProgramId)
+		return { shader, rectangleVaoId, triangleVaoId };
+	}
+
+    void Render_RectangleAndTriangle_Update(GLuint rectangleVaoId, GLuint triangleVaoId, const Shader& shader)
     {
         Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glUseProgram(shaderProgramId);
+		shader.Use();
 
         glBindVertexArray(rectangleVaoId);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -196,8 +193,7 @@ void Core::Run()
     glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
 
     #pragma region Rendering Commands Setup
-    GLuint rectangleVaoId, triangleVaoId, shaderProgramId;
-    Render_RectangleAndTriangle_Setup(rectangleVaoId, triangleVaoId, shaderProgramId);
+    auto [ shader, rectangleVaoId, triangleVaoId ] = Render_RectangleAndTriangle_Setup();
     #pragma endregion
 
     // Render loop until close requested
@@ -206,7 +202,7 @@ void Core::Run()
         ProcessInput(window);
 
         #pragma region Rendering Commands
-        Render_RectangleAndTriangle_Update(rectangleVaoId, triangleVaoId, shaderProgramId);
+        Render_RectangleAndTriangle_Update(rectangleVaoId, triangleVaoId, shader);
         #pragma endregion
 
         // Swap front and back buffers (double buffered)

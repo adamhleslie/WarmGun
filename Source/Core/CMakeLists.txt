@@ -2,7 +2,9 @@ set(library_name "Core")
 
 set(sources
     Core.h Core.cpp
-    Shader.h Shader.cpp)
+    Shader.h Shader.cpp
+    GLShader.h GLShader.cpp
+    GLProgram.h GLProgram.cpp)
 
 set(include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR})
