@@ -4,6 +4,9 @@
 #include <initializer_list>
 #include "GLShader.h"
 
+/**
+ *
+ */
 class GLProgram
 {
 public:

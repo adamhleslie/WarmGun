@@ -4,6 +4,9 @@
 #include <string>
 #include <memory>
 
+/**
+ *
+ */
 class GLShader
 {
 public:

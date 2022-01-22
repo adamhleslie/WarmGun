@@ -4,6 +4,9 @@
 #include <string>
 #include "GLProgram.h"
 
+/**
+ *
+ */
 class Shader
 {
 public:

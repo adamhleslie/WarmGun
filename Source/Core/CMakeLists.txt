@@ -1,10 +1,14 @@
 set(library_name "Core")
 
 set(sources
+    Utilities.h
     Core.h Core.cpp
     Shader.h Shader.cpp
     GLShader.h GLShader.cpp
-    GLProgram.h GLProgram.cpp)
+    GLProgram.h GLProgram.cpp
+    GLVertexArray.h GLVertexArray.cpp
+    GLVertexBuffer.h GLVertexBuffer.cpp
+    GLElementBuffer.h GLElementBuffer.cpp)
 
 set(include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR})

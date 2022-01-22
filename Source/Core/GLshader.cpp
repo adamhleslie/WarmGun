@@ -23,5 +23,5 @@ GLShader::GLShader(GLenum shaderType, const std::string& shaderSource)
 
 GLShader::~GLShader()
 {
-	glDeleteShader(Get());
+	glDeleteShader(m_shaderId);
 }

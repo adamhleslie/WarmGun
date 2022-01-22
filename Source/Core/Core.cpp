@@ -1,56 +1,61 @@
 #include "Core.h"
 #include "Shader.h"
+#include "GLVertexArray.h"
+#include "GLVertexBuffer.h"
+#include "Utilities.h"
 
 #include <iostream>
+#include <array>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace
 {
-    constexpr unsigned int g_screenWidth = 800;
-    constexpr unsigned int g_screenHeight = 600;
-    bool g_renderWireframe = false;
+	constexpr unsigned int g_screenWidth = 800;
+	constexpr unsigned int g_screenHeight = 600;
+	bool g_renderWireframe = false;
 
-    #pragma region Shaders
-    const char* g_vertexShaderSource = "#version 410 core\n"
-                                       "layout (location = 0) in vec3 aPos;\n"
-                                       "void main()\n"
-                                       "{\n"
-                                       "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                       "}\0";
+#pragma region Shaders
+	const char* g_vertexShaderSource = "#version 410 core\n"
+	                                   "layout (location = 0) in vec3 aPos;\n"
+	                                   "void main()\n"
+	                                   "{\n"
+	                                   "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+	                                   "}\0";
 
-    const char* g_fragmentShaderSource = "#version 410 core\n"
-                                         "out vec4 FragColor;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                         "}\0";
-    #pragma endregion
+	const char* g_fragmentShaderSource = "#version 410 core\n"
+	                                     "out vec4 FragColor;\n"
+	                                     "void main()\n"
+	                                     "{\n"
+	                                     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+	                                     "}\0";
+#pragma endregion
 
-    #pragma region Rectangle
-    const GLfloat g_rectangleVertices[] =
-    {
-        0.5f,  0.5f, 0.0f,      // top right
-        0.5f, -0.5f, 0.0f,      // bottom right
-        -0.5f, -0.5f, 0.0f,     // bottom left
-        -0.5f,  0.5f, 0.0f      // top left
-    };
+#pragma region Rectangle
+	const std::array<GLfloat, 12> g_rectangleVertices =
+	{
+		0.5f, 0.5f, 0.0f,      // top right
+		0.5f, -0.5f, 0.0f,      // bottom right
+		-0.5f, -0.5f, 0.0f,     // bottom left
+		-0.5f, 0.5f, 0.0f      // top left
+	};
 
-    const GLuint g_rectangleIndices[] =
-    {
-        0, 1, 3,    // first triangle
-        1, 2, 3     // second triangle
-    };
-    #pragma endregion
+	const std::array<GLuint, 6> g_rectangleIndices =
+	{
+		0, 1, 3,    // first triangle
+		1, 2, 3     // second triangle
+	};
+#pragma endregion
 
-    #pragma region Triangle
-    const GLfloat g_triangleVertices[] =
-    {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
-    };
-    const GLuint g_triangleIndices[] = { 0, 1, 2 };
+#pragma region Triangle
+	const std::array<GLfloat, 9> g_triangleVertices =
+	{
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f
+	};
+
+	const std::array<GLuint, 3> g_triangleIndices = { 0, 1, 2 };
     #pragma endregion
 
     void FrameBufferSizeCallback(GLFWwindow* window, int width, int height)
@@ -81,23 +86,25 @@ namespace
         }
     }
 
-    void CreateEBO(const GLfloat* vertices, GLsizeiptr verticesSize, const GLuint* indices, GLsizeiptr indicesSize, GLuint& vaoId, GLuint& vboId, GLuint& eboId)
+	std::shared_ptr<GLVertexArray> CreateEBO(Utilities::CArray<const GLfloat> vertices, Utilities::CArray<const GLuint> indices, GLuint& eboId)
     {
         #pragma region VAO
-        // Create a vertex array object (VAO) for rectangle
-        glGenVertexArrays(1, &vaoId);
-        glBindVertexArray(vaoId);
+        // Create a vertex array object (VAO), and bind it
+		std::shared_ptr<GLVertexArray> vertexArray = std::make_shared<GLVertexArray>();
+		vertexArray->Bind();
 
         #pragma region VBO
-        // Create a vertex buffer object (VBO)
-        glGenBuffers(1, &vboId);
-        glBindBuffer(GL_ARRAY_BUFFER, vboId);
+        // Create a vertex buffer object (VBO), and bind it
+		std::shared_ptr<GLVertexBuffer> vertexBuffer = std::make_shared<GLVertexBuffer>();
+		vertexBuffer->Bind();
 
-        // Copy NDCs into the VBO
-        glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
+        // Copy normalized device coordinate (NDO) vertices into the VBO
+		vertexBuffer->CopyTo(vertices, GL_STATIC_DRAW);
+
+		// TODO: HERE
 
         // Tell OpenGL how to parse the array of vertices: Pass vertices into the vertex attribute with "(location = 0)"
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(GLfloat), 0);
         glEnableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -109,7 +116,7 @@ namespace
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
         // Copy indices into the EBO
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, std::get<1>(indices), std::get<0>(indices), GL_STATIC_DRAW);
 
         // Do NOT unbind the EBO while a VAO is active as the bound EBO is stored in the bound VAO when it is unbound
         // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -118,6 +125,8 @@ namespace
         glBindVertexArray(0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         #pragma endregion
+
+		return vertexArray;
     }
 
     void Render_ClearToColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a)
@@ -126,18 +135,18 @@ namespace
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-	std::tuple<Shader, GLuint, GLuint> Render_RectangleAndTriangle_Setup()
+	std::tuple<Shader, std::shared_ptr<GLVertexArray>, std::shared_ptr<GLVertexArray>> Render_RectangleAndTriangle_Setup()
     {
         // Create shader program
         Shader shader{g_vertexShaderSource, g_fragmentShaderSource};
 
-        GLuint rectangleVboId, rectangleEboId, rectangleVaoId;
-        CreateEBO(g_rectangleVertices, sizeof(g_rectangleVertices), g_rectangleIndices, sizeof(g_rectangleIndices), rectangleVaoId, rectangleVboId, rectangleEboId);
+        GLuint rectangleEboId;
+	    std::shared_ptr<GLVertexArray> rectangleVertexArray = CreateEBO(Utilities::ToCArray(g_rectangleVertices), Utilities::ToCArray(g_rectangleIndices), rectangleEboId);
 
-        GLuint triangleVboId, triangleEboId, triangleVaoId;
-        CreateEBO(g_triangleVertices, sizeof(g_triangleVertices), g_triangleIndices, sizeof(g_triangleIndices), triangleVaoId, triangleVboId, triangleEboId);
+        GLuint triangleEboId;
+	    std::shared_ptr<GLVertexArray> triangleVertexArray = CreateEBO(Utilities::ToCArray(g_triangleVertices), Utilities::ToCArray(g_triangleIndices), triangleEboId);
 
-		return { shader, rectangleVaoId, triangleVaoId };
+		return {shader, rectangleVertexArray, triangleVertexArray};
 	}
 
     void Render_RectangleAndTriangle_Update(GLuint rectangleVaoId, GLuint triangleVaoId, const Shader& shader)
@@ -193,7 +202,7 @@ void Core::Run()
     glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
 
     #pragma region Rendering Commands Setup
-    auto [ shader, rectangleVaoId, triangleVaoId ] = Render_RectangleAndTriangle_Setup();
+    auto [ shader, rectangleVertexArray, triangleVertexArray ] = Render_RectangleAndTriangle_Setup();
     #pragma endregion
 
     // Render loop until close requested
@@ -202,7 +211,7 @@ void Core::Run()
         ProcessInput(window);
 
         #pragma region Rendering Commands
-        Render_RectangleAndTriangle_Update(rectangleVaoId, triangleVaoId, shader);
+        Render_RectangleAndTriangle_Update(rectangleVertexArray->Get(), triangleVertexArray->Get(), shader);
         #pragma endregion
 
         // Swap front and back buffers (double buffered)

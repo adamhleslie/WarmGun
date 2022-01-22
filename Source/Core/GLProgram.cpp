@@ -31,7 +31,7 @@ GLProgram::GLProgram(std::initializer_list<std::reference_wrapper<GLShader>> sha
 
 GLProgram::~GLProgram()
 {
-	glDeleteProgram(Get());
+	glDeleteProgram(m_programId);
 }
 
 
