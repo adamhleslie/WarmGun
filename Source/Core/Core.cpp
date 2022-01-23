@@ -18,8 +18,8 @@ namespace
 	bool g_renderWireframe = false;
 
 	#pragma region Shaders
-	const std::filesystem::path g_vertexShaderPath{"../../Shaders/Simple.vert"};
-	const std::filesystem::path g_fragmentShaderPath{"../../Shaders/Simple.frag"};
+	const std::filesystem::path g_vertexShaderPath{"./Content/Shaders/Simple.vert"};
+	const std::filesystem::path g_fragmentShaderPath{"./Content/Shaders/Simple.frag"};
 	#pragma endregion
 
 	#pragma region Rectangle

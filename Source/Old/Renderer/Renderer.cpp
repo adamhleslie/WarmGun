@@ -32,8 +32,8 @@ Renderer::Renderer (Ogre::SceneType sceneType)
 	mWindow = mRoot->createRenderWindow(PROJECT_NAME, 640, 480, false);
 
 	// Load in renderer resources
-	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Renderer", "FileSystem", "General");
-	ResourceGroupManager::getSingleton().addResourceLocation("./Media/Particle", "FileSystem", "Particle");
+	ResourceGroupManager::getSingleton().addResourceLocation("./Content/Renderer", "FileSystem", "General");
+	ResourceGroupManager::getSingleton().addResourceLocation("./Content/Particle", "FileSystem", "Particle");
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Set up frame listener

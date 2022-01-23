@@ -48,18 +48,13 @@ setup_cxx_target(${PROJECT_NAME})
 add_subdirectory(Source/Core)
 add_subdirectory(Source/Application)
 
-# OLD #
-
-## Copy the media directory to the binaries folder
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#	COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/Media $<TARGET_FILE_DIR:${PROJECT_NAME}>/Media)
-#
-## On Windows, copy DLLs to bin path.
-## If you link more libraries or plugins, make sure to add commands here.
-#if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-#	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<$<CONFIG:Release>:${OGRE_BINARY_REL}> $<$<NOT:$<CONFIG:Release>>:${OGRE_BINARY_DBG}> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<$<CONFIG:Release>:${OGRE_RenderSystem_GL_REL}> $<$<NOT:$<CONFIG:Release>>:${OGRE_RenderSystem_GL_DBG}> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#		COMMENT "Copying Ogre DLLs to build directory for debugging."
-#	)
-#endif()
+# Make symbolic link for Content folder
+set(DATA_SOURCE_DIR "${CMAKE_SOURCE_DIR}/Content")
+set(DATA_DESTINATION_DIR "${CMAKE_CURRENT_BINARY_DIR}/Content")
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD COMMAND ${CMAKE_COMMAND}
+    -E create_symlink ${DATA_SOURCE_DIR} ${DATA_DESTINATION_DIR}
+    DEPENDS ${DATA_DESTINATION_DIR}
+    COMMENT "symbolic link ${DATA_SOURCE_DIR} => ${DATA_DESTINATION_DIR}"
+)
