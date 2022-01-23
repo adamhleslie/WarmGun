@@ -7,6 +7,7 @@ set(sources
     GLShader.h GLShader.cpp
     GLProgram.h GLProgram.cpp
     GLVertexArray.h GLVertexArray.cpp
+    GLBuffer.h
     GLVertexBuffer.h GLVertexBuffer.cpp
     GLElementBuffer.h GLElementBuffer.cpp)
 

@@ -16,10 +16,13 @@ public:
 	GLVertexArray(const GLVertexArray&) = delete;
 	GLVertexArray& operator=(const GLVertexArray&) = delete;
 
-	void Bind() const;
-
 	// Explicit conversion function for OpenGL Identifier
 	GLuint Get() const { return m_vertexArrayId; }
+
+	void Bind() const;
+
+	static void ClearBinding();
+	static GLuint GetBinding();
 
 private:
 	GLuint m_vertexArrayId;

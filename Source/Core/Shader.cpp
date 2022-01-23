@@ -69,5 +69,5 @@ Shader::Shader(const std::string& vertexShaderSource, const std::string& fragmen
 
 void Shader::Use() const
 {
-	glUseProgram(m_shaderProgram->Get());
+	m_shaderProgram->Use();
 }

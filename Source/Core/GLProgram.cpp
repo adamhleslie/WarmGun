@@ -34,4 +34,7 @@ GLProgram::~GLProgram()
 	glDeleteProgram(m_programId);
 }
 
-
+void GLProgram::Use() const
+{
+	glUseProgram(Get());
+}

@@ -19,6 +19,8 @@ public:
 	// Explicit conversion function for OpenGL Identifier
 	GLuint Get() const { return m_programId; }
 
+	void Use() const;
+
 private:
 	GLuint m_programId;
 };

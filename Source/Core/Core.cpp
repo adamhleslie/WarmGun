@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "GLVertexArray.h"
 #include "GLVertexBuffer.h"
+#include "GLElementBuffer.h"
 #include "Utilities.h"
 
 #include <iostream>
@@ -15,7 +16,7 @@ namespace
 	constexpr unsigned int g_screenHeight = 600;
 	bool g_renderWireframe = false;
 
-#pragma region Shaders
+	#pragma region Shaders
 	const char* g_vertexShaderSource = "#version 410 core\n"
 	                                   "layout (location = 0) in vec3 aPos;\n"
 	                                   "void main()\n"
@@ -29,9 +30,9 @@ namespace
 	                                     "{\n"
 	                                     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 	                                     "}\0";
-#pragma endregion
+	#pragma endregion
 
-#pragma region Rectangle
+	#pragma region Rectangle
 	const std::array<GLfloat, 12> g_rectangleVertices =
 	{
 		0.5f, 0.5f, 0.0f,      // top right
@@ -45,9 +46,9 @@ namespace
 		0, 1, 3,    // first triangle
 		1, 2, 3     // second triangle
 	};
-#pragma endregion
+	#pragma endregion
 
-#pragma region Triangle
+	#pragma region Triangle
 	const std::array<GLfloat, 9> g_triangleVertices =
 	{
 		-0.5f, -0.5f, 0.0f,
@@ -56,7 +57,7 @@ namespace
 	};
 
 	const std::array<GLuint, 3> g_triangleIndices = { 0, 1, 2 };
-    #pragma endregion
+	#pragma endregion
 
     void FrameBufferSizeCallback(GLFWwindow* window, int width, int height)
     {
@@ -86,7 +87,7 @@ namespace
         }
     }
 
-	std::shared_ptr<GLVertexArray> CreateEBO(Utilities::CArray<const GLfloat> vertices, Utilities::CArray<const GLuint> indices, GLuint& eboId)
+	std::shared_ptr<GLVertexArray> CreateVAO(Utilities::CArray<const GLfloat> vertices, Utilities::CArray<const GLuint> indices)
     {
         #pragma region VAO
         // Create a vertex array object (VAO), and bind it
@@ -101,29 +102,26 @@ namespace
         // Copy normalized device coordinate (NDO) vertices into the VBO
 		vertexBuffer->CopyTo(vertices, GL_STATIC_DRAW);
 
-		// TODO: HERE
-
         // Tell OpenGL how to parse the array of vertices: Pass vertices into the vertex attribute with "(location = 0)"
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(GLfloat), 0);
-        glEnableVertexAttribArray(0);
+		vertexBuffer->SetAttribute(0, 3, GL_FLOAT, false, 3 * sizeof(GLfloat));
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+		GLVertexBuffer::ClearBinding();
         #pragma endregion
 
         #pragma region EBO
         // Create an element buffer object (EBO)
-        glGenBuffers(1, &eboId);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+		std::shared_ptr<GLElementBuffer> elementBuffer = std::make_shared<GLElementBuffer>();
+		elementBuffer->Bind();
 
         // Copy indices into the EBO
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, std::get<1>(indices), std::get<0>(indices), GL_STATIC_DRAW);
+		elementBuffer->CopyTo(indices, GL_STATIC_DRAW);
 
         // Do NOT unbind the EBO while a VAO is active as the bound EBO is stored in the bound VAO when it is unbound
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//GLElementBuffer::ClearBinding();
         #pragma endregion
 
-        glBindVertexArray(0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		GLVertexArray::ClearBinding();
+		GLElementBuffer::ClearBinding();
         #pragma endregion
 
 		return vertexArray;
@@ -140,27 +138,29 @@ namespace
         // Create shader program
         Shader shader{g_vertexShaderSource, g_fragmentShaderSource};
 
-        GLuint rectangleEboId;
-	    std::shared_ptr<GLVertexArray> rectangleVertexArray = CreateEBO(Utilities::ToCArray(g_rectangleVertices), Utilities::ToCArray(g_rectangleIndices), rectangleEboId);
+	    std::shared_ptr<GLVertexArray> rectangleVertexArray =
+		    CreateVAO(Utilities::ToCArray(g_rectangleVertices), Utilities::ToCArray(g_rectangleIndices));
 
-        GLuint triangleEboId;
-	    std::shared_ptr<GLVertexArray> triangleVertexArray = CreateEBO(Utilities::ToCArray(g_triangleVertices), Utilities::ToCArray(g_triangleIndices), triangleEboId);
+	    std::shared_ptr<GLVertexArray> triangleVertexArray =
+		    CreateVAO(Utilities::ToCArray(g_triangleVertices), Utilities::ToCArray(g_triangleIndices));
 
 		return {shader, rectangleVertexArray, triangleVertexArray};
 	}
 
-    void Render_RectangleAndTriangle_Update(GLuint rectangleVaoId, GLuint triangleVaoId, const Shader& shader)
+    void Render_RectangleAndTriangle_Update(const GLVertexArray& rectangle, const GLVertexArray& triangle, const Shader& shader)
     {
         Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
 		shader.Use();
 
-        glBindVertexArray(rectangleVaoId);
+	    rectangle.Bind();
+		//rectangle.Draw();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        glBindVertexArray(triangleVaoId);
+		triangle.Bind();
+		//triangle.Draw();
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
-        glBindVertexArray(0);
+		GLVertexArray::ClearBinding();
     }
 }
 
@@ -202,7 +202,7 @@ void Core::Run()
     glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
 
     #pragma region Rendering Commands Setup
-    auto [ shader, rectangleVertexArray, triangleVertexArray ] = Render_RectangleAndTriangle_Setup();
+    auto [ shader, rectangle, triangle ] = Render_RectangleAndTriangle_Setup();
     #pragma endregion
 
     // Render loop until close requested
@@ -211,7 +211,7 @@ void Core::Run()
         ProcessInput(window);
 
         #pragma region Rendering Commands
-        Render_RectangleAndTriangle_Update(rectangleVertexArray->Get(), triangleVertexArray->Get(), shader);
+        Render_RectangleAndTriangle_Update(*rectangle, *triangle, shader);
         #pragma endregion
 
         // Swap front and back buffers (double buffered)
