@@ -7,7 +7,7 @@
 /**
  * Generic Buffer Object
  */
-template<GLenum BufferType, GLenum BufferBindingType, class T>
+template<GLenum BufferType, GLenum BufferTypeBinding, class T>
 class GLBuffer
 {
 public:
@@ -26,6 +26,11 @@ public:
 
 	// Explicit conversion function for OpenGL Identifier
 	GLuint Get() const { return m_bufferId; }
+
+	bool IsBound() const
+	{
+		return (Get() == GetBinding());
+	}
 
 	void Bind() const
 	{
@@ -51,7 +56,7 @@ public:
 	static GLuint GetBinding()
 	{
 		GLint binding;
-		glGetIntegerv(BufferBindingType, &binding);
+		glGetIntegerv(BufferTypeBinding, &binding);
 		return binding;
 	}
 
