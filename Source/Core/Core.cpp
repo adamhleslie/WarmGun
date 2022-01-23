@@ -191,7 +191,12 @@ void Core::Run()
         return;
     }
 
-    // Set OpenGL rendering (the viewport) to take up the full window
+	// Log OpenGL data
+	GLint maxVertexAttributes;
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttributes);
+	std::cout << "[Core.Run] Maximum number of vertex attributes supported: " << maxVertexAttributes << std::endl;
+
+	// Set OpenGL rendering (the viewport) to take up the full window
     glViewport(0, 0, g_screenWidth, g_screenHeight);
 
     // Set resizing of window to modify the viewport's size

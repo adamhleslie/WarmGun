@@ -5,12 +5,24 @@
 #pragma warning(default:5039)
 
 #include <exception>
+#include <cstdio>
 #include "Core.h"
 
 #pragma warning(disable:4100) // Disable warnings related to unused parameters for WinMain
 int CALLBACK WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    try
+	if (!AllocConsole())
+	{
+		return 1;
+	}
+
+	// Open streams: std::cout, std::cerr, std::cin
+	FILE* filePtr;
+	freopen_s(&filePtr, "CONOUT$", "w", stdout);
+	freopen_s(&filePtr, "CONOUT$", "w", stderr);
+	freopen_s(&filePtr, "CONIN$", "r", stdin);
+
+	try
     {
         // Run the application!
         Core core;
