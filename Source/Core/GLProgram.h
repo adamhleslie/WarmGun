@@ -3,6 +3,7 @@
 #include "GLShader.h"
 #include <glad/glad.h>
 #include <initializer_list>
+#include <string>
 
 /**
  * Shader Program
@@ -21,6 +22,11 @@ public:
 
 	void Use() const;
 
+	bool SetUniform(const std::string& name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const;
+	bool HasUniform(const std::string& name) const;
+
 private:
+	GLint GetUniformLocation(const std::string& name) const;
+
 	GLuint m_programId;
 };

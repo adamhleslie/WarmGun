@@ -1,4 +1,6 @@
 #version 410 core
+
+// All fragment shaders require a vec4 color output variable
 out vec4 FragColor;
 
 void main()

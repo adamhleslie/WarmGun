@@ -38,3 +38,26 @@ void GLProgram::Use() const
 {
 	glUseProgram(Get());
 }
+
+bool GLProgram::SetUniform(const std::string& name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const
+{
+	GLint uniformLocation = GetUniformLocation(name);
+	if (uniformLocation == -1)
+	{
+		return false;
+	}
+
+	glProgramUniform4f(Get(), uniformLocation, v0, v1, v2, v3);
+
+	return true;
+}
+
+bool GLProgram::HasUniform(const std::string& name) const
+{
+	return (GetUniformLocation(name) != -1);
+}
+
+GLint GLProgram::GetUniformLocation(const std::string& name) const
+{
+	return glGetUniformLocation(Get(), name.c_str());
+}

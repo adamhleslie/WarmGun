@@ -19,7 +19,7 @@ namespace
 
 	#pragma region Shaders
 	const std::filesystem::path g_vertexShaderPath{"./Content/Shaders/Simple.vert"};
-	const std::filesystem::path g_fragmentShaderPath{"./Content/Shaders/Simple.frag"};
+	const std::filesystem::path g_fragmentShaderPath{"./Content/Shaders/Uniform.frag"};
 	#pragma endregion
 
 	#pragma region Rectangle
@@ -146,7 +146,9 @@ namespace
     void Render_RectangleAndTriangle_Update(const GLVertexArray& rectangle, const GLVertexArray& triangle, const Shader& shader)
     {
         Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
+
 		shader.Use();
+	    shader.SetUniform("uniformColor", 0.0f, (sin(glfwGetTime()) / 2.0f) + 0.5f, 0.0f, 1.0f);
 
 	    rectangle.Bind();
 		//rectangle.Draw();

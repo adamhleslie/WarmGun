@@ -14,3 +14,8 @@ void Shader::Use() const
 {
 	m_shaderProgram->Use();
 }
+
+bool Shader::SetUniform(const std::string& name, float x, float y, float z, float w) const
+{
+	return m_shaderProgram->SetUniform(name, x, y, z, w);
+}
