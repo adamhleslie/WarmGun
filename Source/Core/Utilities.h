@@ -3,10 +3,15 @@
 #include <cstddef>
 #include <array>
 #include <tuple>
+#include <string>
+#include <filesystem>
 
 namespace Utilities
 {
-	// CArray is a tuple storing the array's pointer, and the size of the array in bytes
+	bool ReadFile(const std::filesystem::path& path, std::string& contents);
+
+	#pragma region CArray
+	// CArray is a tuple storing an array's pointer, and the size of the array in bytes
 	// Recommended unpacking:
 	//     auto [data, sizeOf] = x;
 	template<class T>
@@ -41,4 +46,5 @@ namespace Utilities
 	{
 		return (std::get<1>(array) / sizeof(T));
 	}
+	#pragma endregion
 }

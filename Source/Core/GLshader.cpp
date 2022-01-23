@@ -16,8 +16,8 @@ GLShader::GLShader(GLenum shaderType, const std::string& shaderSource)
 	{
 		char infoLog[512];
 		glGetShaderInfoLog(Get(), 512, nullptr, infoLog);
-		std::cout << "[Shader.CreateShader] Compilation failed: " << infoLog << std::endl;
-		// TODO: Throw exception
+		std::cout << "[GLShader] Compilation failed: " << infoLog << std::endl;
+		throw std::invalid_argument("[GLShader] Compilation failed");
 	}
 }
 

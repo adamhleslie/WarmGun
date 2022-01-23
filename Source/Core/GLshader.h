@@ -5,7 +5,7 @@
 #include <memory>
 
 /**
- *
+ *	Shader
  */
 class GLShader
 {

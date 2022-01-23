@@ -1,4 +1,5 @@
 #include "Core.h"
+
 #include "Shader.h"
 #include "GLVertexArray.h"
 #include "GLVertexBuffer.h"
@@ -17,19 +18,8 @@ namespace
 	bool g_renderWireframe = false;
 
 	#pragma region Shaders
-	const char* g_vertexShaderSource = "#version 410 core\n"
-	                                   "layout (location = 0) in vec3 aPos;\n"
-	                                   "void main()\n"
-	                                   "{\n"
-	                                   "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	                                   "}\0";
-
-	const char* g_fragmentShaderSource = "#version 410 core\n"
-	                                     "out vec4 FragColor;\n"
-	                                     "void main()\n"
-	                                     "{\n"
-	                                     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	                                     "}\0";
+	const std::filesystem::path g_vertexShaderPath{"../../Shaders/Simple.vert"};
+	const std::filesystem::path g_fragmentShaderPath{"../../Shaders/Simple.frag"};
 	#pragma endregion
 
 	#pragma region Rectangle
@@ -135,8 +125,14 @@ namespace
 
 	std::tuple<Shader, std::shared_ptr<GLVertexArray>, std::shared_ptr<GLVertexArray>> Render_RectangleAndTriangle_Setup()
     {
-        // Create shader program
-        Shader shader{g_vertexShaderSource, g_fragmentShaderSource};
+		std::string vertexShaderSource;
+		Utilities::ReadFile(g_vertexShaderPath, vertexShaderSource);
+
+	    std::string fragmentShaderSource;
+	    Utilities::ReadFile(g_fragmentShaderPath, fragmentShaderSource);
+
+	    // Create shader program
+        Shader shader{vertexShaderSource, fragmentShaderSource};
 
 	    std::shared_ptr<GLVertexArray> rectangleVertexArray =
 		    CreateVAO(Utilities::ToCArray(g_rectangleVertices), Utilities::ToCArray(g_rectangleIndices));

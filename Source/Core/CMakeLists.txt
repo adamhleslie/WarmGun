@@ -1,7 +1,7 @@
 set(library_name "Core")
 
 set(sources
-    Utilities.h
+    Utilities.h Utilities.cpp
     Core.h Core.cpp
     Shader.h Shader.cpp
     GLShader.h GLShader.cpp

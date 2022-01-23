@@ -1,11 +1,11 @@
 #pragma once
 
+#include "GLShader.h"
 #include <glad/glad.h>
 #include <initializer_list>
-#include "GLShader.h"
 
 /**
- *
+ * Shader Program
  */
 class GLProgram
 {
