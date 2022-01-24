@@ -3,6 +3,10 @@
 #include <system_error>
 #include "GLShader.h"
 
+Shader::Shader()
+	: m_shaderProgram(nullptr)
+{ }
+
 Shader::Shader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
 {
 	GLShader vertexShader{GL_VERTEX_SHADER, vertexShaderSource};

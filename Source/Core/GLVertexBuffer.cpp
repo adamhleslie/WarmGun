@@ -1,8 +1,8 @@
 #include "GLVertexBuffer.h"
 
-void GLVertexBuffer::SetAttribute(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride) const
+void GLVertexBuffer::SetAttribute(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, size_t offset) const
 {
 	// TODO: Check if bound!
-	glVertexAttribPointer(index, size, type, normalized, stride, 0);
+	glVertexAttribPointer(index, size, type, normalized, stride, reinterpret_cast<const void*>(offset));
 	glEnableVertexAttribArray(index);
 }

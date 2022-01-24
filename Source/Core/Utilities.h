@@ -5,10 +5,13 @@
 #include <tuple>
 #include <string>
 #include <filesystem>
+#include <glad/glad.h>
 
 namespace Utilities
 {
 	bool ReadFile(const std::filesystem::path& path, std::string& contents);
+
+	void Render_ClearToColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a);
 
 	#pragma region CArray
 	// CArray is a tuple storing an array's pointer, and the size of the array in bytes

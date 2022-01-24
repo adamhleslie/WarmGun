@@ -10,7 +10,7 @@ class GLVertexBuffer : public GLBuffer<GL_ARRAY_BUFFER, GL_ARRAY_BUFFER_BINDING,
 public:
 	using GLBuffer::GLBuffer;
 
-	void SetAttribute(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride) const;
+	void SetAttribute(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride,  size_t offset) const;
 };
 
 

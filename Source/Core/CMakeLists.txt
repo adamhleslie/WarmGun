@@ -9,7 +9,10 @@ set(sources
     GLVertexArray.h GLVertexArray.cpp
     GLBuffer.h
     GLVertexBuffer.h GLVertexBuffer.cpp
-    GLElementBuffer.h GLElementBuffer.cpp)
+    GLElementBuffer.h GLElementBuffer.cpp
+    RenderExample.h
+    RenderExample_RectangleAndTriangle.h RenderExample_RectangleAndTriangle.cpp
+    RenderExample_RainbowTriangle.h RenderExample_RainbowTriangle.cpp)
 
 set(include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR})

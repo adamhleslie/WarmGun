@@ -10,6 +10,7 @@
 class Shader
 {
 public:
+	Shader();
 	Shader(const std::string& vertexShader, const std::string& fragmentShader);
 
     void Use() const;
