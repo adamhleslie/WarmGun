@@ -9,7 +9,7 @@ class RenderExample_RectangleAndTriangle : public RenderExample
 public:
 	RenderExample_RectangleAndTriangle();
 
-	void Update() override;
+	void Render() override;
 
 private:
 	Shader m_shader;

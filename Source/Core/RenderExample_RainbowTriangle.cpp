@@ -78,7 +78,7 @@ RenderExample_RainbowTriangle::RenderExample_RainbowTriangle()
 	m_triangle = CreateVAO(Utilities::ToCArray(g_triangleVertices), Utilities::ToCArray(g_triangleIndices));
 }
 
-void RenderExample_RainbowTriangle::Update()
+void RenderExample_RainbowTriangle::Render()
 {
 	Utilities::Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
 

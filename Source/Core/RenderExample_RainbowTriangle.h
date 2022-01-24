@@ -9,7 +9,7 @@ class RenderExample_RainbowTriangle : public RenderExample
 public:
 	RenderExample_RainbowTriangle();
 	
-	void Update() override;
+	void Render() override;
 
 private:
 	Shader m_shader;

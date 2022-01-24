@@ -92,7 +92,7 @@ void Core::Run()
     {
         ProcessInput(window);
 
-	    renderExample->Update();
+	    renderExample->Render();
 
         // Swap front and back buffers (double buffered)
         glfwSwapBuffers(window);
