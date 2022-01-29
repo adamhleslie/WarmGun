@@ -3,6 +3,7 @@
 #include "RenderExample.h"
 #include "RenderExample_RectangleAndTriangle.h"
 #include "RenderExample_RainbowTriangle.h"
+#include "RenderExample_TexturedTriangle.h"
 #include <iostream>
 #include <array>
 #include <glad/glad.h>
@@ -45,7 +46,11 @@ namespace
 
 void Core::Run()
 {
-    // Set up GLFW with OpenGL 4.6 Core
+	// TODO: Use macros to create automatic logging w/ [Class.Func] prefix
+	//std::cout << "\"" << __FUNCSIG__  << "\" | \"" << __func__ << "\"" << std::endl;
+	//std::cout << "\"" << __PRETTY_FUNCTION__  << "\" | \"" << __func__ << "\"" << std::endl;
+
+	// Set up GLFW with OpenGL 4.6 Core
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -85,7 +90,7 @@ void Core::Run()
     // Set resizing of window to modify the viewport's size
     glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
 
-	std::unique_ptr<RenderExample> renderExample = std::unique_ptr<RenderExample>(new RenderExample_RainbowTriangle());
+	std::unique_ptr<RenderExample> renderExample = std::unique_ptr<RenderExample>(new RenderExample_TexturedTriangle());
 
     // Render loop until close requested
     while (!glfwWindowShouldClose(window))

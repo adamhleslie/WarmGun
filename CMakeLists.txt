@@ -39,6 +39,7 @@ include(project.library)
 include(project.opengl)
 include(project.glfw)
 include(project.glad)
+include(project.stb_image)
 
 # Add project exe
 add_executable(${PROJECT_NAME} WIN32)

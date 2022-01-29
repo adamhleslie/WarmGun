@@ -1,4 +1,4 @@
-#include "RenderExample_RainbowTriangle.h"
+#include "RenderExample_TexturedTriangle.h"
 
 #include "Utilities.h"
 #include "GLVertexBuffer.h"
@@ -6,12 +6,13 @@
 #include <filesystem>
 #include <array>
 #include <glad/glad.h>
+#include <iostream>
 
 namespace
 {
 	#pragma region Shaders
-	const std::filesystem::path g_vertexShaderPath{"./Content/Shaders/VariableLink.vert"};
-	const std::filesystem::path g_fragmentShaderPath{"./Content/Shaders/VariableLink.frag"};
+	const std::filesystem::path g_vertexShaderPath{ "./Content/Shaders/VariableLink.vert" };
+	const std::filesystem::path g_fragmentShaderPath{ "./Content/Shaders/VariableLink.frag" };
 	#pragma endregion
 
 	#pragma region Triangle
@@ -66,7 +67,7 @@ namespace
 	}
 }
 
-RenderExample_RainbowTriangle::RenderExample_RainbowTriangle()
+RenderExample_TexturedTriangle::RenderExample_TexturedTriangle()
 {
 	std::string vertexShaderSource;
 	Utilities::ReadFile(g_vertexShaderPath, vertexShaderSource);
@@ -78,7 +79,7 @@ RenderExample_RainbowTriangle::RenderExample_RainbowTriangle()
 	m_triangle = CreateVAO(Utilities::ToCArray(g_triangleVertices), Utilities::ToCArray(g_triangleIndices));
 }
 
-void RenderExample_RainbowTriangle::Render()
+void RenderExample_TexturedTriangle::Render()
 {
 	Utilities::Render_ClearToColor(0.2f, 0.3f, 0.3f, 1.0f);
 
