@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GLBindable.h"
 #include <glad/glad.h>
 
 /**
@@ -7,25 +8,23 @@
  * After binding, any subsequent vertex attribute calls will be stored inside
  * Calls: glEnableVertexAttribArray / glDisableVertexAttribArray / glVertexAttribPointer
  */
-class GLVertexArray
+class GLVertexArray : public GLBindable<GL_VERTEX_ARRAY_BINDING>
 {
 public:
 	GLVertexArray();
-	virtual ~GLVertexArray();
+	~GLVertexArray() override;
 
 	GLVertexArray(const GLVertexArray&) = delete;
 	GLVertexArray& operator=(const GLVertexArray&) = delete;
 
-	// Explicit conversion function for OpenGL Identifier
-	GLuint Get() const { return m_vertexArrayId; }
-
-	void Bind() const;
+	void Bind() const override;
 
 	static void ClearBinding();
-	static GLuint GetBinding();
 
 private:
-	GLuint m_vertexArrayId;
+	static GLuint Generate();
+	static void Bind(GLuint identifier);
+	static void Delete(GLuint identifier);
 };
 
 

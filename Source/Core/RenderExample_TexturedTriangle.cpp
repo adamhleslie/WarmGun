@@ -3,9 +3,11 @@
 #include "Utilities.h"
 #include "GLVertexBuffer.h"
 #include "GLElementBuffer.h"
+#include "GLTexture.h"
+#include <glad/glad.h>
+#include <stb_image.h>
 #include <filesystem>
 #include <array>
-#include <glad/glad.h>
 #include <iostream>
 
 namespace
@@ -77,6 +79,14 @@ RenderExample_TexturedTriangle::RenderExample_TexturedTriangle()
 
 	m_shader = Shader{vertexShaderSource, fragmentShaderSource};
 	m_triangle = CreateVAO(Utilities::ToCArray(g_triangleVertices), Utilities::ToCArray(g_triangleIndices));
+
+	int width, height, channelCount;
+	unsigned char *data = stbi_load("Content/Textures/container.jpg", &width, &height, &channelCount, 0);
+
+	GLTexture texture;
+	texture.Bind();
+
+	texture.CopyTo(data, width, height);
 }
 
 void RenderExample_TexturedTriangle::Render()

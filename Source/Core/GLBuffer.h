@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utilities.h"
+#include "GLBindable.h"
 #include <glad/glad.h>
 #include <tuple>
 
@@ -8,38 +9,29 @@
  * Generic Buffer Object
  */
 template<GLenum BufferType, GLenum BufferTypeBinding, class T>
-class GLBuffer
+class GLBuffer : public GLBindable<BufferTypeBinding>
 {
 public:
 	GLBuffer()
-	{
-		glGenBuffers(1, &m_bufferId);
-	}
+		: GLBindable<BufferTypeBinding>(Generate())
+	{ }
 
 	virtual ~GLBuffer()
 	{
-		glDeleteBuffers(1, &m_bufferId);
+		Delete(GLIdentified::Get());
 	}
 
 	GLBuffer(const GLBuffer&) = delete;
 	GLBuffer& operator=(const GLBuffer&) = delete;
 
-	// Explicit conversion function for OpenGL Identifier
-	GLuint Get() const { return m_bufferId; }
-
-	bool IsBound() const
+	void Bind() const override
 	{
-		return (Get() == GetBinding());
-	}
-
-	void Bind() const
-	{
-		glBindBuffer(BufferType, Get());
+		Bind(GLIdentified::Get());
 	}
 
 	void CopyTo(const T* vertices, GLsizeiptr sizeOf, GLenum usage) const
 	{
-		// TODO: Check if bound!
+		// TODO: Check IsBound!
 		glBufferData(BufferType, sizeOf, vertices, usage);
 	}
 
@@ -50,18 +42,26 @@ public:
 
 	static void ClearBinding()
 	{
-		glBindBuffer(BufferType, 0);
-	}
-
-	static GLuint GetBinding()
-	{
-		GLint binding;
-		glGetIntegerv(BufferTypeBinding, &binding);
-		return binding;
+		Bind(0);
 	}
 
 private:
-	GLuint m_bufferId;
+	static GLuint Generate()
+	{
+		GLuint identifier;
+		glGenBuffers(1, &identifier);
+		return identifier;
+	}
+
+	static void Bind(GLuint identifier)
+	{
+		glBindBuffer(BufferType, identifier);
+	}
+
+	static void Delete(GLuint identifier)
+	{
+		glDeleteBuffers(1, &identifier);
+	}
 };
 
 

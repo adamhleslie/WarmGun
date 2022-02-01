@@ -3,9 +3,8 @@
 #include <iostream>
 
 GLShader::GLShader(GLenum shaderType, const std::string& shaderSource)
+	: GLIdentified(glCreateShader(shaderType))
 {
-	m_shaderId = glCreateShader(shaderType);
-
 	const char* shaderSourceString = shaderSource.c_str();
 	glShaderSource(Get(), 1, &shaderSourceString, nullptr);
 	glCompileShader(Get());
@@ -23,5 +22,5 @@ GLShader::GLShader(GLenum shaderType, const std::string& shaderSource)
 
 GLShader::~GLShader()
 {
-	glDeleteShader(m_shaderId);
+	glDeleteShader(Get());
 }

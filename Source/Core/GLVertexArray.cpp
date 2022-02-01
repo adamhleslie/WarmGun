@@ -1,28 +1,39 @@
 #include "GLVertexArray.h"
 
 GLVertexArray::GLVertexArray()
-{
-	glGenVertexArrays(1, &m_vertexArrayId);
-}
+	: GLBindable<GL_VERTEX_ARRAY_BINDING>(Generate())
+{ }
 
 GLVertexArray::~GLVertexArray()
 {
-	glDeleteVertexArrays(1, &m_vertexArrayId);
+	Delete(Get());
 }
 
 void GLVertexArray::Bind() const
 {
-	glBindVertexArray(Get());
+	Bind(Get());
 }
 
 void GLVertexArray::ClearBinding()
 {
-	glBindVertexArray(0);
+	Bind(0);
 }
 
-GLuint GLVertexArray::GetBinding()
+#pragma region Static
+GLuint GLVertexArray::Generate()
 {
-	GLint binding;
-	glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &binding);
-	return binding;
+	GLuint identifier;
+	glGenVertexArrays(1, &identifier);
+	return identifier;
 }
+
+void GLVertexArray::Bind(GLuint identifier)
+{
+	glBindVertexArray(identifier);
+}
+
+void GLVertexArray::Delete(GLuint identifier)
+{
+	glDeleteVertexArrays(1, &identifier);
+}
+#pragma endregion

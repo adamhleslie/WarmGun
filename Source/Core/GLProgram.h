@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GLIdentified.h"
 #include "GLShader.h"
 #include <glad/glad.h>
 #include <initializer_list>
@@ -8,17 +9,14 @@
 /**
  * Shader Program
  */
-class GLProgram
+class GLProgram : public GLIdentified
 {
 public:
 	GLProgram(std::initializer_list<std::reference_wrapper<GLShader>> shaderIds);
-	virtual ~GLProgram();
+	~GLProgram() override;
 
 	GLProgram(const GLProgram&) = delete;
 	GLProgram& operator=(const GLProgram&) = delete;
-
-	// Explicit conversion function for OpenGL Identifier
-	GLuint Get() const { return m_programId; }
 
 	void Use() const;
 
@@ -27,6 +25,4 @@ public:
 
 private:
 	GLint GetUniformLocation(const std::string& name) const;
-
-	GLuint m_programId;
 };

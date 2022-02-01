@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GLIdentified.h"
 #include <glad/glad.h>
 #include <string>
 #include <memory>
@@ -7,18 +8,12 @@
 /**
  *	Shader
  */
-class GLShader
+class GLShader : public GLIdentified
 {
 public:
 	GLShader(GLenum shaderType, const std::string& shaderSource);
-	virtual ~GLShader();
+	~GLShader() override;
 
 	GLShader(const GLShader&) = delete;
 	GLShader& operator=(const GLShader&) = delete;
-
-	// Explicit conversion function for OpenGL Identifier
-	GLuint Get() const { return m_shaderId; }
-
-private:
-	GLuint m_shaderId;
 };

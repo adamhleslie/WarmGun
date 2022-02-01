@@ -3,6 +3,7 @@
 #include <iostream>
 
 GLProgram::GLProgram(std::initializer_list<std::reference_wrapper<GLShader>> shaders)
+	: GLIdentified(glCreateProgram())
 {
 	if (shaders.size() == 0)
 	{
@@ -10,7 +11,6 @@ GLProgram::GLProgram(std::initializer_list<std::reference_wrapper<GLShader>> sha
 		throw std::invalid_argument("[GLProgram] No shader IDs provided");
 	}
 
-	m_programId = glCreateProgram();
 	for (const GLShader& shader : shaders)
 	{
 		glAttachShader(Get(), shader.Get());
@@ -31,7 +31,7 @@ GLProgram::GLProgram(std::initializer_list<std::reference_wrapper<GLShader>> sha
 
 GLProgram::~GLProgram()
 {
-	glDeleteProgram(m_programId);
+	glDeleteProgram(Get());
 }
 
 void GLProgram::Use() const

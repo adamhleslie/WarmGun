@@ -4,8 +4,11 @@ set(sources
     Utilities.h Utilities.cpp
     Core.h Core.cpp
     Shader.h Shader.cpp
+    GLIdentified.h GLIdentified.cpp
+    GLBindable.h
     GLShader.h GLShader.cpp
     GLProgram.h GLProgram.cpp
+    GLTexture.h GLTexture.cpp
     GLVertexArray.h GLVertexArray.cpp
     GLBuffer.h
     GLVertexBuffer.h GLVertexBuffer.cpp
