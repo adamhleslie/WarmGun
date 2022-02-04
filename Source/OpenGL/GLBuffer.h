@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Utilities.h"
+#include "Utilities_OpenGL.h"
 #include "GLBindable.h"
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <tuple>
 
 /**

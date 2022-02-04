@@ -46,6 +46,7 @@ add_executable(${PROJECT_NAME} WIN32)
 setup_cxx_target(${PROJECT_NAME})
 
 # Add internal libraries
+add_subdirectory(Source/OpenGL)
 add_subdirectory(Source/Core)
 add_subdirectory(Source/Application)
 

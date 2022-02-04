@@ -5,5 +5,3 @@ class RenderExample
 public:
 	virtual void Render() = 0;
 };
-
-

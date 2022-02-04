@@ -2,7 +2,7 @@
 
 #include "GLIdentified.h"
 #include "GLShader.h"
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <initializer_list>
 #include <string>
 

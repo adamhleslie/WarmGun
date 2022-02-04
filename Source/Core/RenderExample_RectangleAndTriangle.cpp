@@ -1,6 +1,7 @@
 #include "RenderExample_RectangleAndTriangle.h"
 
 #include "Utilities.h"
+#include "Utilities_OpenGL.h"
 #include "GLVertexBuffer.h"
 #include "GLElementBuffer.h"
 #include <GLFW/glfw3.h>

@@ -1,6 +1,7 @@
 #include "RenderExample_TexturedTriangle.h"
 
 #include "Utilities.h"
+#include "Utilities_OpenGL.h"
 #include "GLVertexBuffer.h"
 #include "GLElementBuffer.h"
 #include "GLTexture.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GLIdentified.h"
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <string>
 #include <memory>
 
