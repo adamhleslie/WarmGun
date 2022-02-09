@@ -19,10 +19,30 @@ void GLTexture::ClearBinding()
 	Bind(0);
 }
 
+void GLTexture::SetWrapping(GLint s, GLint t)
+{
+	// TODO: Check if bound!
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t);
+}
+
+void GLTexture::SetFiltering(GLint minifyingFilter, GLint magnifyingFilter)
+{
+	// TODO: Check if bound!
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minifyingFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter);
+}
+
 void GLTexture::CopyTo(GLubyte* texture, GLsizei width, GLsizei height) const
 {
 	// TODO: Check if bound!
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+	glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+void GLTexture::GenerateMipmaps()
+{
+	// TODO: Check if bound!
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 

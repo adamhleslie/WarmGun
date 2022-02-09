@@ -86,7 +86,7 @@ void RenderExample_RainbowTriangle::Render()
 	m_shader.Use();
 
 	m_triangle->Bind();
-	//m_triangle->Draw();
+	//m_rectangle->Draw();
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 	GLVertexArray::ClearBinding();

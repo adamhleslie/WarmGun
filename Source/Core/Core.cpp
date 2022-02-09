@@ -3,7 +3,7 @@
 #include "RenderExample.h"
 #include "RenderExample_RectangleAndTriangle.h"
 #include "RenderExample_RainbowTriangle.h"
-#include "RenderExample_TexturedTriangle.h"
+#include "RenderExample_Texturing.h"
 #include <iostream>
 #include <array>
 #include <glad/glad.h>
@@ -90,7 +90,7 @@ void Core::Run()
     // Set resizing of window to modify the viewport's size
     glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
 
-	std::unique_ptr<RenderExample> renderExample = std::unique_ptr<RenderExample>(new RenderExample_TexturedTriangle());
+	std::unique_ptr<RenderExample> renderExample = std::unique_ptr<RenderExample>(new RenderExample_Texturing());
 
     // Render loop until close requested
     while (!glfwWindowShouldClose(window))

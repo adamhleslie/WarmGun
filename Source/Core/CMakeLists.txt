@@ -7,7 +7,7 @@ set(sources
     RenderExample.h
     RenderExample_RectangleAndTriangle.h RenderExample_RectangleAndTriangle.cpp
     RenderExample_RainbowTriangle.h RenderExample_RainbowTriangle.cpp
-    RenderExample_TexturedTriangle.h RenderExample_TexturedTriangle.cpp)
+    RenderExample_Texturing.h RenderExample_Texturing.cpp)
 
 set(include_dirs
     ${CMAKE_CURRENT_SOURCE_DIR})
