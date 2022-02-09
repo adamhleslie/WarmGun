@@ -23,3 +23,8 @@ bool Shader::SetUniform(const std::string& name, float x, float y, float z, floa
 {
 	return m_shaderProgram->SetUniform(name, x, y, z, w);
 }
+
+bool Shader::SetUniform(const std::string& name, int i) const
+{
+	return m_shaderProgram->SetUniform(name, i);
+}

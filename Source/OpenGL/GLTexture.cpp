@@ -14,6 +14,12 @@ void GLTexture::Bind() const
 	Bind(Get());
 }
 
+void GLTexture::BindTo(GLenum textureUnit) const
+{
+	glActiveTexture(textureUnit);
+	Bind();
+}
+
 void GLTexture::ClearBinding()
 {
 	Bind(0);
@@ -33,10 +39,10 @@ void GLTexture::SetFiltering(GLint minifyingFilter, GLint magnifyingFilter)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter);
 }
 
-void GLTexture::CopyTo(GLubyte* texture, GLsizei width, GLsizei height) const
+void GLTexture::CopyTo(GLubyte* texture, GLsizei width, GLsizei height, GLenum format) const
 {
 	// TODO: Check if bound!
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, texture);
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 

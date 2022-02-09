@@ -52,6 +52,19 @@ bool GLProgram::SetUniform(const std::string& name, GLfloat v0, GLfloat v1, GLfl
 	return true;
 }
 
+bool GLProgram::SetUniform(const std::string& name, int i) const
+{
+	GLint uniformLocation = GetUniformLocation(name);
+	if (uniformLocation == -1)
+	{
+		return false;
+	}
+
+	glProgramUniform1i(Get(), uniformLocation, i);
+
+	return true;
+}
+
 bool GLProgram::HasUniform(const std::string& name) const
 {
 	return (GetUniformLocation(name) != -1);

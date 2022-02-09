@@ -16,11 +16,12 @@ public:
 	GLTexture& operator=(const GLTexture&) = delete;
 
 	void Bind() const override;
+	void BindTo(GLenum textureUnit) const;
 	static void ClearBinding();
 
 	void SetWrapping(GLint s, GLint t);
 	void SetFiltering(GLint minifyingFilter, GLint magnifyingFilter);
-	void CopyTo(GLubyte* texture, GLsizei width, GLsizei height) const;
+	void CopyTo(GLubyte* texture, GLsizei width, GLsizei height, GLenum format) const;
 	void GenerateMipmaps();
 
 private:

@@ -21,6 +21,7 @@ public:
 	void Use() const;
 
 	bool SetUniform(const std::string& name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const;
+	bool SetUniform(const std::string& name, int i) const;
 	bool HasUniform(const std::string& name) const;
 
 private:

@@ -17,7 +17,8 @@ namespace
 	const std::filesystem::path g_fragmentShaderPath{"./Content/Shaders/Textured.frag"};
 	#pragma endregion
 
-	const std::filesystem::path g_texturePath{"./Content/Textures/container.jpg"};
+	const std::filesystem::path g_texture1Path{"./Content/Textures/container.jpg"};
+	const std::filesystem::path g_texture2Path{"./Content/Textures/awesomeface.png"};
 
 	#pragma region Rectangle
 	const std::array<GLfloat, 32> g_rectangleVertices =
@@ -76,7 +77,7 @@ namespace
 		return vertexArray;
 	}
 
-	std::shared_ptr<GLTexture> CreateTexture(const std::filesystem::path& path, GLint sWrapping, GLint tWrapping, GLint minifyingFilter, GLint magnifyingFilter)
+	std::shared_ptr<GLTexture> CreateTexture(const std::filesystem::path& path, GLenum format, GLint sWrapping, GLint tWrapping, GLint minifyingFilter, GLint magnifyingFilter)
 	{
 		std::shared_ptr<GLTexture> texture = std::make_shared<GLTexture>();
 		texture->Bind();
@@ -84,7 +85,7 @@ namespace
 		// TODO: Wrap stbi usage in resource management class
 		int width, height, channelCount;
 		unsigned char *data = stbi_load(path.string().c_str(), &width, &height, &channelCount, 0);
-		texture->CopyTo(data, width, height);
+		texture->CopyTo(data, width, height, format);
 		stbi_image_free(data);
 
 		texture->SetWrapping(sWrapping, tWrapping);
@@ -105,7 +106,13 @@ RenderExample_Texturing::RenderExample_Texturing()
 
 	m_shader = Shader{vertexShaderSource, fragmentShaderSource};
 	m_rectangle = CreateVAO(Utilities::ToCArray(g_rectangleVertices), Utilities::ToCArray(g_rectangleIndices));
-	m_texture = CreateTexture(g_texturePath, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+
+	stbi_set_flip_vertically_on_load(true);
+	m_texture1 = CreateTexture(g_texture1Path, GL_RGB, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+	m_shader.SetUniform("texture1", 0);
+
+	m_texture2 = CreateTexture(g_texture2Path, GL_RGBA, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+	m_shader.SetUniform("texture2", 1);
 }
 
 void RenderExample_Texturing::Render()
@@ -114,7 +121,8 @@ void RenderExample_Texturing::Render()
 
 	m_shader.Use();
 
-	m_texture->Bind();
+	m_texture1->BindTo(GL_TEXTURE0);
+	m_texture2->BindTo(GL_TEXTURE1);
 	m_rectangle->Bind();
 	//m_rectangle->Draw();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
