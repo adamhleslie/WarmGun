@@ -116,7 +116,7 @@ void RenderExample_Texturing::Render()
 	m_texture1->Bind(0);
 	m_texture2->Bind(1);
 	m_rectangle->Bind();
-	//m_rectangle->Draw();
+	// TODO: m_rectangle->Draw();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	GLTexture::ClearBinding(0);

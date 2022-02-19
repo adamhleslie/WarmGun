@@ -98,11 +98,11 @@ void RenderExample_RectangleAndTriangle::Render()
 	m_shader.SetUniform("uniformColor", 0.0f, (sin(glfwGetTime()) / 2.0f) + 0.5f, 0.0f, 1.0f);
 
 	m_rectangle->Bind();
-	//rectangle.Draw();
+	// TODO: rectangle.Draw();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	m_triangle->Bind();
-	//triangle->Draw();
+	// TODO: triangle->Draw();
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 	GLVertexArray::ClearBinding();
