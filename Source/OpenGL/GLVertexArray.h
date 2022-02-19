@@ -1,12 +1,12 @@
 #pragma once
 
 #include "GLBindable.h"
+#include "GLVertexBuffer.h"
+#include "GLElementBuffer.h"
 #include "glad/glad.h"
 
 /**
  * Vertex Array Object (VAO)
- * After binding, any subsequent vertex attribute calls will be stored inside
- * Calls: glEnableVertexAttribArray / glDisableVertexAttribArray / glVertexAttribPointer
  */
 class GLVertexArray : public GLBindable<GL_VERTEX_ARRAY_BINDING>
 {
@@ -18,8 +18,11 @@ public:
 	GLVertexArray& operator=(const GLVertexArray&) = delete;
 
 	void Bind() const override;
-
 	static void ClearBinding();
+
+	void BindElementBuffer(const GLElementBuffer& elementBuffer) const;
+	void BindVertexBuffer(const GLVertexBuffer& vertexBuffer, GLuint bindingIndex, GLintptr offset, GLsizei stride) const;
+	void SetAttribute(GLuint bindingIndex, GLuint attributeIndex, GLint size, GLenum type, GLboolean normalized, GLuint offset) const;
 
 private:
 	static GLuint Generate();

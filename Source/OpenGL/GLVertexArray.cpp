@@ -19,11 +19,28 @@ void GLVertexArray::ClearBinding()
 	Bind(0);
 }
 
+void GLVertexArray::BindElementBuffer(const GLElementBuffer& elementBuffer) const
+{
+	glVertexArrayElementBuffer(Get(), elementBuffer.Get());
+}
+
+void GLVertexArray::BindVertexBuffer(const GLVertexBuffer& vbo, GLuint bindingIndex, GLintptr offset, GLsizei stride) const
+{
+	glVertexArrayVertexBuffer(Get(), bindingIndex, vbo.Get(), offset, stride);
+}
+
+void GLVertexArray::SetAttribute(GLuint bindingIndex, GLuint attributeIndex, GLint size, GLenum type, GLboolean normalized, GLuint offset) const
+{
+	glEnableVertexArrayAttrib(Get(), attributeIndex);
+	glVertexArrayAttribFormat(Get(), attributeIndex, size, type, normalized, offset);
+	glVertexArrayAttribBinding(Get(), attributeIndex, bindingIndex);
+}
+
 #pragma region Static
 GLuint GLVertexArray::Generate()
 {
 	GLuint identifier;
-	glGenVertexArrays(1, &identifier);
+	glCreateVertexArrays(1, &identifier);
 	return identifier;
 }
 

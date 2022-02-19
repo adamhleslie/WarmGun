@@ -46,38 +46,31 @@ namespace
 	std::shared_ptr<GLVertexArray> CreateVAO(Utilities::CArray<const GLfloat> vertices, Utilities::CArray<const GLuint> indices)
 	{
 		#pragma region VAO
-		// Create a vertex array object (VAO), and bind it
+		// Create a vertex array object (VAO)
 		std::shared_ptr<GLVertexArray> vertexArray = std::make_shared<GLVertexArray>();
-		vertexArray->Bind();
 
 		#pragma region VBO
-		// Create a vertex buffer object (VBO), and bind it
+		// Create a vertex buffer object (VBO)
 		std::shared_ptr<GLVertexBuffer> vertexBuffer = std::make_shared<GLVertexBuffer>();
-		vertexBuffer->Bind();
 
 		// Copy normalized device coordinate (NDO) vertices into the VBO
 		vertexBuffer->CopyTo(vertices, GL_STATIC_DRAW);
 
 		// Tell OpenGL how to parse the array of vertices: Pass vertices into the vertex attribute with "(location = 0)"
-		vertexBuffer->SetAttribute(0, 3, GL_FLOAT, false, 3 * sizeof(GLfloat), 0);
-
-		GLVertexBuffer::ClearBinding();
+		vertexArray->BindVertexBuffer(*vertexBuffer, 0, 0, 3 * sizeof(GLfloat));
+		vertexArray->SetAttribute(0, 0, 3, GL_FLOAT, false, 0);
 		#pragma endregion
 
 		#pragma region EBO
 		// Create an element buffer object (EBO)
 		std::shared_ptr<GLElementBuffer> elementBuffer = std::make_shared<GLElementBuffer>();
-		elementBuffer->Bind();
 
 		// Copy indices into the EBO
 		elementBuffer->CopyTo(indices, GL_STATIC_DRAW);
 
-		// Do NOT unbind the EBO while a VAO is active as the bound EBO is stored in the bound VAO when it is unbound
-		//GLElementBuffer::ClearBinding();
+		// Bind EBO to VAO
+		vertexArray->BindElementBuffer(*elementBuffer);
 		#pragma endregion
-
-		GLVertexArray::ClearBinding();
-		GLElementBuffer::ClearBinding();
 		#pragma endregion
 
 		return vertexArray;

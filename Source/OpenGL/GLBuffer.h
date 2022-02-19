@@ -29,10 +29,14 @@ public:
 		Bind(GLIdentified::Get());
 	}
 
+	static void ClearBinding()
+	{
+		Bind(0);
+	}
+
 	void CopyTo(const T* vertices, GLsizeiptr sizeOf, GLenum usage) const
 	{
-		// TODO: Check IsBound!
-		glBufferData(BufferType, sizeOf, vertices, usage);
+		glNamedBufferData(GLIdentified::Get(), sizeOf, vertices, usage);
 	}
 
 	void CopyTo(Utilities::CArray<const T> vertices, GLenum usage) const
@@ -40,16 +44,11 @@ public:
 		CopyTo(std::get<0>(vertices), std::get<1>(vertices), usage);
 	}
 
-	static void ClearBinding()
-	{
-		Bind(0);
-	}
-
 private:
 	static GLuint Generate()
 	{
 		GLuint identifier;
-		glGenBuffers(1, &identifier);
+		glCreateBuffers(1, &identifier);
 		return identifier;
 	}
 
