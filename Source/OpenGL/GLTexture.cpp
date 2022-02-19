@@ -9,60 +9,50 @@ GLTexture::~GLTexture()
 	Delete(Get());
 }
 
-void GLTexture::Bind() const
+void GLTexture::Bind(GLuint textureUnit) const
 {
-	Bind(Get());
+	Bind(Get(), textureUnit);
 }
 
-void GLTexture::BindTo(GLenum textureUnit) const
+void GLTexture::ClearBinding(GLuint textureUnit /* = 0 */)
 {
-	glActiveTexture(textureUnit);
-	Bind();
+	Bind(0, textureUnit);
 }
 
-void GLTexture::ClearBinding()
+void GLTexture::SetWrapping(GLint s, GLint t) const
 {
-	Bind(0);
+	glTextureParameteri(Get(), GL_TEXTURE_WRAP_S, s);
+	glTextureParameteri(Get(), GL_TEXTURE_WRAP_T, t);
 }
 
-void GLTexture::SetWrapping(GLint s, GLint t)
+void GLTexture::SetFiltering(GLint minifyingFilter, GLint magnifyingFilter) const
 {
-	// TODO: Check if bound!
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t);
+	glTextureParameteri(Get(), GL_TEXTURE_MIN_FILTER, minifyingFilter);
+	glTextureParameteri(Get(), GL_TEXTURE_MAG_FILTER, magnifyingFilter);
 }
 
-void GLTexture::SetFiltering(GLint minifyingFilter, GLint magnifyingFilter)
+void GLTexture::CopyTo(GLubyte* texture, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format) const
 {
-	// TODO: Check if bound!
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minifyingFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter);
+	glTextureStorage2D(Get(), 1, internalFormat, width, height);
+	glTextureSubImage2D(Get(), 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, texture);
 }
 
-void GLTexture::CopyTo(GLubyte* texture, GLsizei width, GLsizei height, GLenum format) const
+void GLTexture::GenerateMipmaps() const
 {
-	// TODO: Check if bound!
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, texture);
-	glGenerateMipmap(GL_TEXTURE_2D);
-}
-
-void GLTexture::GenerateMipmaps()
-{
-	// TODO: Check if bound!
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateTextureMipmap(Get());
 }
 
 #pragma region Static
 GLuint GLTexture::Generate()
 {
 	GLuint identifier;
-	glGenTextures(1, &identifier);
+	glCreateTextures(GL_TEXTURE_2D, 1, &identifier);
 	return identifier;
 }
 
-void GLTexture::Bind(GLuint identifier)
+void GLTexture::Bind(GLuint identifier, GLuint textureUnit)
 {
-	glBindTexture(GL_TEXTURE_2D, identifier);
+	glBindTextureUnit(textureUnit, identifier);
 }
 
 void GLTexture::Delete(GLuint identifier)

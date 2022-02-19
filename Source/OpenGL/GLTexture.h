@@ -15,17 +15,18 @@ public:
 	GLTexture(const GLTexture&) = delete;
 	GLTexture& operator=(const GLTexture&) = delete;
 
-	void Bind() const override;
-	void BindTo(GLenum textureUnit) const;
-	static void ClearBinding();
+	void Bind() const override { Bind(0); }
+	void Bind(GLenum textureUnit) const;
 
-	void SetWrapping(GLint s, GLint t);
-	void SetFiltering(GLint minifyingFilter, GLint magnifyingFilter);
-	void CopyTo(GLubyte* texture, GLsizei width, GLsizei height, GLenum format) const;
-	void GenerateMipmaps();
+	static void ClearBinding(GLuint textureUnit = 0);
+
+	void SetWrapping(GLint s, GLint t) const;
+	void SetFiltering(GLint minifyingFilter, GLint magnifyingFilter) const;
+	void CopyTo(GLubyte* texture, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format) const;
+	void GenerateMipmaps() const;
 
 private:
 	static GLuint Generate();
-	static void Bind(GLuint identifier);
+	static void Bind(GLuint identifier, GLuint textureUnit);
 	static void Delete(GLuint identifier);
 };

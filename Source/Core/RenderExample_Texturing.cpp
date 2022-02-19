@@ -77,15 +77,14 @@ namespace
 		return vertexArray;
 	}
 
-	std::shared_ptr<GLTexture> CreateTexture(const std::filesystem::path& path, GLenum format, GLint sWrapping, GLint tWrapping, GLint minifyingFilter, GLint magnifyingFilter)
+	std::shared_ptr<GLTexture> CreateTexture(const std::filesystem::path& path, GLenum internalFormat, GLenum format, GLint sWrapping, GLint tWrapping, GLint minifyingFilter, GLint magnifyingFilter)
 	{
 		std::shared_ptr<GLTexture> texture = std::make_shared<GLTexture>();
-		texture->Bind();
 
 		// TODO: Wrap stbi usage in resource management class
 		int width, height, channelCount;
 		unsigned char *data = stbi_load(path.string().c_str(), &width, &height, &channelCount, 0);
-		texture->CopyTo(data, width, height, format);
+		texture->CopyTo(data, width, height, internalFormat, format);
 		stbi_image_free(data);
 
 		texture->SetWrapping(sWrapping, tWrapping);
@@ -108,10 +107,10 @@ RenderExample_Texturing::RenderExample_Texturing()
 	m_rectangle = CreateVAO(Utilities::ToCArray(g_rectangleVertices), Utilities::ToCArray(g_rectangleIndices));
 
 	stbi_set_flip_vertically_on_load(true);
-	m_texture1 = CreateTexture(g_texture1Path, GL_RGB, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+	m_texture1 = CreateTexture(g_texture1Path, GL_RGB8, GL_RGB, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	m_shader.SetUniform("texture1", 0);
 
-	m_texture2 = CreateTexture(g_texture2Path, GL_RGBA, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+	m_texture2 = CreateTexture(g_texture2Path, GL_RGBA8, GL_RGBA, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	m_shader.SetUniform("texture2", 1);
 }
 
@@ -121,12 +120,13 @@ void RenderExample_Texturing::Render()
 
 	m_shader.Use();
 
-	m_texture1->BindTo(GL_TEXTURE0);
-	m_texture2->BindTo(GL_TEXTURE1);
+	m_texture1->Bind(0);
+	m_texture2->Bind(1);
 	m_rectangle->Bind();
 	//m_rectangle->Draw();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	GLTexture::ClearBinding();
+	GLTexture::ClearBinding(0);
+	GLTexture::ClearBinding(1);
 	GLVertexArray::ClearBinding();
 }
